@@ -47,6 +47,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
  */
+#[\AllowDynamicProperties]
 class CI_DB_pdo_result extends CI_DB_result {
 
 	public $db;

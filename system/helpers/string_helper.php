@@ -187,7 +187,7 @@ if ( !function_exists('reduce_multiples'))
 	function reduce_multiples($str, $character = ',', $trim = FALSE)
 	{
 		$str = preg_replace('#' . preg_quote((string) $character, '#') . '{2,}#', (string) $character, (string) $str);
-		return ($trim === TRUE) ? trim($str, $character) : $str;
+		return ($trim === TRUE) ? trim((string) $str, $character) : $str;
 	}
 }
 

@@ -46,6 +46,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @link		https://codeigniter.com/userguide3/libraries/cart.html
  * @deprecated	3.0.0	This class is too specific for CI.
  */
+#[\AllowDynamicProperties]
 class CI_Cart {
 
 	/**

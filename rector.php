@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
+use Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     // Define paths to refactor - including application code, tests AND entire CodeIgniter system
@@ -30,6 +31,11 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/system/fonts', // Font files
         __DIR__ . '/system/language', // Language files
         '*/index.html', // Default CodeIgniter index.html files
+        
+        // Skip specific rules for problematic files
+        AddAllowDynamicPropertiesAttributeRector::class => [
+            __DIR__ . '/system/database/DB.php', // Dynamic class definitions cause issues
+        ],
     ]);
 
     // PHP 7.4 to PHP 8.0 migration rules
@@ -60,4 +66,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // Apply early return pattern when possible
     $rectorConfig->rule(ChangeNestedIfsToEarlyReturnRector::class);
+
+	// Add allow dynamic properties attribute to classes that have dynamic properties
+	$rectorConfig->rule(AddAllowDynamicPropertiesAttributeRector::class);
 };

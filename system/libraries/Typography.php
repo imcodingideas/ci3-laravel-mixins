@@ -45,6 +45,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/typography.html
  */
+#[\AllowDynamicProperties]
 class CI_Typography {
 
 	/**
@@ -148,13 +149,13 @@ class CI_Typography {
 		// Do the same with braces if necessary
 		if ($this->protect_braced_quotes === TRUE)
 		{
-			$str = preg_replace_callback('#\{.+?\}#si', [$this, '_protect_characters'], $str);
+			$str = preg_replace_callback('#\{.+?\}#si', [$this, '_protect_characters'], (string) $str);
 		}
 
 		// Convert "ignore" tags to temporary marker.  The parser splits out the string at every tag
 		// it encounters.  Certain inline tags, like image tags, links, span tags, etc. will be
 		// adversely affected if they are split out so we'll convert the opening bracket < temporarily to: {@TAG}
-		$str = preg_replace('#<(/*)(' . $this->inline_elements . ')([ >])#i', '{@TAG}\\1\\2\\3', $str);
+		$str = preg_replace('#<(/*)(' . $this->inline_elements . ')([ >])#i', '{@TAG}\\1\\2\\3', (string) $str);
 
 		/* Split the string at every tag. This expression creates an array with this prototype:
 		 *
@@ -166,7 +167,7 @@ class CI_Typography {
 		 *		Etc...
 		 *	}
 		 */
-		$chunks = preg_split('/(<(?:[^<>]+(?:"[^"]*"|\'[^\']*\')?)+>)/', $str, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		$chunks = preg_split('/(<(?:[^<>]+(?:"[^"]*"|\'[^\']*\')?)+>)/', (string) $str, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
 		// Build our finalized string.  We cycle through the array, skipping tags, and processing the contained text
 		$str = '';

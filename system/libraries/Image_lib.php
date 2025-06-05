@@ -45,6 +45,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/image_lib.html
  */
+#[\AllowDynamicProperties]
 class CI_Image_lib {
 
 	public $dest_image;

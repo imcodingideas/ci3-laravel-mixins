@@ -69,7 +69,7 @@ if ( !function_exists('xml_convert'))
 
 		if ($protect_all === TRUE)
 		{
-			$str = preg_replace('/&(\w+);/', $temp . '\\1;', $str);
+			$str = preg_replace('/&(\w+);/', $temp . '\\1;', (string) $str);
 		}
 
 		$str = str_replace(
@@ -83,7 +83,7 @@ if ( !function_exists('xml_convert'))
 
 		if ($protect_all === TRUE)
 		{
-			return preg_replace('/' . $temp . '(\w+);/', '&\\1;', $str);
+			return preg_replace('/' . $temp . '(\w+);/', '&\\1;', (string) $str);
 		}
 
 		return $str;

@@ -45,6 +45,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/javascript.html
  */
+#[\AllowDynamicProperties]
 class CI_Jquery extends CI_Javascript {
 
 	public $CI;

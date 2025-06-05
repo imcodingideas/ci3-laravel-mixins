@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
+#[\AllowDynamicProperties]
 class PostModelTest extends TestCase
 {
     private $CI;

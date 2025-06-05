@@ -46,6 +46,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @link		https://codeigniter.com/userguide3/libraries/javascript.html
  * @deprecated	3.0.0	This was never a good idea in the first place.
  */
+#[\AllowDynamicProperties]
 class CI_Javascript {
 
 	public $CI;
