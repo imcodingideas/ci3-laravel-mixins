@@ -85,14 +85,7 @@ if ( !function_exists('create_captcha'))
 
 		foreach ($defaults as $key => $val)
 		{
-			if ( !is_array($data) && empty($$key))
-			{
-				$$key = $val;
-			}
-			else
-			{
-				$$key = $data[$key] ?? $val;
-			}
+			$$key = !is_array($data) && empty($$key) ? $val : $data[$key] ?? $val;
 		}
 
 		if ( !extension_loaded('gd'))

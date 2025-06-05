@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 
 return static function (RectorConfig $rectorConfig): void {
     // Define paths to refactor - including application code, tests AND entire CodeIgniter system
@@ -56,4 +57,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->bootstrapFiles([
         __DIR__ . '/tests/bootstrap.php',
     ]);
-}; 
+
+    // Apply early return pattern when possible
+    $rectorConfig->rule(ChangeNestedIfsToEarlyReturnRector::class);
+};
