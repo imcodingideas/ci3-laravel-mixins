@@ -112,7 +112,7 @@ class CI_Typography {
 		}
 
 		// Standardize Newlines to make matching easier
-		if (strpos($str, "\r") !== FALSE)
+		if (str_contains((string) $str, "\r"))
 		{
 			$str = str_replace(["\r\n", "\r"], "\n", $str);
 		}
@@ -121,12 +121,12 @@ class CI_Typography {
 		// we'll compress them down to a maximum of two since there's no benefit to more.
 		if ($reduce_linebreaks === TRUE)
 		{
-			$str = preg_replace("/\n\n+/", "\n\n", $str);
+			$str = preg_replace("/\n\n+/", "\n\n", (string) $str);
 		}
 
 		// HTML comment tags don't conform to patterns of normal tags, so pull them out separately, only if needed
 		$html_comments = [];
-		if (strpos($str, '<!--') !== FALSE && preg_match_all('#(<!\-\-.*?\-\->)#s', $str, $matches))
+		if (str_contains((string) $str, '<!--') && preg_match_all('#(<!\-\-.*?\-\->)#s', (string) $str, $matches))
 		{
 			for ($i = 0, $total = count($matches[0]); $i < $total; $i++)
 			{
@@ -137,13 +137,13 @@ class CI_Typography {
 
 		// match and yank <pre> tags if they exist.  It's cheaper to do this separately since most content will
 		// not contain <pre> tags, and it keeps the PCRE patterns below simpler and faster
-		if (strpos($str, '<pre') !== FALSE)
+		if (str_contains((string) $str, '<pre'))
 		{
-			$str = preg_replace_callback('#<pre.*?>.*?</pre>#si', [$this, '_protect_characters'], $str);
+			$str = preg_replace_callback('#<pre.*?>.*?</pre>#si', [$this, '_protect_characters'], (string) $str);
 		}
 
 		// Convert quotes within tags to temporary markers.
-		$str = preg_replace_callback('#<.+?>#si', [$this, '_protect_characters'], $str);
+		$str = preg_replace_callback('#<.+?>#si', [$this, '_protect_characters'], (string) $str);
 
 		// Do the same with braces if necessary
 		if ($this->protect_braced_quotes === TRUE)
@@ -223,7 +223,7 @@ class CI_Typography {
 			// remove surrounding paragraph tags, but only if there's an opening paragraph tag
 			// otherwise HTML comments at the ends of paragraphs will have the closing tag removed
 			// if '<p>{@HC1}' then replace <p>{@HC1}</p> with the comment, else replace only {@HC1} with the comment
-			$str = preg_replace('#(?(?=<p>\{@HC' . $i . '\})<p>\{@HC' . $i . '\}(\s*</p>)|\{@HC' . $i . '\})#s', $html_comments[$i], $str);
+			$str = preg_replace('#(?(?=<p>\{@HC' . $i . '\})<p>\{@HC' . $i . '\}(\s*</p>)|\{@HC' . $i . '\})#s', $html_comments[$i], (string) $str);
 		}
 
 		// Final clean up
@@ -273,7 +273,7 @@ class CI_Typography {
 			$table['#<p></p>#'] = '<p>&nbsp;</p>';
 		}
 
-		return preg_replace(array_keys($table), $table, $str);
+		return preg_replace(array_keys($table), $table, (string) $str);
 
 	}
 
@@ -339,7 +339,7 @@ class CI_Typography {
 						];
 		}
 
-		return preg_replace(array_keys($table), $table, $str);
+		return preg_replace(array_keys($table), $table, (string) $str);
 	}
 
 	// --------------------------------------------------------------------
@@ -354,7 +354,7 @@ class CI_Typography {
 	 */
 	protected function _format_newlines($str)
 	{
-		if ($str === '' || strpos($str, "\n") === FALSE && !in_array($this->last_block_element, $this->inner_block_required))
+		if ($str === '' || !str_contains((string) $str, "\n") && !in_array($this->last_block_element, $this->inner_block_required))
 		{
 			return $str;
 		}
@@ -408,7 +408,7 @@ class CI_Typography {
 	public function nl2br_except_pre($str)
 	{
 		$newstr = '';
-		for ($ex = explode('pre>', $str), $ct = count($ex), $i = 0; $i < $ct; $i++)
+		for ($ex = explode('pre>', (string) $str), $ct = count($ex), $i = 0; $i < $ct; $i++)
 		{
 			$newstr .= (($i % 2) === 0) ? nl2br($ex[$i]) : $ex[$i];
 			if ($ct - 1 !== $i)

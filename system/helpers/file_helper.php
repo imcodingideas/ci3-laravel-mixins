@@ -294,7 +294,7 @@ if ( !function_exists('get_file_info'))
 			switch ($key)
 			{
 				case 'name':
-					$fileinfo['name'] = basename($file);
+					$fileinfo['name'] = basename((string) $file);
 					break;
 				case 'server_path':
 					$fileinfo['server_path'] = $file;

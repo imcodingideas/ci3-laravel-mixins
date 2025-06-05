@@ -158,7 +158,7 @@ class CI_Profiler {
 		{
 			// We match the "end" marker so that the list ends
 			// up in the order that it was defined
-			if (preg_match('/(.+?)_end$/i', $key, $match)
+			if (preg_match('/(.+?)_end$/i', (string) $key, $match)
 				&& isset($this->CI->benchmark->marker[$match[1] . '_end'], $this->CI->benchmark->marker[$match[1] . '_start']))
 			{
 				$profile[$match[1]] = $this->CI->benchmark->elapsed_time($match[1] . '_start', $key);
@@ -204,7 +204,7 @@ class CI_Profiler {
 			{
 				if ($cobject instanceof CI_DB)
 				{
-					$dbs[get_class($this->CI) . ':$' . $name] = $cobject;
+					$dbs[$this->CI::class . ':$' . $name] = $cobject;
 				}
 				elseif ($cobject instanceof CI_Model)
 				{
@@ -212,7 +212,7 @@ class CI_Profiler {
 					{
 						if ($mobject instanceof CI_DB)
 						{
-							$dbs[get_class($cobject) . ':$' . $mname] = $mobject;
+							$dbs[$cobject::class . ':$' . $mname] = $mobject;
 						}
 					}
 				}
@@ -318,7 +318,7 @@ class CI_Profiler {
                 }
 				$val = (is_array($val) || is_object($val))
 					? '<pre>' . htmlspecialchars(print_r($val, TRUE), ENT_QUOTES, config_item('charset')) . '</pre>'
-					: htmlspecialchars($val, ENT_QUOTES, config_item('charset'));
+					: htmlspecialchars((string) $val, ENT_QUOTES, config_item('charset'));
 
 				$output .= '<tr><td style="width:50%;color:#000;background-color:#ddd;padding:5px;">&#36;_GET['
 					. $key . ']&nbsp;&nbsp; </td><td style="width:50%;padding:5px;color:#cd6e00;font-weight:normal;background-color:#ddd;">'
@@ -360,7 +360,7 @@ class CI_Profiler {
                 }
 				$val = (is_array($val) || is_object($val))
 					? '<pre>' . htmlspecialchars(print_r($val, TRUE), ENT_QUOTES, config_item('charset')) . '</pre>'
-					: htmlspecialchars($val, ENT_QUOTES, config_item('charset'));
+					: htmlspecialchars((string) $val, ENT_QUOTES, config_item('charset'));
 
 				$output .= '<tr><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">&#36;_POST['
 					. $key . ']&nbsp;&nbsp; </td><td style="width:50%;padding:5px;color:#009900;font-weight:normal;background-color:#ddd;">'
@@ -374,7 +374,7 @@ class CI_Profiler {
                 }
 				$val = (is_array($val) || is_object($val))
 					? '<pre>' . htmlspecialchars(print_r($val, TRUE), ENT_QUOTES, config_item('charset')) . '</pre>'
-					: htmlspecialchars($val, ENT_QUOTES, config_item('charset'));
+					: htmlspecialchars((string) $val, ENT_QUOTES, config_item('charset'));
 
 				$output .= '<tr><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">&#36;_FILES['
 					. $key . ']&nbsp;&nbsp; </td><td style="width:50%;padding:5px;color:#009900;font-weight:normal;background-color:#ddd;">'
@@ -438,7 +438,7 @@ class CI_Profiler {
 			. "\n"
 			. '<legend style="color:#5a0099;">&nbsp;&nbsp;' . $this->CI->lang->line('profiler_memory_usage') . "&nbsp;&nbsp;</legend>\n"
 			. '<div style="color:#5a0099;font-weight:normal;padding:4px 0 4px 0;">'
-			. (($usage = memory_get_usage()) != '' ? number_format($usage) . ' bytes' : $this->CI->lang->line('profiler_no_memory'))
+			. (($usage = memory_get_usage()) != 0 ? number_format($usage) . ' bytes' : $this->CI->lang->line('profiler_no_memory'))
 			. '</div></fieldset>';
 	}
 
@@ -462,7 +462,7 @@ class CI_Profiler {
 
 		foreach (['HTTP_ACCEPT', 'HTTP_USER_AGENT', 'HTTP_CONNECTION', 'SERVER_PORT', 'SERVER_NAME', 'REMOTE_ADDR', 'SERVER_SOFTWARE', 'HTTP_ACCEPT_LANGUAGE', 'SCRIPT_NAME', 'REQUEST_METHOD', ' HTTP_HOST', 'REMOTE_HOST', 'CONTENT_TYPE', 'SERVER_PROTOCOL', 'QUERY_STRING', 'HTTP_ACCEPT_ENCODING', 'HTTP_X_FORWARDED_FOR', 'HTTP_DNT'] as $header)
 		{
-			$val = isset($_SERVER[$header]) ? htmlspecialchars($_SERVER[$header], ENT_QUOTES, config_item('charset')) : '';
+			$val = isset($_SERVER[$header]) ? htmlspecialchars((string) $_SERVER[$header], ENT_QUOTES, config_item('charset')) : '';
 			$output .= '<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">'
 				. $header . '&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">' . $val . "</td></tr>\n";
 		}

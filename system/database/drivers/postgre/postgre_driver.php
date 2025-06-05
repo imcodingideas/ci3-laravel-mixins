@@ -87,7 +87,7 @@ class CI_DB_postgre_driver extends CI_DB {
             $this->dsn = '';
         }
 
-		if (strpos($this->hostname, '/') !== FALSE)
+		if (str_contains($this->hostname, '/'))
 		{
 			// If UNIX sockets are used, we shouldn't set a port
 			$this->port = '';
@@ -97,7 +97,7 @@ class CI_DB_postgre_driver extends CI_DB {
             $this->dsn = 'host=' . $this->hostname . ' ';
         }
 
-		if ( !empty($this->port) && ctype_digit($this->port))
+		if ( !empty($this->port) && ctype_digit((string) $this->port))
 		{
 			$this->dsn .= 'port=' . $this->port . ' ';
 		}
@@ -290,7 +290,7 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	public function is_write_type($sql)
 	{
-		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', $sql))
+		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', (string) $sql))
 		{
 			return FALSE;
 		}
@@ -308,7 +308,7 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	protected function _escape_str($str)
 	{
-		return pg_escape_string($this->conn_id, $str);
+		return pg_escape_string($this->conn_id, (string) $str);
 	}
 
 	// --------------------------------------------------------------------

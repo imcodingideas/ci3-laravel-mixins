@@ -140,7 +140,7 @@ class CI_Zip {
 	{
 		foreach ((array) $directory as $dir)
 		{
-			if ( !preg_match('|.+/$|', $dir))
+			if ( !preg_match('|.+/$|', (string) $dir))
 			{
 				$dir .= '/';
 			}

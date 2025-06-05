@@ -111,12 +111,12 @@ if ( !is_php('5.4'))
 		$_registered = ini_get('variables_order');
 		foreach (['E' => '_ENV', 'G' => '_GET', 'P' => '_POST', 'C' => '_COOKIE', 'S' => '_SERVER'] as $key => $superglobal)
 		{
-			if (strpos($_registered, $key) === FALSE)
+			if (!str_contains($_registered, $key))
 			{
 				continue;
 			}
 
-			foreach (array_keys($$superglobal) as $var)
+			foreach (array_keys(${$superglobal}) as $var)
 			{
 				if (isset($GLOBALS[$var]) && !in_array($var, $_protected, TRUE))
 				{
@@ -239,7 +239,7 @@ if ( !is_php('5.4'))
  * in it's constructor, but it's _not_ class-specific.
  *
  */
-	$charset = strtoupper(config_item('charset'));
+	$charset = strtoupper((string) config_item('charset'));
 	ini_set('default_charset', $charset);
 
 	if (extension_loaded('mbstring'))
@@ -397,7 +397,7 @@ if ( !is_php('5.4'))
  */
 
 	$e404 = FALSE;
-	$class = ucfirst($RTR->class);
+	$class = ucfirst((string) $RTR->class);
 	$method = $RTR->method;
 
 	if ($class === '' || $class === '0' || !file_exists(APPPATH . 'controllers/' . $RTR->directory . $class . '.php'))

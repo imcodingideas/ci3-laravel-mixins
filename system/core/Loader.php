@@ -249,13 +249,13 @@ class CI_Loader {
 		$path = '';
 
 		// Is the model in a sub-folder? If so, parse out the filename and path.
-		if (($last_slash = strrpos($model, '/')) !== FALSE)
+		if (($last_slash = strrpos((string) $model, '/')) !== FALSE)
 		{
 			// The path is in front of the last slash
-			$path = substr($model, 0, ++$last_slash);
+			$path = substr((string) $model, 0, ++$last_slash);
 
 			// And the model name behind it
-			$model = substr($model, $last_slash);
+			$model = substr((string) $model, $last_slash);
 		}
 
 		if (empty($name))
@@ -323,7 +323,7 @@ class CI_Loader {
 			}
 		}
 
-		$model = ucfirst($model);
+		$model = ucfirst((string) $model);
 		if ( !$this->_ci_class_exists_no_autoload($model))
 		{
 			foreach ($this->_ci_model_paths as $mod_path)
@@ -356,7 +356,7 @@ class CI_Loader {
 		$this->_ci_models[] = $name;
 		$model = new $model();
 		$CI->$name = $model;
-		log_message('info', 'Model "' . get_class($model) . '" initialized');
+		log_message('info', 'Model "' . $model::class . '" initialized');
 		return $this;
 	}
 
@@ -614,7 +614,7 @@ class CI_Loader {
 		{
 			$filename = basename($helper);
 			$filepath = ($filename === $helper) ? '' : substr($helper, 0, strlen($helper) - strlen($filename));
-			$filename = strtolower(preg_replace('#(_helper)?(\.php)?$#i', '', $filename)) . '_helper';
+			$filename = strtolower((string) preg_replace('#(_helper)?(\.php)?$#i', '', $filename)) . '_helper';
 			$helper = $filepath . $filename;
 
 			if (isset($this->_ci_helpers[$helper]))
@@ -902,7 +902,7 @@ class CI_Loader {
 		// Set the default data variables
 		foreach (['_ci_view', '_ci_vars', '_ci_path', '_ci_return'] as $_ci_val)
 		{
-			$$_ci_val = $_ci_data[$_ci_val] ?? FALSE;
+			${$_ci_val} = $_ci_data[$_ci_val] ?? FALSE;
 		}
 
 		$file_exists = FALSE;
@@ -1413,7 +1413,7 @@ class CI_Loader {
 
 		foreach (array_keys($vars) as $key)
 		{
-			if (strncmp($key, '_ci_', 4) === 0)
+			if (str_starts_with($key, '_ci_'))
 			{
 				unset($vars[$key]);
 			}

@@ -186,11 +186,11 @@ class CI_Calendar {
 		{
 			$year = date('Y', $local_time);
 		}
-		elseif (strlen($year) === 1)
+		elseif (strlen((string) $year) === 1)
 		{
 			$year = '200' . $year;
 		}
-		elseif (strlen($year) === 2)
+		elseif (strlen((string) $year) === 2)
 		{
 			$year = '20' . $year;
 		}
@@ -199,7 +199,7 @@ class CI_Calendar {
 		{
 			$month = date('m', $local_time);
 		}
-		elseif (strlen($month) === 1)
+		elseif (strlen((string) $month) === 1)
 		{
 			$month = '0' . $month;
 		}
@@ -442,7 +442,7 @@ class CI_Calendar {
 			$date['year']--;
 		}
 
-		if (strlen($date['month']) === 1)
+		if (strlen((string) $date['month']) === 1)
 		{
 			$date['month'] = '0' . $date['month'];
 		}

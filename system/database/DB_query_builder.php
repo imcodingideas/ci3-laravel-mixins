@@ -294,7 +294,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 		foreach ($select as $val)
 		{
-			$val = trim($val);
+			$val = trim((string) $val);
 
 			if ($val !== '')
 			{
@@ -435,7 +435,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 */
 	protected function _create_alias_from_table($item)
 	{
-		if (strpos($item, '.') !== FALSE)
+		if (str_contains($item, '.'))
 		{
 			$item = explode('.', $item);
 			return end($item);
@@ -474,9 +474,9 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	{
 		foreach ((array) $from as $val)
 		{
-			if (strpos($val, ',') !== FALSE)
+			if (str_contains((string) $val, ','))
 			{
-				foreach (explode(',', $val) as $v)
+				foreach (explode(',', (string) $val) as $v)
 				{
 					$v = trim($v);
 					$this->_track_aliases($v);
@@ -492,7 +492,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			}
 			else
 			{
-				$val = trim($val);
+				$val = trim((string) $val);
 
 				// Extract any aliases that might exist. We use this information
 				// in the protect_identifiers to know whether to add a table prefix
@@ -528,7 +528,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	{
 		if ($type !== '')
 		{
-			$type = strtoupper(trim($type));
+			$type = strtoupper(trim((string) $type));
 
 			if ( !in_array($type, ['LEFT', 'RIGHT', 'OUTER', 'INNER', 'LEFT OUTER', 'RIGHT OUTER', 'FULL OUTER', 'FULL'], TRUE))
 			{
@@ -559,16 +559,16 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 		else
 		{
 			// Split multiple conditions
-			if (preg_match_all('/\sAND\s|\sOR\s/i', $cond, $joints, PREG_OFFSET_CAPTURE))
+			if (preg_match_all('/\sAND\s|\sOR\s/i', (string) $cond, $joints, PREG_OFFSET_CAPTURE))
 			{
 				$conditions = [];
 				$joints = $joints[0];
 				array_unshift($joints, ['', 0]);
 
-				for ($i = count($joints) - 1, $pos = strlen($cond); $i >= 0; $i--)
+				for ($i = count($joints) - 1, $pos = strlen((string) $cond); $i >= 0; $i--)
 				{
 					$joints[$i][1] += strlen($joints[$i][0]); // offset
-					$conditions[$i] = substr($cond, $joints[$i][1], $pos - $joints[$i][1]);
+					$conditions[$i] = substr((string) $cond, $joints[$i][1], $pos - $joints[$i][1]);
 					$pos = $joints[$i][1] - strlen($joints[$i][0]);
 					$joints[$i] = $joints[$i][0];
 				}
@@ -584,7 +584,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			{
 				$operator = $this->_get_operator($conditions[$i]);
 				$cond .= $joints[$i];
-				$cond .= preg_match("/(\(*)?([\[\]\w\.'-]+)" . preg_quote($operator) . '(.*)/i', $conditions[$i], $match)
+				$cond .= preg_match("/(\(*)?([\[\]\w\.'-]+)" . preg_quote($operator) . '(.*)/i', (string) $conditions[$i], $match)
 					? $match[1] . $this->protect_identifiers($match[2]) . $operator . $this->protect_identifiers($match[3])
 					: $conditions[$i];
 			}
@@ -973,22 +973,12 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 				$v = $this->escape_like_str($v);
 			}
 
-			switch ($side)
-			{
-				case 'none':
-					$v = "'{$v}'";
-					break;
-				case 'before':
-					$v = "'%{$v}'";
-					break;
-				case 'after':
-					$v = "'{$v}%'";
-					break;
-				case 'both':
-				default:
-					$v = "'%{$v}%'";
-					break;
-			}
+			$v = match ($side) {
+                'none' => "'{$v}'",
+                'before' => "'%{$v}'",
+                'after' => "'{$v}%'",
+                default => "'%{$v}%'",
+            };
 
 			// some platforms require an escape sequence definition for LIKE wildcards
 			if ($escape === TRUE && $this->_like_escape_str !== '')
@@ -1147,7 +1137,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 		foreach ($by as $val)
 		{
-			$val = trim($val);
+			$val = trim((string) $val);
 
 			if ($val !== '')
 			{
@@ -1242,7 +1232,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 		else
 		{
 			$qb_orderby = [];
-			foreach (explode(',', $orderby) as $field)
+			foreach (explode(',', (string) $orderby) as $field)
 			{
 				$qb_orderby[] = ($direction === '' && preg_match('/\s+(ASC|DESC)$/i', rtrim($field), $match, PREG_OFFSET_CAPTURE))
 					? ['field' => ltrim(substr($field, 0, $match[0][1])), 'direction' => ' ' . $match[1][0], 'escape' => TRUE]
@@ -2306,19 +2296,19 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 		// Does the string contain a comma?  If so, we need to separate
 		// the string into discreet statements
-		if (strpos($table, ',') !== FALSE)
+		if (str_contains((string) $table, ','))
 		{
-			return $this->_track_aliases(explode(',', $table));
+			return $this->_track_aliases(explode(',', (string) $table));
 		}
 
 		// if a table alias is used we can recognize it by a space
-		if (strpos($table, ' ') !== FALSE)
+		if (str_contains((string) $table, ' '))
 		{
 			// if the alias is written with the AS keyword, remove it
-			$table = preg_replace('/\s+AS\s+/i', ' ', $table);
+			$table = preg_replace('/\s+AS\s+/i', ' ', (string) $table);
 
 			// Grab the alias
-			$table = trim(strrchr($table, ' '));
+			$table = trim(strrchr((string) $table, ' '));
 
 			// Store the alias, if it doesn't already exist
 			if ( !in_array($table, $this->qb_aliased_tables, TRUE))
@@ -2438,7 +2428,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 				// Split multiple conditions
 				$conditions = preg_split(
 				    '/((?:^|\s+)AND\s+|(?:^|\s+)OR\s+)/i',
-				    $this->{$qb_key}[$i]['condition'],
+				    (string) $this->{$qb_key}[$i]['condition'],
 				    -1,
 				    PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
 				);

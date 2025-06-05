@@ -114,7 +114,7 @@ if ( !function_exists('mdate'))
 		$datestr = str_replace(
 		    '%\\',
 		    '',
-		    preg_replace('/([a-z]+?){1}/i', '\\\\\\1', $datestr)
+		    preg_replace('/([a-z]+?){1}/i', '\\\\\\1', (string) $datestr)
 		);
 
 		return date($datestr, $time);
@@ -152,7 +152,7 @@ if ( !function_exists('standard_date'))
 		}
 
 		// Procedural style pre-defined constants from the DateTime extension
-		if (strpos($fmt, 'DATE_') !== 0 || defined($fmt) === FALSE)
+		if (!str_starts_with($fmt, 'DATE_') || defined($fmt) === FALSE)
 		{
 			return FALSE;
 		}
@@ -463,9 +463,9 @@ if ( !function_exists('human_to_unix'))
 			return FALSE;
 		}
 
-		$datestr = preg_replace('/\040+/', ' ', trim($datestr));
+		$datestr = preg_replace('/\040+/', ' ', trim((string) $datestr));
 
-		if ( !preg_match('/^(\d{2}|\d{4})\-[0-9]{1,2}\-[0-9]{1,2}\s[0-9]{1,2}:[0-9]{1,2}(?::[0-9]{1,2})?(?:\s[AP]M)?$/i', $datestr))
+		if ( !preg_match('/^(\d{2}|\d{4})\-[0-9]{1,2}\-[0-9]{1,2}\s[0-9]{1,2}:[0-9]{1,2}(?::[0-9]{1,2})?(?:\s[AP]M)?$/i', (string) $datestr))
 		{
 			return FALSE;
 		}
@@ -519,30 +519,30 @@ if ( !function_exists('nice_date'))
 		}
 
 		// Date like: YYYYMM
-		if (preg_match('/^\d{6}$/i', $bad_date))
+		if (preg_match('/^\d{6}$/i', (string) $bad_date))
 		{
-			if (in_array(substr($bad_date, 0, 2), ['19', '20']))
+			if (in_array(substr((string) $bad_date, 0, 2), ['19', '20']))
 			{
-				$year = substr($bad_date, 0, 4);
-				$month = substr($bad_date, 4, 2);
+				$year = substr((string) $bad_date, 0, 4);
+				$month = substr((string) $bad_date, 4, 2);
 			}
 			else
 			{
-				$month = substr($bad_date, 0, 2);
-				$year = substr($bad_date, 2, 4);
+				$month = substr((string) $bad_date, 0, 2);
+				$year = substr((string) $bad_date, 2, 4);
 			}
 
 			return date($format, strtotime($year . '-' . $month . '-01'));
 		}
 
 		// Date Like: YYYYMMDD
-		if (preg_match('/^\d{8}$/i', $bad_date, $matches))
+		if (preg_match('/^\d{8}$/i', (string) $bad_date, $matches))
 		{
 			return DateTime::createFromFormat('Ymd', $bad_date)->format($format);
 		}
 
 		// Date Like: MM-DD-YYYY __or__ M-D-YYYY (or anything in between)
-		if (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/i', $bad_date, $matches))
+		if (preg_match('/^(\d{1,2})-(\d{1,2})-(\d{4})$/i', (string) $bad_date, $matches))
 		{
 			return date($format, strtotime($matches[3] . '-' . $matches[1] . '-' . $matches[2]));
 		}
@@ -550,13 +550,13 @@ if ( !function_exists('nice_date'))
 		// Any other kind of string, when converted into UNIX time,
 		// produces "0 seconds after epoc..." is probably bad...
 		// return "Invalid Date".
-		if (date('U', strtotime($bad_date)) === '0')
+		if (date('U', strtotime((string) $bad_date)) === '0')
 		{
 			return 'Invalid Date';
 		}
 
 		// It's probably a valid-ish date format already
-		return date($format, strtotime($bad_date));
+		return date($format, strtotime((string) $bad_date));
 	}
 }
 
@@ -700,7 +700,7 @@ if ( !function_exists('date_range'))
 		$is_unix = $is_unix && $is_unix !== 'days';
 
 		// Validate input and try strtotime() on invalid timestamps/intervals, just in case
-		if ( !ctype_digit((string) $unix_start) && $unix_start = @strtotime($unix_start) === FALSE || !ctype_digit((string) $mixed) && ($is_unix === FALSE || $mixed = @strtotime($mixed) === FALSE) || $is_unix && $mixed < $unix_start)
+		if ( !ctype_digit((string) $unix_start) && $unix_start = @strtotime((string) $unix_start) === FALSE || !ctype_digit((string) $mixed) && ($is_unix === FALSE || $mixed = @strtotime((string) $mixed) === FALSE) || $is_unix && $mixed < $unix_start)
 		{
 			return FALSE;
 		}

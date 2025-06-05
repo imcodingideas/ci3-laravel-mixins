@@ -447,7 +447,7 @@ class CI_Pagination {
 		$first_url = $this->first_url;
 
 		$query_string = '';
-		$query_string_sep = (strpos($base_url, '?') === FALSE) ? '?' : '&amp;';
+		$query_string_sep = (str_contains($base_url, '?')) ? '&amp;' : '?';
 
 		// Are we using query strings?
 		if ($this->page_query_string === TRUE)
@@ -524,7 +524,7 @@ class CI_Pagination {
 		}
 
 		// If something isn't quite right, back to the default base page.
-		if ( !ctype_digit($this->cur_page) || $this->use_page_numbers && (int) $this->cur_page === 0)
+		if ( !ctype_digit((string) $this->cur_page) || $this->use_page_numbers && (int) $this->cur_page === 0)
 		{
 			$this->cur_page = $base_page;
 		}

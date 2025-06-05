@@ -127,7 +127,7 @@ class CI_Log {
 
 		$this->_log_path = ($config['log_path'] !== '') ? $config['log_path'] : APPPATH . 'logs/';
 		$this->_file_ext = (isset($config['log_file_extension']) && $config['log_file_extension'] !== '')
-			? ltrim($config['log_file_extension'], '.') : 'php';
+			? ltrim((string) $config['log_file_extension'], '.') : 'php';
 
 		if (!file_exists($this->_log_path)) {
             mkdir($this->_log_path, 0755, TRUE);
@@ -206,7 +206,7 @@ class CI_Log {
 		flock($fp, LOCK_EX);
 
 		// Instantiating DateTime with microseconds appended to initial date is needed for proper support of this format
-		if (strpos($this->_date_fmt, 'u') !== FALSE)
+		if (str_contains($this->_date_fmt, 'u'))
 		{
 			$microtime_full = microtime(TRUE);
 			$microtime_short = sprintf('%06d', ($microtime_full - floor($microtime_full)) * 1000000);

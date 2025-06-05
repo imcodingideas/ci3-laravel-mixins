@@ -71,7 +71,7 @@ if ( !function_exists('trim_slashes'))
 	 */
 	function trim_slashes($str)
 	{
-		return trim($str, '/');
+		return trim((string) $str, '/');
 	}
 }
 
@@ -91,7 +91,7 @@ if ( !function_exists('strip_slashes'))
 	{
 		if ( !is_array($str))
 		{
-			return stripslashes($str);
+			return stripslashes((string) $str);
 		}
 
 		foreach ($str as $key => $val)
@@ -160,7 +160,7 @@ if ( !function_exists('reduce_double_slashes'))
 	 */
 	function reduce_double_slashes($str)
 	{
-		return preg_replace('#(^|[^:])//+#', '\\1/', $str);
+		return preg_replace('#(^|[^:])//+#', '\\1/', (string) $str);
 	}
 }
 
@@ -186,7 +186,7 @@ if ( !function_exists('reduce_multiples'))
 	 */
 	function reduce_multiples($str, $character = ',', $trim = FALSE)
 	{
-		$str = preg_replace('#' . preg_quote($character, '#') . '{2,}#', $character, $str);
+		$str = preg_replace('#' . preg_quote((string) $character, '#') . '{2,}#', (string) $character, (string) $str);
 		return ($trim === TRUE) ? trim($str, $character) : $str;
 	}
 }
@@ -253,7 +253,7 @@ if ( !function_exists('increment_string'))
 	 */
 	function increment_string($str, $separator = '_', $first = 1)
 	{
-		preg_match('/(.+)' . preg_quote($separator, '/') . '([0-9]+)$/', $str, $match);
+		preg_match('/(.+)' . preg_quote((string) $separator, '/') . '([0-9]+)$/', (string) $str, $match);
 		return isset($match[2]) ? $match[1] . $separator . ($match[2] + 1) : $str . $separator . $first;
 	}
 }

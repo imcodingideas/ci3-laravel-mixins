@@ -176,7 +176,7 @@ if ( !function_exists('password_hash'))
 				return FALSE;
 			}
 
-			$options['salt'] = str_replace('+', '.', rtrim(base64_encode($options['salt']), '='));
+			$options['salt'] = str_replace('+', '.', rtrim(base64_encode((string) $options['salt']), '='));
 		}
 		elseif ( !preg_match('#^[a-zA-Z0-9./]+$#D', $options['salt']))
 		{

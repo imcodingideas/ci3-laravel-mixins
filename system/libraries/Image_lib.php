@@ -468,7 +468,7 @@ class CI_Image_lib {
 				{
 					if (in_array($key, ['wm_font_color', 'wm_shadow_color'], TRUE))
 					{
-						if (preg_match('/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i', $val, $matches))
+						if (preg_match('/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i', (string) $val, $matches))
 						{
 							/* $matches[1] contains our hex color value, but it might be
 							 * both in the full 6-length format or the shortened 3-length
@@ -557,7 +557,7 @@ class CI_Image_lib {
 			$this->dest_image = $this->source_image;
 			$this->dest_folder = $this->source_folder;
 		}
-		elseif (strpos($this->new_image, '/') === FALSE && strpos($this->new_image, '\\') === FALSE)
+		elseif (!str_contains($this->new_image, '/') && !str_contains($this->new_image, '\\'))
 		{
 			$this->dest_image = $this->new_image;
 			$this->dest_folder = $this->source_folder;
@@ -1748,8 +1748,8 @@ class CI_Image_lib {
 	 */
 	public function explode_name($source_image)
 	{
-		$ext = strrchr($source_image, '.');
-		$name = ($ext === FALSE) ? $source_image : substr($source_image, 0, -strlen($ext));
+		$ext = strrchr((string) $source_image, '.');
+		$name = ($ext === FALSE) ? $source_image : substr((string) $source_image, 0, -strlen($ext));
 
 		return ['ext' => $ext, 'name' => $name];
 	}
@@ -1786,7 +1786,7 @@ class CI_Image_lib {
 		if (function_exists('gd_info'))
 		{
 			$gd_version = @gd_info();
-			return preg_replace('/\D/', '', $gd_version['GD Version']);
+			return preg_replace('/\D/', '', (string) $gd_version['GD Version']);
 		}
 
 		return FALSE;

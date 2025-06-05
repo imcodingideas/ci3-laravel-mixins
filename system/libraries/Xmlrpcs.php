@@ -167,13 +167,10 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Main Server Function.
-	 *
-	 * @return	void
-	 */
-	public function serve()
+    /**
+     * Main Server Function.
+     */
+    public function serve(): never
 	{
 		$r = $this->parseRequest();
 		$payload = '<?xml version="1.0" encoding="' . $this->xmlrpc_defencoding . '"?' . '>' . "\n" . $this->debug_msg . $r->prepare_response();
@@ -253,7 +250,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		// PARSE + PROCESS XML DATA
 		//-------------------------------------
 
-		if ( xml_parse($parser, $data, 1) === 0)
+		if ( xml_parse($parser, (string) $data, 1) === 0)
 		{
 			// Return XML error as a faultCode
 			$r = new XML_RPC_Response(
@@ -321,7 +318,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 		$methName = $m->method_name;
 
 		// Check to see if it is a system call
-		$system_call = (strpos($methName, 'system') === 0);
+		$system_call = (str_starts_with((string) $methName, 'system'));
 
 		if ($this->xss_clean === FALSE)
 		{

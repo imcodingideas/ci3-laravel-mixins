@@ -155,12 +155,7 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 */
 	public function version()
 	{
-		if (isset($this->data_cache['version']))
-		{
-			return $this->data_cache['version'];
-		}
-
-		return ( !$this->conn_id || $version = cubrid_get_server_info($this->conn_id) === FALSE)
+		return $this->data_cache['version'] ?? ( !$this->conn_id || $version = cubrid_get_server_info($this->conn_id) === FALSE)
 			? FALSE
 			: $this->data_cache['version'] = $version;
 	}

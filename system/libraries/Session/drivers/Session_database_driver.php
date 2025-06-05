@@ -100,7 +100,7 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 		}
 
 		$db_driver = $this->_db->dbdriver . (empty($this->_db->subdriver) ? '' : '_' . $this->_db->subdriver);
-		if (strpos($db_driver, 'mysql') !== FALSE)
+		if (str_contains($db_driver, 'mysql'))
 		{
 			$this->_platform = 'mysql';
 		}

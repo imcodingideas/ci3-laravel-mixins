@@ -151,7 +151,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-		if (empty($binds) || empty($this->bind_marker) || strpos($sql, $this->bind_marker) === FALSE)
+		if (empty($binds) || empty($this->bind_marker) || !str_contains($sql, $this->bind_marker))
 		{
 			return $sql;
 		}
@@ -302,7 +302,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function is_write_type($sql)
 	{
-		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', $sql))
+		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', (string) $sql))
 		{
 			return FALSE;
 		}

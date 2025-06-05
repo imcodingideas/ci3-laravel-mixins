@@ -137,7 +137,7 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
                 $this->dsn .= ';charset=' . $this->char_set;
             }
 		}
-		elseif ( !empty($this->char_set) && strpos($this->dsn, 'charset=', 4) === FALSE)
+		elseif ( !empty($this->char_set) && !str_contains(substr((string) $this->dsn, 4), 'charset='))
 		{
 			$this->dsn .= ';charset=' . $this->char_set;
 		}
@@ -201,7 +201,7 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _list_columns($table = '')
 	{
-		if (strpos($table, '.') !== FALSE)
+		if (str_contains($table, '.'))
 		{
 			sscanf($table, '%[^.].%s', $owner, $table);
 		}
@@ -211,7 +211,7 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 		}
 
 		return 'SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS
-			WHERE UPPER(OWNER) = ' . $this->escape(strtoupper($owner)) . '
+			WHERE UPPER(OWNER) = ' . $this->escape(strtoupper((string) $owner)) . '
 				AND UPPER(TABLE_NAME) = ' . $this->escape(strtoupper($table));
 	}
 
@@ -225,7 +225,7 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 	 */
 	public function field_data($table)
 	{
-		if (strpos($table, '.') !== FALSE)
+		if (str_contains($table, '.'))
 		{
 			sscanf($table, '%[^.].%s', $owner, $table);
 		}
@@ -236,7 +236,7 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 
 		$sql = 'SELECT COLUMN_NAME, DATA_TYPE, CHAR_LENGTH, DATA_PRECISION, DATA_LENGTH, DATA_DEFAULT, NULLABLE
 			FROM ALL_TAB_COLUMNS
-			WHERE UPPER(OWNER) = ' . $this->escape(strtoupper($owner)) . '
+			WHERE UPPER(OWNER) = ' . $this->escape(strtoupper((string) $owner)) . '
 				AND UPPER(TABLE_NAME) = ' . $this->escape(strtoupper($table));
 
 		if (($query = $this->query($sql)) === FALSE)

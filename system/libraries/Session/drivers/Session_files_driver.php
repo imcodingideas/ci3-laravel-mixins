@@ -149,7 +149,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 		$this->_config['save_path'] = $save_path;
 		$this->_file_path = $this->_config['save_path'] . DIRECTORY_SEPARATOR
 			. $name // we'll use the session cookie name as a prefix to avoid collisions
-			. ($this->_config['match_ip'] ? md5($_SERVER['REMOTE_ADDR']) : '');
+			. ($this->_config['match_ip'] ? md5((string) $_SERVER['REMOTE_ADDR']) : '');
 
 		$this->php5_validate_id();
 
@@ -376,7 +376,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 
 		$pattern = sprintf(
 		    '#\A%s' . $pattern . $this->_sid_regexp . '\z#',
-		    preg_quote($this->_config['cookie_name'])
+		    preg_quote((string) $this->_config['cookie_name'])
 		);
 
 		while (($file = readdir($directory)) !== FALSE)

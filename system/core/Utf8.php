@@ -61,7 +61,7 @@ class CI_Utf8 {
 		if (
 			defined('PREG_BAD_UTF8_ERROR')				// PCRE must support UTF-8
 			&& (ICONV_ENABLED || MB_ENABLED)	// iconv or mbstring must be installed
-			&& strtoupper(config_item('charset')) === 'UTF-8'	// Application charset must be UTF-8
+			&& strtoupper((string) config_item('charset')) === 'UTF-8'	// Application charset must be UTF-8
 			)
 		{
 			define('UTF8_ENABLED', TRUE);

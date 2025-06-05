@@ -115,7 +115,7 @@ class CI_Migration {
 	public function __construct($config = [])
 	{
 		// Only run this constructor on main library load
-		if ( !in_array(get_class($this), ['CI_Migration', config_item('subclass_prefix') . 'Migration'], TRUE))
+		if ( !in_array(static::class, ['CI_Migration', config_item('subclass_prefix') . 'Migration'], TRUE))
 		{
 			return;
 		}
@@ -267,7 +267,7 @@ class CI_Migration {
 			}
 
 			include_once $file;
-			$class = 'Migration_' . ucfirst(strtolower($this->_get_migration_name(basename($file, '.php'))));
+			$class = 'Migration_' . ucfirst(strtolower($this->_get_migration_name(basename((string) $file, '.php'))));
 
 			// Validate the migration file structure
 			if ( !class_exists($class, FALSE))
@@ -324,7 +324,7 @@ class CI_Migration {
 			return FALSE;
 		}
 
-		$last_migration = basename(end($migrations));
+		$last_migration = basename((string) end($migrations));
 
 		// Calculate the last migration step from existing migration
 		// filenames and proceed to the standard version migration

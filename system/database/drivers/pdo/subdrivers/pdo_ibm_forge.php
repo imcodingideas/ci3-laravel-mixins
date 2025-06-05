@@ -104,7 +104,7 @@ class CI_DB_pdo_ibm_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_type(&$attributes)
 	{
-		switch (strtoupper($attributes['TYPE']))
+		switch (strtoupper((string) $attributes['TYPE']))
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';

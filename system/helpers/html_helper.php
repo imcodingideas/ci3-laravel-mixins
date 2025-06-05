@@ -192,7 +192,7 @@ if ( !function_exists('img'))
 
 		foreach ($src as $k => $v)
 		{
-			if ($k === 'src' && !preg_match('#^(data:[a-z,;])|(([a-z]+:)?(?<!data:)//)#i', $v))
+			if ($k === 'src' && !preg_match('#^(data:[a-z,;])|(([a-z]+:)?(?<!data:)//)#i', (string) $v))
 			{
 				if ($index_page === TRUE)
 				{
@@ -284,7 +284,7 @@ if ( !function_exists('link_tag'))
 		{
 			foreach ($href as $k => $v)
 			{
-				if ($k === 'href' && !preg_match('#^([a-z]+:)?//#i', $v))
+				if ($k === 'href' && !preg_match('#^([a-z]+:)?//#i', (string) $v))
 				{
 					if ($index_page === TRUE)
 					{
@@ -303,7 +303,7 @@ if ( !function_exists('link_tag'))
 		}
 		else
 		{
-			if (preg_match('#^([a-z]+:)?//#i', $href))
+			if (preg_match('#^([a-z]+:)?//#i', (string) $href))
 			{
 				$link .= 'href="' . $href . '" ';
 			}

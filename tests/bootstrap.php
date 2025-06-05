@@ -36,7 +36,7 @@ $backtrace = debug_backtrace();
 $isFeatureTest = false;
 
 foreach ($backtrace as $trace) {
-    if (isset($trace['file']) && strpos($trace['file'], '/feature/') !== false) {
+    if (isset($trace['file']) && str_contains($trace['file'], '/feature/')) {
         $isFeatureTest = true;
         break;
     }

@@ -125,7 +125,7 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
                 $this->dsn .= ';charset=' . $this->char_set;
             }
 		}
-		elseif ( !empty($this->char_set) && strpos($this->dsn, 'charset=', 6) === FALSE)
+		elseif ( !empty($this->char_set) && !str_contains(substr((string) $this->dsn, 6), 'charset='))
 		{
 			$this->dsn .= ';charset=' . $this->char_set;
 		}

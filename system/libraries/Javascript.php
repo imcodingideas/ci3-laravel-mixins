@@ -651,11 +651,11 @@ class CI_Javascript {
 			$this->_javascript_location = $this->CI->config->item('javascript_location');
 		}
 
-		if ($relative === TRUE || strpos($external_file, 'http://') === 0 || strpos($external_file, 'https://') === 0)
+		if ($relative === TRUE || str_starts_with($external_file, 'http://') || str_starts_with($external_file, 'https://'))
 		{
 			$str = $this->_open_script($external_file);
 		}
-		elseif (strpos($this->_javascript_location, 'http://') !== FALSE)
+		elseif (str_contains($this->_javascript_location, 'http://'))
 		{
 			$str = $this->_open_script($this->_javascript_location . $external_file);
 		}
@@ -697,7 +697,7 @@ class CI_Javascript {
 	 */
 	protected function _open_script($src = '')
 	{
-		return '<script type="text/javascript" charset="' . strtolower($this->CI->config->item('charset')) . '"'
+		return '<script type="text/javascript" charset="' . strtolower((string) $this->CI->config->item('charset')) . '"'
 			. ($src === '' ? '>' : ' src="' . $src . '">');
 	}
 

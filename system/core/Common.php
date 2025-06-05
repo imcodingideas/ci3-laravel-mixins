@@ -102,7 +102,7 @@ if ( !function_exists('is_really_writable'))
 		 */
 		if (is_dir($file))
 		{
-			$file = rtrim($file, '/') . '/' . md5(mt_rand());
+			$file = rtrim((string) $file, '/') . '/' . md5(mt_rand());
 			if (($fp = @fopen($file, 'ab')) === FALSE)
 			{
 				return FALSE;
@@ -216,7 +216,7 @@ if ( !function_exists('is_loaded'))
 
 		if ($class !== '')
 		{
-			$_is_loaded[strtolower($class)] = $class;
+			$_is_loaded[strtolower((string) $class)] = $class;
 		}
 
 		return $_is_loaded;
@@ -348,15 +348,15 @@ if ( !function_exists('is_https'))
 	 */
 	function is_https()
 	{
-		if ( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
+		if ( !empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
 		{
 			return TRUE;
 		}
-		elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+		elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
 		{
 			return TRUE;
 		}
-		elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off')
+		elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower((string) $_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off')
 		{
 			return TRUE;
 		}
@@ -425,17 +425,16 @@ if ( !function_exists('show_error'))
 if ( !function_exists('show_404'))
 {
 	/**
-	 * 404 Page Handler.
-	 *
-	 * This function is similar to the show_error() function above
-	 * However, instead of the standard error template it displays
-	 * 404 errors.
-	 *
-	 * @param	string
-	 * @param	bool
-	 * @return	void
-	 */
-	function show_404($page = '', $log_error = TRUE)
+     * 404 Page Handler.
+     *
+     * This function is similar to the show_error() function above
+     * However, instead of the standard error template it displays
+     * 404 errors.
+     *
+     * @param	string
+     * @param	bool
+     */
+    function show_404($page = '', $log_error = TRUE): never
 	{
 		$_error = &load_class('Exceptions', 'core');
 		$_error->show_404($page, $log_error);
@@ -560,7 +559,7 @@ if ( !function_exists('set_status_header'))
 			}
         }
 
-		if (strpos(PHP_SAPI, 'cgi') === 0)
+		if (str_starts_with(PHP_SAPI, 'cgi'))
 		{
 			header('Status: ' . $code . ' ' . $text, TRUE);
 			return;
@@ -725,7 +724,7 @@ if ( !function_exists('remove_invisible_characters'))
 
 		do
 		{
-			$str = preg_replace($non_displayables, '', $str, -1, $count);
+			$str = preg_replace($non_displayables, '', (string) $str, -1, $count);
 		}
 		while ($count);
 
@@ -761,7 +760,7 @@ if ( !function_exists('html_escape'))
 			return $var;
 		}
 
-		return htmlspecialchars($var, ENT_QUOTES, config_item('charset'), $double_encode);
+		return htmlspecialchars((string) $var, ENT_QUOTES, config_item('charset'), $double_encode);
 	}
 }
 

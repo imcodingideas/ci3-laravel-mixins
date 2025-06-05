@@ -112,7 +112,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 			$server_list[] = $server['host'] . ':' . $server['port'];
 		}
 
-		if ( !preg_match_all('#,?([^,:]+)\:(\d{1,5})(?:\:(\d+))?#', $this->_config['save_path'], $matches, PREG_SET_ORDER))
+		if ( !preg_match_all('#,?([^,:]+)\:(\d{1,5})(?:\:(\d+))?#', (string) $this->_config['save_path'], $matches, PREG_SET_ORDER))
 		{
 			$this->_memcached = NULL;
 			log_message('error', 'Session: Invalid Memcached save path format: ' . $this->_config['save_path']);

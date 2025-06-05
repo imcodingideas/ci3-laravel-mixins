@@ -132,7 +132,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 		{
 			log_message('error', 'Session: No Redis save path configured.');
 		}
-		elseif (preg_match('#(?:tcp://)?([^:?]+)(?:\:(\d+))?(\?.+)?#', $this->_config['save_path'], $matches)) {
+		elseif (preg_match('#(?:tcp://)?([^:?]+)(?:\:(\d+))?(\?.+)?#', (string) $this->_config['save_path'], $matches)) {
             if (!isset($matches[3])) {
                 $matches[3] = '';
             }

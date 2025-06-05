@@ -47,12 +47,9 @@ defined('BASEPATH') || exit('No direct script access allowed');
  */
 class CI_SessionWrapper implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface {
 
-	protected CI_Session_driver_interface $driver;
-
-	public function __construct(CI_Session_driver_interface $driver)
-	{
-		$this->driver = $driver;
-	}
+	public function __construct(protected CI_Session_driver_interface $driver)
+    {
+    }
 
 	public function open(string $save_path, string $name): bool
 	{

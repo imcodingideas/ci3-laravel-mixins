@@ -95,7 +95,7 @@ class CI_Driver_Library {
 		if ( $this->lib_name === null)
 		{
 			// Get library name without any prefix
-			$this->lib_name = str_replace(['CI_', $prefix], '', get_class($this));
+			$this->lib_name = str_replace(['CI_', $prefix], '', static::class);
 		}
 
 		// The child will be prefixed with the parent lib
@@ -248,7 +248,7 @@ class CI_Driver {
 		// Lock down attributes to what is defined in the class
 		// and speed up references in magic methods
 
-		$class_name = get_class($parent);
+		$class_name = $parent::class;
 
 		if ( !isset(self::$_reflections[$class_name]))
 		{
