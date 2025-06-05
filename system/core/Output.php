@@ -633,7 +633,7 @@ class CI_Output {
 			return;
 		}
 
-		chmod($cache_path, 0640);
+		chmod($cache_path, 0o640);
 		log_message('debug', 'Cache file written: ' . $cache_path);
 
 		// Send HTTP cache-control headers to browser to match file cache settings.

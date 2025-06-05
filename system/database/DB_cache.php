@@ -168,7 +168,7 @@ class CI_DB_Cache {
 		$dir_path = $this->db->cachedir . $segment_one . '+' . $segment_two . '/';
 		$filename = md5($sql);
 
-		if ( !is_dir($dir_path) && !@mkdir($dir_path, 0750))
+		if ( !is_dir($dir_path) && !@mkdir($dir_path, 0o750))
 		{
 			return FALSE;
 		}
@@ -178,7 +178,7 @@ class CI_DB_Cache {
 			return FALSE;
 		}
 
-		chmod($dir_path . $filename, 0640);
+		chmod($dir_path . $filename, 0o640);
 		return TRUE;
 	}
 

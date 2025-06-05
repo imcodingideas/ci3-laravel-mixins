@@ -59,7 +59,7 @@ class CI_Log {
 	 *
 	 * @var	int
 	 */
-	protected $_file_permissions = 0644;
+	protected $_file_permissions = 0o644;
 
 	/**
 	 * Level of logging.
@@ -130,7 +130,7 @@ class CI_Log {
 			? ltrim((string) $config['log_file_extension'], '.') : 'php';
 
 		if (!file_exists($this->_log_path)) {
-            mkdir($this->_log_path, 0755, TRUE);
+            mkdir($this->_log_path, 0o755, TRUE);
         }
 
 		if ( !is_dir($this->_log_path) || !is_really_writable($this->_log_path))

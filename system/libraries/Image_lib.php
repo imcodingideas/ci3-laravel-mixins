@@ -342,7 +342,7 @@ class CI_Image_lib {
 	 *
 	 * @var	int
 	 */
-	public $file_permissions = 0644;
+	public $file_permissions = 0o644;
 
 	/**
 	 * Name of function to create image.

@@ -623,7 +623,8 @@ class XML_RPC_Client extends CI_Xmlrpc
 	public function __construct(/**
      * Path.
      */
-    public $path, $server, /**
+    public $path,
+	    $server, /**
      * Server port.
      */
     public $port = 80, /**
@@ -632,7 +633,8 @@ class XML_RPC_Client extends CI_Xmlrpc
     public $proxy = FALSE, /**
      * Proxy port.
      */
-    public $proxy_port = 8080)
+    public $proxy_port = 8080
+	)
 	{
 		parent::__construct();
 
@@ -1044,7 +1046,9 @@ class XML_RPC_Message extends CI_Xmlrpc
     public function __construct(/**
      * Method name.
      */
-    public $method_name, $pars = FALSE)
+    public $method_name,
+        $pars = FALSE
+    )
 	{
 		parent::__construct();
 		if (is_array($pars) && count($pars) > 0)

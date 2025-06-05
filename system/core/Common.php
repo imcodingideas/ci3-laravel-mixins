@@ -109,7 +109,7 @@ if ( !function_exists('is_really_writable'))
 			}
 
 			fclose($fp);
-			@chmod($file, 0777);
+			@chmod($file, 0o777);
 			@unlink($file);
 			return TRUE;
 		}
@@ -424,7 +424,7 @@ if ( !function_exists('show_error'))
 
 if ( !function_exists('show_404'))
 {
-	/**
+    /**
      * 404 Page Handler.
      *
      * This function is similar to the show_error() function above
