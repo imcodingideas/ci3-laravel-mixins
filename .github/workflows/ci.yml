@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, develop]
   pull_request:
-    branches: [main, dev]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -30,11 +30,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-          - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: "7.4"
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysql
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysql
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -51,10 +51,10 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-          - name: Create environment file
-      run: |
-        cp env.example .env
-        echo "CI_ENV=testing" >> .env
+      - name: Create environment file
+        run: |
+          cp env.example .env
+          echo "CI_ENV=testing" >> .env
 
       - name: Wait for MySQL
         run: |
@@ -69,9 +69,9 @@ jobs:
           mysql -h 127.0.0.1 -P 3307 -u root -proot -e "GRANT ALL PRIVILEGES ON test_db.* TO 'ci_user'@'%' IDENTIFIED BY 'ci_password';"
           mysql -h 127.0.0.1 -P 3307 -u root -proot -e "FLUSH PRIVILEGES;"
 
-          - name: Create database tables
-      run: |
-        mysql -h 127.0.0.1 -P 3307 -u ci_user -pci_password test_db < database/init/01_create_posts_table.sql
+      - name: Create database tables
+        run: |
+          mysql -h 127.0.0.1 -P 3307 -u ci_user -pci_password test_db < database/init/01_create_posts_table.sql
 
       - name: Run tests
         run: composer test
