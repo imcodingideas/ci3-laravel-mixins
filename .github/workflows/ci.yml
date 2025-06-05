@@ -15,7 +15,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_db
+          MYSQL_DATABASE: codeigniter_db
           MYSQL_USER: ci_user
           MYSQL_PASSWORD: ci_password
         ports:
@@ -62,13 +62,13 @@ jobs:
 
       - name: Set up database
         run: |
-          mysql -h 127.0.0.1 -P 3307 -u root -proot -e "CREATE DATABASE IF NOT EXISTS test_db;"
-          mysql -h 127.0.0.1 -P 3307 -u root -proot -e "GRANT ALL PRIVILEGES ON test_db.* TO 'ci_user'@'%' IDENTIFIED BY 'ci_password';"
+          mysql -h 127.0.0.1 -P 3307 -u root -proot -e "CREATE DATABASE IF NOT EXISTS codeigniter_db;"
+          mysql -h 127.0.0.1 -P 3307 -u root -proot -e "GRANT ALL PRIVILEGES ON codeigniter_db.* TO 'ci_user'@'%' IDENTIFIED BY 'ci_password';"
           mysql -h 127.0.0.1 -P 3307 -u root -proot -e "FLUSH PRIVILEGES;"
 
       - name: Create database tables
         run: |
-          mysql -h 127.0.0.1 -P 3307 -u ci_user -pci_password test_db < database/init/01_create_posts_table.sql
+          mysql -h 127.0.0.1 -P 3307 -u ci_user -pci_password codeigniter_db < database/init/01_create_posts_table.sql
 
       - name: Run tests
         run: composer test
