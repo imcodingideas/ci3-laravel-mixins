@@ -45,6 +45,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/security.html
  */
+#[\AllowDynamicProperties]
 class CI_Security {
 
 	/**
@@ -829,7 +830,7 @@ class CI_Security {
 		$nospaces = preg_replace('#\s+#', '', (string) $input);
 		return ($nospaces === $input)
 			? $input
-			: rawurldecode($nospaces);
+			: rawurldecode((string) $nospaces);
 	}
 
 	// ----------------------------------------------------------------
@@ -907,7 +908,7 @@ class CI_Security {
 				// of numerous XSS issues we've had.
 				$matches['attributes'] = preg_replace('#^[^a-z]+#i', '', (string) $matches['attributes']);
 
-				if ( !preg_match($attributes_pattern, $matches['attributes'], $attribute, PREG_OFFSET_CAPTURE))
+				if ( !preg_match($attributes_pattern, (string) $matches['attributes'], $attribute, PREG_OFFSET_CAPTURE))
 				{
 					// No (valid) attribute found? Discard everything else inside the tag
 					break;
@@ -925,7 +926,7 @@ class CI_Security {
 					$attributes[] = $attribute[0][0];
 				}
 
-				$matches['attributes'] = substr($matches['attributes'], $attribute[0][1] + strlen($attribute[0][0]));
+				$matches['attributes'] = substr((string) $matches['attributes'], $attribute[0][1] + strlen($attribute[0][0]));
 			}
 			while ($matches['attributes'] !== '');
 

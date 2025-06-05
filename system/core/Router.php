@@ -47,6 +47,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/general/routing.html
  */
+#[\AllowDynamicProperties]
 class CI_Router {
 
 	public $uri;
@@ -347,7 +348,7 @@ class CI_Router {
 		while ($c-- > 0)
 		{
 			$test = $this->directory
-				. ucfirst((string) $this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0]);
+				. ucfirst((string) (string) $this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0]);
 
 			if ( !file_exists(APPPATH . 'controllers/' . $test . '.php')
 				&& $directory_override === FALSE

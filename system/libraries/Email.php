@@ -47,6 +47,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/email.html
  */
+#[\AllowDynamicProperties]
 class CI_Email {
 
 	/**
@@ -1144,7 +1145,7 @@ class CI_Email {
 		// If the current word is surrounded by {unwrap} tags we'll
 		// strip the entire chunk and replace it with a marker.
 		$unwrap = [];
-		if (preg_match_all('|\{unwrap\}(.+?)\{/unwrap\}|s', $str, $matches))
+		if (preg_match_all('|\{unwrap\}(.+?)\{/unwrap\}|s', (string) $str, $matches))
 		{
 			for ($i = 0, $c = count($matches[0]); $i < $c; $i++)
 			{
@@ -1156,7 +1157,7 @@ class CI_Email {
 		// Use PHP's native function to do the initial wordwrap.
 		// We set the cut flag to FALSE so that any individual words that are
 		// too long get left alone. In the next step we'll deal with them.
-		$str = wordwrap($str, $charlim, "\n", FALSE);
+		$str = wordwrap((string) $str, $charlim, "\n", FALSE);
 
 		// Split the string into individual lines of text and cycle through them
 		$output = '';

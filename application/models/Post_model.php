@@ -2,6 +2,7 @@
 
 defined('BASEPATH') || exit('No direct script access allowed');
 
+#[\AllowDynamicProperties]
 class Post_model extends CI_Model {
 
     public function __construct()

@@ -49,6 +49,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
  */
+#[\AllowDynamicProperties]
 class CI_DB_sqlite_driver extends CI_DB {
 
 	/**

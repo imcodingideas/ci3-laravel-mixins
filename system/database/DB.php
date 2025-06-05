@@ -48,6 +48,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @param 	string|string[]	$params
  * @param 	bool		$query_builder_override
  *				Determines if query builder should be used or not
+ * @return	CI_DB	Database connection instance
  */
 function &DB($params = '', $query_builder_override = NULL)
 {
@@ -180,27 +181,38 @@ function &DB($params = '', $query_builder_override = NULL)
 			 * @see	CI_DB_query_builder
 			 * @see	CI_DB_driver
 			 */
-			class CI_DB extends CI_DB_query_builder { }
+			class CI_DB extends CI_DB_query_builder
+			{
+			}
 		}
 	}
 	elseif ( !class_exists('CI_DB', FALSE))
 	{
 		/**
-		 * @ignore
+		 * CI_DB.
+		 *
+		 * Acts as an alias for CI_DB_driver when query builder is disabled.
+		 *
+		 * @see	CI_DB_driver
 		 */
-		class CI_DB extends CI_DB_driver { }
+		class CI_DB extends CI_DB_driver
+		{
+		}
 	}
 
 	// Load the DB driver
 	$driver_file = BASEPATH . 'database/drivers/' . $params['dbdriver'] . '/' . $params['dbdriver'] . '_driver.php';
 
-	if (!file_exists($driver_file)) {
-        show_error('Invalid DB driver');
-    }
+	if (!file_exists($driver_file))
+	{
+		show_error('Invalid DB driver');
+	}
+
 	require_once $driver_file;
 
 	// Instantiate the DB adapter
 	$driver = 'CI_DB_' . $params['dbdriver'] . '_driver';
+	/** @var CI_DB $DB */
 	$DB = new $driver($params);
 
 	// Check for a subdriver
@@ -212,6 +224,7 @@ function &DB($params = '', $query_builder_override = NULL)
 		{
 			require_once $driver_file;
 			$driver = 'CI_DB_' . $DB->dbdriver . '_' . $DB->subdriver . '_driver';
+			/** @var CI_DB $DB */
 			$DB = new $driver($params);
 		}
 	}
