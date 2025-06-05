@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,10 +36,10 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO 4D Forge Class
+ * PDO 4D Forge Class.
  *
  * @category	Database
  * @author		EllisLab Dev Team
@@ -48,63 +48,63 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 
 	/**
-	 * CREATE DATABASE statement
+	 * CREATE DATABASE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_create_database	= 'CREATE SCHEMA %s';
+	protected $_create_database = 'CREATE SCHEMA %s';
 
 	/**
-	 * DROP DATABASE statement
+	 * DROP DATABASE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_drop_database	= 'DROP SCHEMA %s';
+	protected $_drop_database = 'DROP SCHEMA %s';
 
 	/**
-	 * CREATE TABLE IF statement
+	 * CREATE TABLE IF statement.
 	 *
 	 * @var	string
 	 */
-	protected $_create_table_if	= 'CREATE TABLE IF NOT EXISTS';
+	protected $_create_table_if = 'CREATE TABLE IF NOT EXISTS';
 
 	/**
-	 * RENAME TABLE statement
+	 * RENAME TABLE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_rename_table	= FALSE;
+	protected $_rename_table = FALSE;
 
 	/**
-	 * DROP TABLE IF statement
+	 * DROP TABLE IF statement.
 	 *
 	 * @var	string
 	 */
-	protected $_drop_table_if	= 'DROP TABLE IF EXISTS';
+	protected $_drop_table_if = 'DROP TABLE IF EXISTS';
 
 	/**
-	 * UNSIGNED support
+	 * UNSIGNED support.
 	 *
 	 * @var	array
 	 */
-	protected $_unsigned		= array(
+	protected $_unsigned = [
 		'INT16'		=> 'INT',
 		'SMALLINT'	=> 'INT',
 		'INT'		=> 'INT64',
-		'INT32'		=> 'INT64'
-	);
+		'INT32'		=> 'INT64',
+	];
 
 	/**
-	 * DEFAULT value representation in CREATE/ALTER TABLE statements
+	 * DEFAULT value representation in CREATE/ALTER TABLE statements.
 	 *
 	 * @var	string
 	 */
-	protected $_default		= FALSE;
+	protected $_default = FALSE;
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * ALTER TABLE
+	 * ALTER TABLE.
 	 *
 	 * @param	string	$alter_type	ALTER type
 	 * @param	string	$table		Table name
@@ -113,7 +113,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
-		if (in_array($alter_type, array('ADD', 'DROP'), TRUE))
+		if (in_array($alter_type, ['ADD', 'DROP'], TRUE))
 		{
 			return parent::_alter_table($alter_type, $table, $field);
 		}
@@ -125,7 +125,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process column
+	 * Process column.
 	 *
 	 * @param	array	$field
 	 * @return	string
@@ -133,16 +133,16 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
-			.' '.$field['type'].$field['length']
-			.$field['null']
-			.$field['unique']
-			.$field['auto_increment'];
+			. ' ' . $field['type'] . $field['length']
+			. $field['null']
+			. $field['unique']
+			. $field['auto_increment'];
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute TYPE
+	 * Field attribute TYPE.
 	 *
 	 * Performs a data type mapping between different databases.
 	 *
@@ -174,7 +174,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute UNIQUE
+	 * Field attribute UNIQUE.
 	 *
 	 * @param	array	&$attributes
 	 * @param	array	&$field
@@ -182,7 +182,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_unique(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === TRUE)
+		if ( !empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === TRUE)
 		{
 			$field['unique'] = ' UNIQUE';
 
@@ -194,7 +194,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute AUTO_INCREMENT
+	 * Field attribute AUTO_INCREMENT.
 	 *
 	 * @param	array	&$attributes
 	 * @param	array	&$field
@@ -202,7 +202,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
+		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
 		{
 			if (stripos($field['type'], 'int') !== FALSE)
 			{

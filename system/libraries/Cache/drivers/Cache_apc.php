@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,13 +36,11 @@
  * @since	Version 2.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CodeIgniter APC Caching Class
+ * CodeIgniter APC Caching Class.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Core
  * @author		EllisLab Dev Team
  * @link
@@ -50,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Cache_apc extends CI_Driver {
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Only present so that an error message is logged
 	 * if APC is not available.
@@ -59,7 +57,7 @@ class CI_Cache_apc extends CI_Driver {
 	 */
 	public function __construct()
 	{
-		if ( ! $this->is_supported())
+		if ( !$this->is_supported())
 		{
 			log_message('error', 'Cache: Failed to initialize APC; extension not loaded/enabled?');
 		}
@@ -68,7 +66,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get
+	 * Get.
 	 *
 	 * Look for a value in the cache. If it exists, return the data
 	 * if not, return FALSE
@@ -87,7 +85,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Cache Save
+	 * Cache Save.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	mixed	$data	Data to store
@@ -103,7 +101,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Delete from Cache
+	 * Delete from Cache.
 	 *
 	 * @param	mixed	unique identifier of the item in the cache
 	 * @return	bool	true on success/false on failure
@@ -116,7 +114,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Increment a raw value
+	 * Increment a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
@@ -130,7 +128,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Decrement a raw value
+	 * Decrement a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
@@ -144,7 +142,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Clean the cache
+	 * Clean the cache.
 	 *
 	 * @return	bool	false on failure/true on success
 	 */
@@ -156,7 +154,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Cache Info
+	 * Cache Info.
 	 *
 	 * @param	string	user/filehits
 	 * @return	mixed	array on success, false on failure
@@ -169,7 +167,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get Cache Metadata
+	 * Get Cache Metadata.
 	 *
 	 * @param	mixed	key to get cache metadata on
 	 * @return	mixed	array on success/false on failure
@@ -177,7 +175,7 @@ class CI_Cache_apc extends CI_Driver {
 	public function get_metadata($id)
 	{
 		$cache_info = apc_cache_info('user', FALSE);
-		if (empty($cache_info) OR empty($cache_info['cache_list']))
+		if ($cache_info === [] || empty($cache_info['cache_list']))
 		{
 			return FALSE;
 		}
@@ -189,12 +187,12 @@ class CI_Cache_apc extends CI_Driver {
 				continue;
 			}
 
-			$success  = FALSE;
-			$metadata = array(
+			$success = FALSE;
+			$metadata = [
 				'expire' => ($entry['ttl'] ? $entry['mtime'] + $entry['ttl'] : 0),
 				'mtime'  => $entry['ttl'],
-				'data'   => apc_fetch($id, $success)
-			);
+				'data'   => apc_fetch($id, $success),
+			];
 
 			return ($success === TRUE) ? $metadata : FALSE;
 		}
@@ -205,7 +203,7 @@ class CI_Cache_apc extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * is_supported()
+	 * is_supported().
 	 *
 	 * Check to see if APC is available on this system, bail if it isn't.
 	 *

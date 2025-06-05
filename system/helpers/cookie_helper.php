@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,9 +36,9 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Cookie Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('set_cookie'))
+if ( !function_exists('set_cookie'))
 {
 	/**
-	 * Set cookie
+	 * Set cookie.
 	 *
 	 * Accepts seven parameters, or you can submit an associative
 	 * array in the first parameter containing all the values.
@@ -77,10 +77,10 @@ if ( ! function_exists('set_cookie'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('get_cookie'))
+if ( !function_exists('get_cookie'))
 {
 	/**
-	 * Fetch an item from the COOKIE array
+	 * Fetch an item from the COOKIE array.
 	 *
 	 * @param	string
 	 * @param	bool
@@ -88,18 +88,20 @@ if ( ! function_exists('get_cookie'))
 	 */
 	function get_cookie($index, $xss_clean = NULL)
 	{
-		is_bool($xss_clean) OR $xss_clean = (config_item('global_xss_filtering') === TRUE);
+		if (!is_bool($xss_clean)) {
+            $xss_clean = (config_item('global_xss_filtering') === TRUE);
+        }
 		$prefix = isset($_COOKIE[$index]) ? '' : config_item('cookie_prefix');
-		return get_instance()->input->cookie($prefix.$index, $xss_clean);
+		return get_instance()->input->cookie($prefix . $index, $xss_clean);
 	}
 }
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('delete_cookie'))
+if ( !function_exists('delete_cookie'))
 {
 	/**
-	 * Delete a COOKIE
+	 * Delete a COOKIE.
 	 *
 	 * @param	mixed
 	 * @param	string	the cookie domain. Usually: .yourdomain.com

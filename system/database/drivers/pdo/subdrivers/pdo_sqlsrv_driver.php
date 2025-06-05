@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,25 +36,51 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO SQLSRV Database Adapter Class
+ * PDO SQLSRV Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
  */
 class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 
+	public $dsn;
+    public $port;
+    public $database;
+    public $QuotedId;
+    public $ConnectionPooling;
+    public $encrypt;
+    public $TraceOn;
+    public $TrustServerCertificate;
+    public $APP;
+    public $Failover_Partner;
+    public $LoginTimeout;
+    public $MultipleActiveResultSets;
+    public $TraceFile;
+    public $WSID;
+    public $char_set;
+    public $conn_id;
+    /**
+     * @var string[]|string
+     */
+    public $_escape_char;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    public $qb_orderby;
+    public $qb_offset;
+    public $qb_select;
+    public $db_debug;
 	/**
-	 * Sub-driver
+	 * Sub-driver.
 	 *
 	 * @var	string
 	 */
@@ -63,14 +89,14 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * ORDER BY random keyword
+	 * ORDER BY random keyword.
 	 *
 	 * @var	array
 	 */
-	protected $_random_keyword = array('NEWID()', 'RAND(%d)');
+	protected $_random_keyword = ['NEWID()', 'RAND(%d)'];
 
 	/**
-	 * Quoted identifier flag
+	 * Quoted identifier flag.
 	 *
 	 * Whether to use SQL-92 standard quoted identifier
 	 * (double quotes) or brackets for identifier escaping.
@@ -82,7 +108,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Builds the DSN if not already set.
 	 *
@@ -95,22 +121,26 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 
 		if (empty($this->dsn))
 		{
-			$this->dsn = 'sqlsrv:Server='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
+			$this->dsn = 'sqlsrv:Server=' . (empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 
-			empty($this->port) OR $this->dsn .= ','.$this->port;
-			empty($this->database) OR $this->dsn .= ';Database='.$this->database;
+			if (!empty($this->port)) {
+                $this->dsn .= ',' . $this->port;
+            }
+			if (!empty($this->database)) {
+                $this->dsn .= ';Database=' . $this->database;
+            }
 
 			// Some custom options
 
-			if (isset($this->QuotedId))
+			if (property_exists($this, 'QuotedId') && $this->QuotedId !== null)
 			{
-				$this->dsn .= ';QuotedId='.$this->QuotedId;
+				$this->dsn .= ';QuotedId=' . $this->QuotedId;
 				$this->_quoted_identifier = (bool) $this->QuotedId;
 			}
 
-			if (isset($this->ConnectionPooling))
+			if (property_exists($this, 'ConnectionPooling') && $this->ConnectionPooling !== null)
 			{
-				$this->dsn .= ';ConnectionPooling='.$this->ConnectionPooling;
+				$this->dsn .= ';ConnectionPooling=' . $this->ConnectionPooling;
 			}
 
 			if ($this->encrypt === TRUE)
@@ -118,22 +148,34 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 				$this->dsn .= ';Encrypt=1';
 			}
 
-			if (isset($this->TraceOn))
+			if (property_exists($this, 'TraceOn') && $this->TraceOn !== null)
 			{
-				$this->dsn .= ';TraceOn='.$this->TraceOn;
+				$this->dsn .= ';TraceOn=' . $this->TraceOn;
 			}
 
-			if (isset($this->TrustServerCertificate))
+			if (property_exists($this, 'TrustServerCertificate') && $this->TrustServerCertificate !== null)
 			{
-				$this->dsn .= ';TrustServerCertificate='.$this->TrustServerCertificate;
+				$this->dsn .= ';TrustServerCertificate=' . $this->TrustServerCertificate;
 			}
 
-			empty($this->APP) OR $this->dsn .= ';APP='.$this->APP;
-			empty($this->Failover_Partner) OR $this->dsn .= ';Failover_Partner='.$this->Failover_Partner;
-			empty($this->LoginTimeout) OR $this->dsn .= ';LoginTimeout='.$this->LoginTimeout;
-			empty($this->MultipleActiveResultSets) OR $this->dsn .= ';MultipleActiveResultSets='.$this->MultipleActiveResultSets;
-			empty($this->TraceFile) OR $this->dsn .= ';TraceFile='.$this->TraceFile;
-			empty($this->WSID) OR $this->dsn .= ';WSID='.$this->WSID;
+			if (!empty($this->APP)) {
+                $this->dsn .= ';APP=' . $this->APP;
+            }
+			if (!empty($this->Failover_Partner)) {
+                $this->dsn .= ';Failover_Partner=' . $this->Failover_Partner;
+            }
+			if (!empty($this->LoginTimeout)) {
+                $this->dsn .= ';LoginTimeout=' . $this->LoginTimeout;
+            }
+			if (!empty($this->MultipleActiveResultSets)) {
+                $this->dsn .= ';MultipleActiveResultSets=' . $this->MultipleActiveResultSets;
+            }
+			if (!empty($this->TraceFile)) {
+                $this->dsn .= ';TraceFile=' . $this->TraceFile;
+            }
+			if (!empty($this->WSID)) {
+                $this->dsn .= ';WSID=' . $this->WSID;
+            }
 		}
 		elseif (preg_match('/QuotedId=(0|1)/', $this->dsn, $match))
 		{
@@ -144,21 +186,21 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Database connection
+	 * Database connection.
 	 *
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
 	public function db_connect($persistent = FALSE)
 	{
-		if ( ! empty($this->char_set) && preg_match('/utf[^8]*8/i', $this->char_set))
+		if ( !empty($this->char_set) && preg_match('/utf[^8]*8/i', $this->char_set))
 		{
 			$this->options[PDO::SQLSRV_ENCODING_UTF8] = 1;
 		}
 
 		$this->conn_id = parent::db_connect($persistent);
 
-		if ( ! is_object($this->conn_id) OR is_bool($this->_quoted_identifier))
+		if ( !is_object($this->conn_id) || is_bool($this->_quoted_identifier))
 		{
 			return $this->conn_id;
 		}
@@ -167,7 +209,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 		$query = $this->query('SELECT CASE WHEN (@@OPTIONS | 256) = @@OPTIONS THEN 1 ELSE 0 END AS qi');
 		$query = $query->row_array();
 		$this->_quoted_identifier = empty($query) ? FALSE : (bool) $query['qi'];
-		$this->_escape_char = ($this->_quoted_identifier) ? '"' : array('[', ']');
+		$this->_escape_char = ($this->_quoted_identifier) ? '"' : ['[', ']'];
 
 		return $this->conn_id;
 	}
@@ -175,7 +217,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show table query
+	 * Show table query.
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -184,23 +226,23 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _list_tables($prefix_limit = FALSE)
 	{
-		$sql = 'SELECT '.$this->escape_identifiers('name')
-			.' FROM '.$this->escape_identifiers('sysobjects')
-			.' WHERE '.$this->escape_identifiers('type')." = 'U'";
+		$sql = 'SELECT ' . $this->escape_identifiers('name')
+			. ' FROM ' . $this->escape_identifiers('sysobjects')
+			. ' WHERE ' . $this->escape_identifiers('type') . " = 'U'";
 
 		if ($prefix_limit === TRUE && $this->dbprefix !== '')
 		{
-			$sql .= ' AND '.$this->escape_identifiers('name')." LIKE '".$this->escape_like_str($this->dbprefix)."%' "
-				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			$sql .= ' AND ' . $this->escape_identifiers('name') . " LIKE '" . $this->escape_like_str($this->dbprefix) . "%' "
+				. sprintf($this->_like_escape_str, $this->_like_escape_chr);
 		}
 
-		return $sql.' ORDER BY '.$this->escape_identifiers('name');
+		return $sql . ' ORDER BY ' . $this->escape_identifiers('name');
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show column query
+	 * Show column query.
 	 *
 	 * Generates a platform-specific query string so that the column names can be fetched
 	 *
@@ -211,13 +253,13 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	{
 		return 'SELECT COLUMN_NAME
 			FROM INFORMATION_SCHEMA.Columns
-			WHERE UPPER(TABLE_NAME) = '.$this->escape(strtoupper($table));
+			WHERE UPPER(TABLE_NAME) = ' . $this->escape(strtoupper($table));
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Returns an object with field data
+	 * Returns an object with field data.
 	 *
 	 * @param	string	$table
 	 * @return	array
@@ -226,7 +268,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	{
 		$sql = 'SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_DEFAULT
 			FROM INFORMATION_SCHEMA.Columns
-			WHERE UPPER(TABLE_NAME) = '.$this->escape(strtoupper($table));
+			WHERE UPPER(TABLE_NAME) = ' . $this->escape(strtoupper($table));
 
 		if (($query = $this->query($sql)) === FALSE)
 		{
@@ -234,14 +276,14 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 		}
 		$query = $query->result_object();
 
-		$retval = array();
+		$retval = [];
 		for ($i = 0, $c = count($query); $i < $c; $i++)
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= $query[$i]->COLUMN_NAME;
-			$retval[$i]->type		= $query[$i]->DATA_TYPE;
-			$retval[$i]->max_length		= ($query[$i]->CHARACTER_MAXIMUM_LENGTH > 0) ? $query[$i]->CHARACTER_MAXIMUM_LENGTH : $query[$i]->NUMERIC_PRECISION;
-			$retval[$i]->default		= $query[$i]->COLUMN_DEFAULT;
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = $query[$i]->COLUMN_NAME;
+			$retval[$i]->type = $query[$i]->DATA_TYPE;
+			$retval[$i]->max_length = ($query[$i]->CHARACTER_MAXIMUM_LENGTH > 0) ? $query[$i]->CHARACTER_MAXIMUM_LENGTH : $query[$i]->NUMERIC_PRECISION;
+			$retval[$i]->default = $query[$i]->COLUMN_DEFAULT;
 		}
 
 		return $retval;
@@ -250,7 +292,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Update statement
+	 * Update statement.
 	 *
 	 * Generates a platform-specific update string from the supplied data
 	 *
@@ -261,14 +303,14 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	protected function _update($table, $values)
 	{
 		$this->qb_limit = FALSE;
-		$this->qb_orderby = array();
+		$this->qb_orderby = [];
 		return parent::_update($table, $values);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Delete statement
+	 * Delete statement.
 	 *
 	 * Generates a platform-specific delete string from the supplied data
 	 *
@@ -279,7 +321,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	{
 		if ($this->qb_limit)
 		{
-			return 'WITH ci_delete AS (SELECT TOP '.$this->qb_limit.' * FROM '.$table.$this->_compile_wh('qb_where').') DELETE FROM ci_delete';
+			return 'WITH ci_delete AS (SELECT TOP ' . $this->qb_limit . ' * FROM ' . $table . $this->_compile_wh('qb_where') . ') DELETE FROM ci_delete';
 		}
 
 		return parent::_delete($table);
@@ -288,7 +330,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * LIMIT
+	 * LIMIT.
 	 *
 	 * Generates a platform-specific LIMIT clause
 	 *
@@ -298,18 +340,18 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	protected function _limit($sql)
 	{
 		// As of SQL Server 2012 (11.0.*) OFFSET is supported
-		if (version_compare($this->version(), '11', '>='))
-		{
-			// SQL Server OFFSET-FETCH can be used only with the ORDER BY clause
-			empty($this->qb_orderby) && $sql .= ' ORDER BY 1';
-
-			return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
-		}
+		if (version_compare($this->version(), '11', '>=')) {
+            // SQL Server OFFSET-FETCH can be used only with the ORDER BY clause
+            if (empty($this->qb_orderby)) {
+                $sql .= ' ORDER BY 1';
+            }
+            return $sql . ' OFFSET ' . (int) $this->qb_offset . ' ROWS FETCH NEXT ' . $this->qb_limit . ' ROWS ONLY';
+        }
 
 		$limit = $this->qb_offset + $this->qb_limit;
 
 		// An ORDER BY clause is required for ROW_NUMBER() to work
-		if ($this->qb_offset && ! empty($this->qb_orderby))
+		if ($this->qb_offset && !empty($this->qb_orderby))
 		{
 			$orderby = $this->_compile_order_by();
 
@@ -317,37 +359,37 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0 OR strpos(implode(',', $this->qb_select), '*') !== FALSE)
+			if (count($this->qb_select) === 0 || strpos(implode(',', $this->qb_select), '*') !== FALSE)
 			{
 				$select = '*'; // Inevitable
 			}
 			else
 			{
 				// Use only field names and their aliases, everything else is out of our scope.
-				$select = array();
+				$select = [];
 				$field_regexp = ($this->_quoted_identifier)
 					? '("[^\"]+")' : '(\[[^\]]+\])';
 				for ($i = 0, $c = count($this->qb_select); $i < $c; $i++)
 				{
-					$select[] = preg_match('/(?:\s|\.)'.$field_regexp.'$/i', $this->qb_select[$i], $m)
+					$select[] = preg_match('/(?:\s|\.)' . $field_regexp . '$/i', $this->qb_select[$i], $m)
 						? $m[1] : $this->qb_select[$i];
 				}
 				$select = implode(', ', $select);
 			}
 
-			return 'SELECT '.$select." FROM (\n\n"
-				.preg_replace('/^(SELECT( DISTINCT)?)/i', '\\1 ROW_NUMBER() OVER('.trim($orderby).') AS '.$this->escape_identifiers('CI_rownum').', ', $sql)
-				."\n\n) ".$this->escape_identifiers('CI_subquery')
-				."\nWHERE ".$this->escape_identifiers('CI_rownum').' BETWEEN '.($this->qb_offset + 1).' AND '.$limit;
+			return 'SELECT ' . $select . " FROM (\n\n"
+				. preg_replace('/^(SELECT( DISTINCT)?)/i', '\\1 ROW_NUMBER() OVER(' . trim($orderby) . ') AS ' . $this->escape_identifiers('CI_rownum') . ', ', $sql)
+				. "\n\n) " . $this->escape_identifiers('CI_subquery')
+				. "\nWHERE " . $this->escape_identifiers('CI_rownum') . ' BETWEEN ' . ($this->qb_offset + 1) . ' AND ' . $limit;
 		}
 
-		return preg_replace('/(^\SELECT (DISTINCT)?)/i','\\1 TOP '.$limit.' ', $sql);
+		return preg_replace('/(^\SELECT (DISTINCT)?)/i', '\\1 TOP ' . $limit . ' ', $sql);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Insert batch statement
+	 * Insert batch statement.
 	 *
 	 * Generates a platform-specific insert string from the supplied data.
 	 *

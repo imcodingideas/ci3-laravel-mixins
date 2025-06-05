@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,9 +36,9 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Array Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('element'))
+if ( !function_exists('element'))
 {
 	/**
-	 * Element
+	 * Element.
 	 *
 	 * Lets you determine whether an array index is set and whether it has a value.
 	 * If the element is empty it returns NULL (or whatever you specify as the default value.)
@@ -71,10 +71,10 @@ if ( ! function_exists('element'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('random_element'))
+if ( !function_exists('random_element'))
 {
 	/**
-	 * Random Element - Takes an array as input and returns a random element
+	 * Random Element - Takes an array as input and returns a random element.
 	 *
 	 * @param	array
 	 * @return	mixed	depends on what the array contains
@@ -87,10 +87,10 @@ if ( ! function_exists('random_element'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('elements'))
+if ( !function_exists('elements'))
 {
 	/**
-	 * Elements
+	 * Elements.
 	 *
 	 * Returns only the array items specified. Will return a default value if
 	 * it is not set.
@@ -102,9 +102,11 @@ if ( ! function_exists('elements'))
 	 */
 	function elements($items, array $array, $default = NULL)
 	{
-		$return = array();
+		$return = [];
 
-		is_array($items) OR $items = array($items);
+		if (!is_array($items)) {
+            $items = [$items];
+        }
 
 		foreach ($items as $item)
 		{

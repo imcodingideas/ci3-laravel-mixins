@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,10 +36,10 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * SQLite3 Result Class
+ * SQLite3 Result Class.
  *
  * This class extends the parent result class: CI_DB_result
  *
@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_sqlite3_result extends CI_DB_result {
 
 	/**
-	 * Number of fields in the result set
+	 * Number of fields in the result set.
 	 *
 	 * @return	int
 	 */
@@ -62,7 +62,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * Generates an array of column names
 	 *
@@ -70,7 +70,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 */
 	public function list_fields()
 	{
-		$field_names = array();
+		$field_names = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
 		{
 			$field_names[] = $this->result_id->columnName($i);
@@ -82,7 +82,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data
+	 * Field data.
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
@@ -90,24 +90,24 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 */
 	public function field_data()
 	{
-		static $data_types = array(
+		static $data_types = [
 			SQLITE3_INTEGER	=> 'integer',
 			SQLITE3_FLOAT	=> 'float',
 			SQLITE3_TEXT	=> 'text',
 			SQLITE3_BLOB	=> 'blob',
-			SQLITE3_NULL	=> 'null'
-		);
+			SQLITE3_NULL	=> 'null',
+		];
 
-		$retval = array();
+		$retval = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= $this->result_id->columnName($i);
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = $this->result_id->columnName($i);
 
 			$type = $this->result_id->columnType($i);
-			$retval[$i]->type		= isset($data_types[$type]) ? $data_types[$type] : $type;
+			$retval[$i]->type = $data_types[$type] ?? $type;
 
-			$retval[$i]->max_length		= NULL;
+			$retval[$i]->max_length = NULL;
 		}
 
 		return $retval;
@@ -116,7 +116,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the result
+	 * Free the result.
 	 *
 	 * @return	void
 	 */
@@ -132,7 +132,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - associative array
+	 * Result - associative array.
 	 *
 	 * Returns the result set as an array
 	 *
@@ -146,7 +146,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - object
+	 * Result - object.
 	 *
 	 * Returns the result set as an object
 	 *
@@ -177,7 +177,7 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Data Seek
+	 * Data Seek.
 	 *
 	 * Moves the internal pointer to the desired offset. We call
 	 * this internally before fetching results to make sure the

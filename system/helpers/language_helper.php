@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,9 +36,9 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Language Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('lang'))
+if ( !function_exists('lang'))
 {
 	/**
-	 * Lang
+	 * Lang.
 	 *
 	 * Fetches a language variable and optionally outputs a form label
 	 *
@@ -62,13 +62,13 @@ if ( ! function_exists('lang'))
 	 * @param	array	$attributes	Any additional HTML attributes
 	 * @return	string
 	 */
-	function lang($line, $for = '', $attributes = array())
+	function lang($line, $for = '', $attributes = [])
 	{
 		$line = get_instance()->lang->line($line);
 
 		if ($for !== '')
 		{
-			$line = '<label for="'.$for.'"'._stringify_attributes($attributes).'>'.$line.'</label>';
+			$line = '<label for="' . $for . '"' . _stringify_attributes($attributes) . '>' . $line . '</label>';
 		}
 
 		return $line;

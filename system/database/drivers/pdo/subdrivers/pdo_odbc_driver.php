@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,32 +36,42 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO ODBC Database Adapter Class
+ * PDO ODBC Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
  */
 class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 
+	public $dsn;
+    public $hostname;
+    public $HOSTNAME;
+    public $port;
+    public $PORT;
+    public $DSN;
+    public $database;
+    public $DRIVER;
+    public $DATABASE;
+    public $PROTOCOL;
+    public $dbprefix;
+    public $_like_escape_chr;
 	/**
-	 * Sub-driver
+	 * Sub-driver.
 	 *
 	 * @var	string
 	 */
 	public $subdriver = 'odbc';
 
 	/**
-	 * Database schema
+	 * Database schema.
 	 *
 	 * @var	string
 	 */
@@ -70,7 +80,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Identifier escape character
+	 * Identifier escape character.
 	 *
 	 * Must be empty for ODBC.
 	 *
@@ -79,23 +89,23 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	protected $_escape_char = '';
 
 	/**
-	 * ESCAPE statement string
+	 * ESCAPE statement string.
 	 *
 	 * @var	string
 	 */
 	protected $_like_escape_str = " {escape '%s'} ";
 
 	/**
-	 * ORDER BY random keyword
+	 * ORDER BY random keyword.
 	 *
 	 * @var	array
 	 */
-	protected $_random_keyword = array('RND()', 'RND(%d)');
+	protected $_random_keyword = ['RND()', 'RND(%d)'];
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Builds the DSN if not already set.
 	 *
@@ -113,56 +123,56 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 			// Pre-defined DSN
 			if (empty($this->hostname) && empty($this->HOSTNAME) && empty($this->port) && empty($this->PORT))
 			{
-				if (isset($this->DSN))
+				if (property_exists($this, 'DSN') && $this->DSN !== null)
 				{
-					$this->dsn .= 'DSN='.$this->DSN;
+					$this->dsn .= 'DSN=' . $this->DSN;
 				}
-				elseif ( ! empty($this->database))
+				elseif ( !empty($this->database))
 				{
-					$this->dsn .= 'DSN='.$this->database;
+					$this->dsn .= 'DSN=' . $this->database;
 				}
 
 				return;
 			}
 
 			// If the DSN is not pre-configured - try to build an IBM DB2 connection string
-			$this->dsn .= 'DRIVER='.(isset($this->DRIVER) ? '{'.$this->DRIVER.'}' : '{IBM DB2 ODBC DRIVER}').';';
+			$this->dsn .= 'DRIVER=' . (property_exists($this, 'DRIVER') && $this->DRIVER !== null ? '{' . $this->DRIVER . '}' : '{IBM DB2 ODBC DRIVER}') . ';';
 
-			if (isset($this->DATABASE))
+			if (property_exists($this, 'DATABASE') && $this->DATABASE !== null)
 			{
-				$this->dsn .= 'DATABASE='.$this->DATABASE.';';
+				$this->dsn .= 'DATABASE=' . $this->DATABASE . ';';
 			}
-			elseif ( ! empty($this->database))
+			elseif ( !empty($this->database))
 			{
-				$this->dsn .= 'DATABASE='.$this->database.';';
+				$this->dsn .= 'DATABASE=' . $this->database . ';';
 			}
 
-			if (isset($this->HOSTNAME))
+			if (property_exists($this, 'HOSTNAME') && $this->HOSTNAME !== null)
 			{
-				$this->dsn .= 'HOSTNAME='.$this->HOSTNAME.';';
+				$this->dsn .= 'HOSTNAME=' . $this->HOSTNAME . ';';
 			}
 			else
 			{
-				$this->dsn .= 'HOSTNAME='.(empty($this->hostname) ? '127.0.0.1;' : $this->hostname.';');
+				$this->dsn .= 'HOSTNAME=' . (empty($this->hostname) ? '127.0.0.1;' : $this->hostname . ';');
 			}
 
-			if (isset($this->PORT))
+			if (property_exists($this, 'PORT') && $this->PORT !== null)
 			{
-				$this->dsn .= 'PORT='.$this->port.';';
+				$this->dsn .= 'PORT=' . $this->port . ';';
 			}
-			elseif ( ! empty($this->port))
+			elseif ( !empty($this->port))
 			{
-				$this->dsn .= ';PORT='.$this->port.';';
+				$this->dsn .= ';PORT=' . $this->port . ';';
 			}
 
-			$this->dsn .= 'PROTOCOL='.(isset($this->PROTOCOL) ? $this->PROTOCOL.';' : 'TCPIP;');
+			$this->dsn .= 'PROTOCOL=' . (property_exists($this, 'PROTOCOL') && $this->PROTOCOL !== null ? $this->PROTOCOL . ';' : 'TCPIP;');
 		}
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Platform-dependent string escape
+	 * Platform-dependent string escape.
 	 *
 	 * @param	string
 	 * @return	string
@@ -193,7 +203,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show table query
+	 * Show table query.
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -202,12 +212,12 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _list_tables($prefix_limit = FALSE)
 	{
-		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '".$this->schema."'";
+		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '" . $this->schema . "'";
 
 		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
 		{
-			return $sql." AND table_name LIKE '".$this->escape_like_str($this->dbprefix)."%' "
-				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			return $sql . " AND table_name LIKE '" . $this->escape_like_str($this->dbprefix) . "%' "
+				. sprintf($this->_like_escape_str, $this->_like_escape_chr);
 		}
 
 		return $sql;
@@ -216,7 +226,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show column query
+	 * Show column query.
 	 *
 	 * Generates a platform-specific query string so that the column names can be fetched
 	 *
@@ -225,6 +235,6 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _list_columns($table = '')
 	{
-		return 'SELECT column_name FROM information_schema.columns WHERE table_name = '.$this->escape($table);
+		return 'SELECT column_name FROM information_schema.columns WHERE table_name = ' . $this->escape($table);
 	}
 }

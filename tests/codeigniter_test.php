@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter Test Bootstrap
+ * CodeIgniter Test Bootstrap.
  * 
  * Simplified CodeIgniter initialization for testing
  * - No routing
@@ -8,21 +9,21 @@
  * - No output rendering
  * - Only core classes initialization
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /*
  * ------------------------------------------------------
  *  Load the framework constants
  * ------------------------------------------------------
  */
-	if (file_exists(APPPATH.'config/'.ENVIRONMENT.'/constants.php'))
+	if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/constants.php'))
 	{
-		require_once(APPPATH.'config/'.ENVIRONMENT.'/constants.php');
+		require_once APPPATH . 'config/' . ENVIRONMENT . '/constants.php';
 	}
 
-	if (file_exists(APPPATH.'config/constants.php'))
+	if (file_exists(APPPATH . 'config/constants.php'))
 	{
-		require_once(APPPATH.'config/constants.php');
+		require_once APPPATH . 'config/constants.php';
 	}
 
 /*
@@ -30,14 +31,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *  Load the global functions
  * ------------------------------------------------------
  */
-	require_once(BASEPATH.'core/Common.php');
+	require_once BASEPATH . 'core/Common.php';
 
 /*
  * ------------------------------------------------------
  * Security procedures (minimal for testing)
  * ------------------------------------------------------
  */
-if ( ! is_php('5.4'))
+if ( !is_php('5.4'))
 {
 	ini_set('magic_quotes_runtime', 0);
 }
@@ -56,9 +57,9 @@ if ( ! is_php('5.4'))
  *  Set the subclass_prefix
  * ------------------------------------------------------
  */
-	if ( ! empty($assign_to_config['subclass_prefix']))
+	if ( !empty($assign_to_config['subclass_prefix']))
 	{
-		get_config(array('subclass_prefix' => $assign_to_config['subclass_prefix']));
+		get_config(['subclass_prefix' => $assign_to_config['subclass_prefix']]);
 	}
 
 /*
@@ -70,13 +71,13 @@ if ( ! is_php('5.4'))
 	{
 		if ($composer_autoload === TRUE)
 		{
-			file_exists(APPPATH.'vendor/autoload.php')
-				? require_once(APPPATH.'vendor/autoload.php')
-				: log_message('error', '$config[\'composer_autoload\'] is set to TRUE but '.APPPATH.'vendor/autoload.php was not found.');
+			file_exists(APPPATH . 'vendor/autoload.php')
+				? require_once(APPPATH . 'vendor/autoload.php')
+				: log_message('error', '$config[\'composer_autoload\'] is set to TRUE but ' . APPPATH . 'vendor/autoload.php was not found.');
 		}
 		elseif (file_exists($composer_autoload))
 		{
-			require_once($composer_autoload);
+			require_once $composer_autoload;
 		}
 	}
 
@@ -85,7 +86,7 @@ if ( ! is_php('5.4'))
  *  Start the timer
  * ------------------------------------------------------
  */
-	$BM =& load_class('Benchmark', 'core');
+	$BM = &load_class('Benchmark', 'core');
 	$BM->mark('total_execution_time_start');
 	$BM->mark('loading_time:_base_classes_start');
 
@@ -94,7 +95,7 @@ if ( ! is_php('5.4'))
  *  Instantiate the config class
  * ------------------------------------------------------
  */
-	$CFG =& load_class('Config', 'core');
+	$CFG = &load_class('Config', 'core');
 
 	// Manual config items
 	if (isset($assign_to_config) && is_array($assign_to_config))
@@ -144,27 +145,27 @@ if ( ! is_php('5.4'))
  *  Load compatibility features
  * ------------------------------------------------------
  */
-	require_once(BASEPATH.'core/compat/mbstring.php');
-	require_once(BASEPATH.'core/compat/hash.php');
-	require_once(BASEPATH.'core/compat/password.php');
-	require_once(BASEPATH.'core/compat/standard.php');
+	require_once BASEPATH . 'core/compat/mbstring.php';
+	require_once BASEPATH . 'core/compat/hash.php';
+	require_once BASEPATH . 'core/compat/password.php';
+	require_once BASEPATH . 'core/compat/standard.php';
 
 /*
  * ------------------------------------------------------
  *  Instantiate core classes needed for testing
  * ------------------------------------------------------
  */
-	$UNI =& load_class('Utf8', 'core');
-	$SEC =& load_class('Security', 'core');
-	$IN  =& load_class('Input', 'core');
-	$LANG =& load_class('Lang', 'core');
+	$UNI = &load_class('Utf8', 'core');
+	$SEC = &load_class('Security', 'core');
+	$IN = &load_class('Input', 'core');
+	$LANG = &load_class('Lang', 'core');
 
 /*
  * ------------------------------------------------------
  *  Load the base controller class (for get_instance)
  * ------------------------------------------------------
  */
-	require_once BASEPATH.'core/Controller.php';
+	require_once BASEPATH . 'core/Controller.php';
 
 	/**
 	 * Reference to the CI_Controller method.
@@ -178,9 +179,9 @@ if ( ! is_php('5.4'))
 		return CI_Controller::get_instance();
 	}
 
-	if (file_exists(APPPATH.'core/'.$CFG->config['subclass_prefix'].'Controller.php'))
+	if (file_exists(APPPATH . 'core/' . $CFG->config['subclass_prefix'] . 'Controller.php'))
 	{
-		require_once APPPATH.'core/'.$CFG->config['subclass_prefix'].'Controller.php';
+		require_once APPPATH . 'core/' . $CFG->config['subclass_prefix'] . 'Controller.php';
 	}
 
 	// Set benchmark end point

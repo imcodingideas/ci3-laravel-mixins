@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,13 +36,11 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * MS SQL Utility Class
+ * MS SQL Utility Class.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -50,26 +48,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_mssql_utility extends CI_DB_utility {
 
 	/**
-	 * List databases statement
+	 * List databases statement.
 	 *
 	 * @var	string
 	 */
-	protected $_list_databases	= 'EXEC sp_helpdb'; // Can also be: EXEC sp_databases
+	protected $_list_databases = 'EXEC sp_helpdb'; // Can also be: EXEC sp_databases
 
 	/**
-	 * OPTIMIZE TABLE statement
+	 * OPTIMIZE TABLE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_optimize_table	= 'ALTER INDEX all ON %s REORGANIZE';
+	protected $_optimize_table = 'ALTER INDEX all ON %s REORGANIZE';
 
 	/**
-	 * Export
+	 * Export.
 	 *
 	 * @param	array	$params	Preferences
 	 * @return	bool
 	 */
-	protected function _backup($params = array())
+	protected function _backup($params = [])
 	{
 		// Currently unsupported
 		return $this->db->display_error('db_unsupported_feature');

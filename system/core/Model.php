@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,13 +36,11 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Model Class
+ * Model Class.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Libraries
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/config.html
@@ -50,15 +48,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Model {
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * @link	https://github.com/bcit-ci/CodeIgniter/issues/5332
 	 * @return	void
 	 */
-	public function __construct() {}
+	public function __construct()
+	{
+		// keep this file
+	}
 
 	/**
-	 * __get magic
+	 * __get magic.
 	 *
 	 * Allows models to access CI's loaded classes using the same
 	 * syntax as controllers.

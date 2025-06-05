@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,9 +36,9 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * PHP ext/standard compatibility package
  *
  * @package		CodeIgniter
@@ -57,20 +57,19 @@ if (is_php('5.5'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('array_column'))
+if ( !function_exists('array_column'))
 {
-	/**
-	 * array_column()
-	 *
-	 * @link	http://php.net/array_column
-	 * @param	array	$array
-	 * @param	mixed	$column_key
-	 * @param	mixed	$index_key
-	 * @return	array
-	 */
-	function array_column(array $array, $column_key, $index_key = NULL)
+    /**
+     * array_column().
+     *
+     * @link	http://php.net/array_column
+     * @param	mixed	$column_key
+     * @param	mixed	$index_key
+     * @return	array
+     */
+    function array_column(array $array, $column_key, $index_key = NULL)
 	{
-		if ( ! in_array($type = gettype($column_key), array('integer', 'string', 'NULL'), TRUE))
+		if ( !in_array($type = gettype($column_key), ['integer', 'string', 'NULL'], TRUE))
 		{
 			if ($type === 'double')
 			{
@@ -87,7 +86,7 @@ if ( ! function_exists('array_column'))
 			}
 		}
 
-		if ( ! in_array($type = gettype($index_key), array('integer', 'string', 'NULL'), TRUE))
+		if ( !in_array($type = gettype($index_key), ['integer', 'string', 'NULL'], TRUE))
 		{
 			if ($type === 'double')
 			{
@@ -104,7 +103,7 @@ if ( ! function_exists('array_column'))
 			}
 		}
 
-		$result = array();
+		$result = [];
 		foreach ($array as &$a)
 		{
 			if ($column_key === NULL)
@@ -120,7 +119,7 @@ if ( ! function_exists('array_column'))
 				continue;
 			}
 
-			if ($index_key === NULL OR ! array_key_exists($index_key, $a))
+			if ($index_key === NULL || !array_key_exists($index_key, $a))
 			{
 				$result[] = $value;
 			}
@@ -143,10 +142,10 @@ if (is_php('5.4'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('hex2bin'))
+if ( !function_exists('hex2bin'))
 {
 	/**
-	 * hex2bin()
+	 * hex2bin().
 	 *
 	 * @link	http://php.net/hex2bin
 	 * @param	string	$data
@@ -154,7 +153,7 @@ if ( ! function_exists('hex2bin'))
 	 */
 	function hex2bin($data)
 	{
-		if (in_array($type = gettype($data), array('array', 'double', 'object', 'resource'), TRUE))
+		if (in_array($type = gettype($data), ['array', 'double', 'object', 'resource'], TRUE))
 		{
 			if ($type === 'object' && method_exists($data, '__toString'))
 			{
@@ -162,7 +161,7 @@ if ( ! function_exists('hex2bin'))
 			}
 			else
 			{
-				trigger_error('hex2bin() expects parameter 1 to be string, '.$type.' given', E_USER_WARNING);
+				trigger_error('hex2bin() expects parameter 1 to be string, ' . $type . ' given', E_USER_WARNING);
 				return NULL;
 			}
 		}
@@ -172,7 +171,7 @@ if ( ! function_exists('hex2bin'))
 			trigger_error('Hexadecimal input string must have an even length', E_USER_WARNING);
 			return FALSE;
 		}
-		elseif ( ! preg_match('/^[0-9a-f]*$/i', $data))
+		elseif ( !preg_match('/^[0-9a-f]*$/i', $data))
 		{
 			trigger_error('Input string must be hexadecimal string', E_USER_WARNING);
 			return FALSE;

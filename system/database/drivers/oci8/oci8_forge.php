@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,10 +36,10 @@
  * @since	Version 1.4.1
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Oracle Forge Class
+ * Oracle Forge Class.
  *
  * @category	Database
  * @author		EllisLab Dev Team
@@ -48,51 +48,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_oci8_forge extends CI_DB_forge {
 
 	/**
-	 * CREATE DATABASE statement
+	 * CREATE DATABASE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_create_database	= FALSE;
+	protected $_create_database = FALSE;
 
 	/**
-	 * CREATE TABLE IF statement
+	 * CREATE TABLE IF statement.
 	 *
 	 * @var	string
 	 */
-	protected $_create_table_if	= FALSE;
+	protected $_create_table_if = FALSE;
 
 	/**
-	 * DROP DATABASE statement
+	 * DROP DATABASE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_drop_database	= FALSE;
+	protected $_drop_database = FALSE;
 
 	/**
-	 * DROP TABLE IF statement
+	 * DROP TABLE IF statement.
 	 *
 	 * @var	string
 	 */
-	protected $_drop_table_if	= FALSE;
+	protected $_drop_table_if = FALSE;
 
 	/**
-	 * UNSIGNED support
+	 * UNSIGNED support.
 	 *
 	 * @var	bool|array
 	 */
-	protected $_unsigned		= FALSE;
+	protected $_unsigned = FALSE;
 
 	/**
-	 * NULL value representation in CREATE/ALTER TABLE statements
+	 * NULL value representation in CREATE/ALTER TABLE statements.
 	 *
 	 * @var	string
 	 */
-	protected $_null		= 'NULL';
+	protected $_null = 'NULL';
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * ALTER TABLE
+	 * ALTER TABLE.
 	 *
 	 * @param	string	$alter_type	ALTER type
 	 * @param	string	$table		Table name
@@ -110,39 +110,39 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 			$alter_type = 'MODIFY';
 		}
 
-		$sql = 'ALTER TABLE '.$this->db->escape_identifiers($table);
-		$sqls = array();
+		$sql = 'ALTER TABLE ' . $this->db->escape_identifiers($table);
+		$sqls = [];
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
 			if ($field[$i]['_literal'] !== FALSE)
 			{
-				$field[$i] = "\n\t".$field[$i]['_literal'];
+				$field[$i] = "\n\t" . $field[$i]['_literal'];
 			}
 			else
 			{
-				$field[$i]['_literal'] = "\n\t".$this->_process_column($field[$i]);
+				$field[$i]['_literal'] = "\n\t" . $this->_process_column($field[$i]);
 
-				if ( ! empty($field[$i]['comment']))
+				if ( !empty($field[$i]['comment']))
 				{
 					$sqls[] = 'COMMENT ON COLUMN '
-						.$this->db->escape_identifiers($table).'.'.$this->db->escape_identifiers($field[$i]['name'])
-						.' IS '.$field[$i]['comment'];
+						. $this->db->escape_identifiers($table) . '.' . $this->db->escape_identifiers($field[$i]['name'])
+						. ' IS ' . $field[$i]['comment'];
 				}
 
-				if ($alter_type === 'MODIFY' && ! empty($field[$i]['new_name']))
+				if ($alter_type === 'MODIFY' && !empty($field[$i]['new_name']))
 				{
-					$sqls[] = $sql.' RENAME COLUMN '.$this->db->escape_identifiers($field[$i]['name'])
-						.' TO '.$this->db->escape_identifiers($field[$i]['new_name']);
+					$sqls[] = $sql . ' RENAME COLUMN ' . $this->db->escape_identifiers($field[$i]['name'])
+						. ' TO ' . $this->db->escape_identifiers($field[$i]['new_name']);
 				}
 
-				$field[$i] = "\n\t".$field[$i]['_literal'];
+				$field[$i] = "\n\t" . $field[$i]['_literal'];
 			}
 		}
 
-		$sql .= ' '.$alter_type.' ';
+		$sql .= ' ' . $alter_type . ' ';
 		$sql .= (count($field) === 1)
 				? $field[0]
-				: '('.implode(',', $field).')';
+				: '(' . implode(',', $field) . ')';
 
 		// RENAME COLUMN must be executed after MODIFY
 		array_unshift($sqls, $sql);
@@ -152,7 +152,7 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute AUTO_INCREMENT
+	 * Field attribute AUTO_INCREMENT.
 	 *
 	 * @param	array	&$attributes
 	 * @param	array	&$field
@@ -160,7 +160,7 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( ! empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos($field['type'], 'number') !== FALSE && version_compare($this->db->version(), '12.1', '>='))
+		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos($field['type'], 'number') !== FALSE && version_compare($this->db->version(), '12.1', '>='))
 		{
 			$field['auto_increment'] = ' GENERATED ALWAYS AS IDENTITY';
 		}
@@ -169,7 +169,7 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process column
+	 * Process column.
 	 *
 	 * @param	array	$field
 	 * @return	string
@@ -177,18 +177,18 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
-			.' '.$field['type'].$field['length']
-			.$field['unsigned']
-			.$field['default']
-			.$field['auto_increment']
-			.$field['null']
-			.$field['unique'];
+			. ' ' . $field['type'] . $field['length']
+			. $field['unsigned']
+			. $field['default']
+			. $field['auto_increment']
+			. $field['null']
+			. $field['unique'];
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute TYPE
+	 * Field attribute TYPE.
 	 *
 	 * Performs a data type mapping between different databases.
 	 *
@@ -200,14 +200,8 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 		switch (strtoupper($attributes['TYPE']))
 		{
 			case 'TINYINT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'MEDIUMINT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'INT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'BIGINT':
 				$attributes['TYPE'] = 'NUMBER';
 				return;

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,63 +36,62 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Jquery Class
+ * Jquery Class.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Loader
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/javascript.html
  */
 class CI_Jquery extends CI_Javascript {
 
+	public $CI;
 	/**
-	 * JavaScript directory location
+	 * JavaScript directory location.
 	 *
 	 * @var	string
 	 */
 	protected $_javascript_folder = 'js';
 
 	/**
-	 * JQuery code for load
+	 * JQuery code for load.
 	 *
 	 * @var	array
 	 */
-	public $jquery_code_for_load = array();
+	public $jquery_code_for_load = [];
 
 	/**
-	 * JQuery code for compile
+	 * JQuery code for compile.
 	 *
 	 * @var	array
 	 */
-	public $jquery_code_for_compile = array();
+	public $jquery_code_for_compile = [];
 
 	/**
-	 * JQuery corner active flag
+	 * JQuery corner active flag.
 	 *
 	 * @var	bool
 	 */
 	public $jquery_corner_active = FALSE;
 
 	/**
-	 * JQuery table sorter active flag
+	 * JQuery table sorter active flag.
 	 *
 	 * @var	bool
 	 */
 	public $jquery_table_sorter_active = FALSE;
 
 	/**
-	 * JQuery table sorter pager active
+	 * JQuery table sorter pager active.
 	 *
 	 * @var	bool
 	 */
 	public $jquery_table_sorter_pager_active = FALSE;
 
 	/**
-	 * JQuery AJAX image
+	 * JQuery AJAX image.
 	 *
 	 * @var	string
 	 */
@@ -101,14 +100,14 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param	array	$params
 	 * @return	void
 	 */
 	public function __construct($params)
 	{
-		$this->CI =& get_instance();
+		$this->CI = &get_instance();
 		extract($params);
 
 		if ($autoload === TRUE)
@@ -124,7 +123,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Blur
+	 * Blur.
 	 *
 	 * Outputs a jQuery blur event
 	 *
@@ -140,7 +139,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Change
+	 * Change.
 	 *
 	 * Outputs a jQuery change event
 	 *
@@ -156,7 +155,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Click
+	 * Click.
 	 *
 	 * Outputs a jQuery click event
 	 *
@@ -167,7 +166,9 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _click($element = 'this', $js = '', $ret_false = TRUE)
 	{
-		is_array($js) OR $js = array($js);
+		if (!is_array($js)) {
+            $js = [$js];
+        }
 
 		if ($ret_false)
 		{
@@ -180,7 +181,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Double Click
+	 * Double Click.
 	 *
 	 * Outputs a jQuery dblclick event
 	 *
@@ -196,7 +197,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Error
+	 * Error.
 	 *
 	 * Outputs a jQuery error event
 	 *
@@ -212,7 +213,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Focus
+	 * Focus.
 	 *
 	 * Outputs a jQuery focus event
 	 *
@@ -228,7 +229,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Hover
+	 * Hover.
 	 *
 	 * Outputs a jQuery hover event
 	 *
@@ -239,7 +240,7 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _hover($element = 'this', $over = '', $out = '')
 	{
-		$event = "\n\t$(".$this->_prep_element($element).").hover(\n\t\tfunction()\n\t\t{\n\t\t\t{$over}\n\t\t}, \n\t\tfunction()\n\t\t{\n\t\t\t{$out}\n\t\t});\n";
+		$event = "\n\t$(" . $this->_prep_element($element) . ").hover(\n\t\tfunction()\n\t\t{\n\t\t\t{$over}\n\t\t}, \n\t\tfunction()\n\t\t{\n\t\t\t{$out}\n\t\t});\n";
 
 		$this->jquery_code_for_compile[] = $event;
 
@@ -249,7 +250,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Keydown
+	 * Keydown.
 	 *
 	 * Outputs a jQuery keydown event
 	 *
@@ -265,7 +266,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Keyup
+	 * Keyup.
 	 *
 	 * Outputs a jQuery keydown event
 	 *
@@ -281,7 +282,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Load
+	 * Load.
 	 *
 	 * Outputs a jQuery load event
 	 *
@@ -297,7 +298,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mousedown
+	 * Mousedown.
 	 *
 	 * Outputs a jQuery mousedown event
 	 *
@@ -313,7 +314,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mouse Out
+	 * Mouse Out.
 	 *
 	 * Outputs a jQuery mouseout event
 	 *
@@ -329,7 +330,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mouse Over
+	 * Mouse Over.
 	 *
 	 * Outputs a jQuery mouseover event
 	 *
@@ -345,7 +346,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mouseup
+	 * Mouseup.
 	 *
 	 * Outputs a jQuery mouseup event
 	 *
@@ -361,30 +362,30 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Output
+	 * Output.
 	 *
 	 * Outputs script directly
 	 *
 	 * @param	array	$array_js = array()
 	 * @return	void
 	 */
-	protected function _output($array_js = array())
+	protected function _output($array_js = [])
 	{
-		if ( ! is_array($array_js))
+		if ( !is_array($array_js))
 		{
-			$array_js = array($array_js);
+			$array_js = [$array_js];
 		}
 
 		foreach ($array_js as $js)
 		{
-			$this->jquery_code_for_compile[] = "\t".$js."\n";
+			$this->jquery_code_for_compile[] = "\t" . $js . "\n";
 		}
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Resize
+	 * Resize.
 	 *
 	 * Outputs a jQuery resize event
 	 *
@@ -400,7 +401,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Scroll
+	 * Scroll.
 	 *
 	 * Outputs a jQuery scroll event
 	 *
@@ -416,7 +417,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Unload
+	 * Unload.
 	 *
 	 * Outputs a jQuery unload event
 	 *
@@ -434,7 +435,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Add Class
+	 * Add Class.
 	 *
 	 * Outputs a jQuery addClass event
 	 *
@@ -445,13 +446,13 @@ class CI_Jquery extends CI_Javascript {
 	protected function _addClass($element = 'this', $class = '')
 	{
 		$element = $this->_prep_element($element);
-		return '$('.$element.').addClass("'.$class.'");';
+		return '$(' . $element . ').addClass("' . $class . '");';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Animate
+	 * Animate.
 	 *
 	 * Outputs a jQuery animate event
 	 *
@@ -461,7 +462,7 @@ class CI_Jquery extends CI_Javascript {
 	 * @param	string	$extra
 	 * @return	string
 	 */
-	protected function _animate($element = 'this', $params = array(), $speed = '', $extra = '')
+	protected function _animate($element = 'this', $params = [], $speed = '', $extra = '')
 	{
 		$element = $this->_prep_element($element);
 		$speed = $this->_validate_speed($speed);
@@ -470,28 +471,28 @@ class CI_Jquery extends CI_Javascript {
 
 		foreach ($params as $param => $value)
 		{
-			$animations .= $param.": '".$value."', ";
+			$animations .= $param . ": '" . $value . "', ";
 		}
 
 		$animations = substr($animations, 0, -2); // remove the last ", "
 
 		if ($speed !== '')
 		{
-			$speed = ', '.$speed;
+			$speed = ', ' . $speed;
 		}
 
 		if ($extra !== '')
 		{
-			$extra = ', '.$extra;
+			$extra = ', ' . $extra;
 		}
 
-		return "$({$element}).animate({\n$animations\n\t\t}".$speed.$extra.');';
+		return "$({$element}).animate({\n$animations\n\t\t}" . $speed . $extra . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fade In
+	 * Fade In.
 	 *
 	 * Outputs a jQuery hide event
 	 *
@@ -516,7 +517,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fade Out
+	 * Fade Out.
 	 *
 	 * Outputs a jQuery hide event
 	 *
@@ -535,13 +536,13 @@ class CI_Jquery extends CI_Javascript {
 			$callback = ", function(){\n{$callback}\n}";
 		}
 
-		return '$('.$element.').fadeOut('.$speed.$callback.');';
+		return '$(' . $element . ').fadeOut(' . $speed . $callback . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Hide
+	 * Hide.
 	 *
 	 * Outputs a jQuery hide action
 	 *
@@ -566,7 +567,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Remove Class
+	 * Remove Class.
 	 *
 	 * Outputs a jQuery remove class event
 	 *
@@ -577,13 +578,13 @@ class CI_Jquery extends CI_Javascript {
 	protected function _removeClass($element = 'this', $class = '')
 	{
 		$element = $this->_prep_element($element);
-		return '$('.$element.').removeClass("'.$class.'");';
+		return '$(' . $element . ').removeClass("' . $class . '");';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Slide Up
+	 * Slide Up.
 	 *
 	 * Outputs a jQuery slideUp event
 	 *
@@ -602,13 +603,13 @@ class CI_Jquery extends CI_Javascript {
 			$callback = ", function(){\n{$callback}\n}";
 		}
 
-		return '$('.$element.').slideUp('.$speed.$callback.');';
+		return '$(' . $element . ').slideUp(' . $speed . $callback . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Slide Down
+	 * Slide Down.
 	 *
 	 * Outputs a jQuery slideDown event
 	 *
@@ -627,13 +628,13 @@ class CI_Jquery extends CI_Javascript {
 			$callback = ", function(){\n{$callback}\n}";
 		}
 
-		return '$('.$element.').slideDown('.$speed.$callback.');';
+		return '$(' . $element . ').slideDown(' . $speed . $callback . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Slide Toggle
+	 * Slide Toggle.
 	 *
 	 * Outputs a jQuery slideToggle event
 	 *
@@ -652,13 +653,13 @@ class CI_Jquery extends CI_Javascript {
 			$callback = ", function(){\n{$callback}\n}";
 		}
 
-		return '$('.$element.').slideToggle('.$speed.$callback.');';
+		return '$(' . $element . ').slideToggle(' . $speed . $callback . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Toggle
+	 * Toggle.
 	 *
 	 * Outputs a jQuery toggle event
 	 *
@@ -668,13 +669,13 @@ class CI_Jquery extends CI_Javascript {
 	protected function _toggle($element = 'this')
 	{
 		$element = $this->_prep_element($element);
-		return '$('.$element.').toggle();';
+		return '$(' . $element . ').toggle();';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Toggle Class
+	 * Toggle Class.
 	 *
 	 * Outputs a jQuery toggle class event
 	 *
@@ -685,13 +686,13 @@ class CI_Jquery extends CI_Javascript {
 	protected function _toggleClass($element = 'this', $class = '')
 	{
 		$element = $this->_prep_element($element);
-		return '$('.$element.').toggleClass("'.$class.'");';
+		return '$(' . $element . ').toggleClass("' . $class . '");';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show
+	 * Show.
 	 *
 	 * Outputs a jQuery show event
 	 *
@@ -710,13 +711,13 @@ class CI_Jquery extends CI_Javascript {
 			$callback = ", function(){\n{$callback}\n}";
 		}
 
-		return '$('.$element.').show('.$speed.$callback.');';
+		return '$(' . $element . ').show(' . $speed . $callback . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Updater
+	 * Updater.
 	 *
 	 * An Ajax call that populates the designated DOM node with
 	 * returned content
@@ -739,21 +740,21 @@ class CI_Jquery extends CI_Javascript {
 		}
 		else
 		{
-			$loading_notifier = '<img src="'.$this->CI->config->slash_item('base_url').$this->CI->config->item('javascript_ajax_img').'" alt="Loading" />';
+			$loading_notifier = '<img src="' . $this->CI->config->slash_item('base_url') . $this->CI->config->item('javascript_ajax_img') . '" alt="Loading" />';
 		}
 
-		$updater = '$('.$container.").empty();\n" // anything that was in... get it out
-			."\t\t$(".$container.').prepend("'.$loading_notifier."\");\n"; // to replace with an image
+		$updater = '$(' . $container . ").empty();\n" // anything that was in... get it out
+			. "\t\t$(" . $container . ').prepend("' . $loading_notifier . "\");\n"; // to replace with an image
 
 		$request_options = '';
 		if ($options !== '')
 		{
 			$request_options .= ', {'
-					.(is_array($options) ? "'".implode("', '", $options)."'" : "'".str_replace(':', "':'", $options)."'")
-					.'}';
+					. (is_array($options) ? "'" . implode("', '", $options) . "'" : "'" . str_replace(':', "':'", $options) . "'")
+					. '}';
 		}
 
-		return $updater."\t\t$($container).load('$controller'$request_options);";
+		return $updater . "\t\t$($container).load('$controller'$request_options);";
 	}
 
 	// --------------------------------------------------------------------
@@ -761,7 +762,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Zebra tables
+	 * Zebra tables.
 	 *
 	 * @param	string	$class
 	 * @param	string	$odd
@@ -770,7 +771,7 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _zebraTables($class = '', $odd = 'odd', $hover = '')
 	{
-		$class = ($class !== '') ? '.'.$class : '';
+		$class = ($class !== '') ? '.' . $class : '';
 		$zebra = "\t\$(\"table{$class} tbody tr:nth-child(even)\").addClass(\"{$odd}\");";
 
 		$this->jquery_code_for_compile[] = $zebra;
@@ -788,7 +789,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Corner Plugin
+	 * Corner Plugin.
 	 *
 	 * @link	https://www.malsup.com/jquery/corner/
 	 * @param	string	$element
@@ -797,21 +798,18 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	public function corner($element = '', $corner_style = '')
 	{
-		// may want to make this configurable down the road
-		$corner_location = '/plugins/jquery.corner.js';
-
 		if ($corner_style !== '')
 		{
-			$corner_style = '"'.$corner_style.'"';
+			$corner_style = '"' . $corner_style . '"';
 		}
 
-		return '$('.$this->_prep_element($element).').corner('.$corner_style.');';
+		return '$(' . $this->_prep_element($element) . ').corner(' . $corner_style . ');';
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Modal window
+	 * Modal window.
 	 *
 	 * Load a thickbox modal window
 	 *
@@ -827,7 +825,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Effect
+	 * Effect.
 	 *
 	 * Load an Effect library
 	 *
@@ -843,7 +841,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Plugin
+	 * Plugin.
 	 *
 	 * Load a plugin library
 	 *
@@ -859,7 +857,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * UI
+	 * UI.
 	 *
 	 * Load a user interface library
 	 *
@@ -875,7 +873,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Sortable
+	 * Sortable.
 	 *
 	 * Creates a jQuery sortable
 	 *
@@ -883,14 +881,14 @@ class CI_Jquery extends CI_Javascript {
 	 * @param	array	$options
 	 * @return	string
 	 */
-	public function sortable($element, $options = array())
+	public function sortable($element, $options = [])
 	{
 		if (count($options) > 0)
 		{
-			$sort_options = array();
+			$sort_options = [];
 			foreach ($options as $k=>$v)
 			{
-				$sort_options[] = "\n\t\t".$k.': '.$v;
+				$sort_options[] = "\n\t\t" . $k . ': ' . $v;
 			}
 			$sort_options = implode(',', $sort_options);
 		}
@@ -899,13 +897,13 @@ class CI_Jquery extends CI_Javascript {
 			$sort_options = '';
 		}
 
-		return '$('.$this->_prep_element($element).').sortable({'.$sort_options."\n\t});";
+		return '$(' . $this->_prep_element($element) . ').sortable({' . $sort_options . "\n\t});";
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Table Sorter Plugin
+	 * Table Sorter Plugin.
 	 *
 	 * @param	string	table name
 	 * @param	string	plugin location
@@ -913,7 +911,7 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	public function tablesorter($table = '', $options = '')
 	{
-		$this->jquery_code_for_compile[] = "\t$(".$this->_prep_element($table).').tablesorter('.$options.");\n";
+		$this->jquery_code_for_compile[] = "\t$(" . $this->_prep_element($table) . ').tablesorter(' . $options . ");\n";
 	}
 
 	// --------------------------------------------------------------------
@@ -921,7 +919,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Add Event
+	 * Add Event.
 	 *
 	 * Constructs the syntax for an event, and adds to into the array for compilation
 	 *
@@ -937,7 +935,7 @@ class CI_Jquery extends CI_Javascript {
 			$js = implode("\n\t\t", $js);
 		}
 
-		$event = "\n\t$(".$this->_prep_element($element).').'.$event."(function(){\n\t\t{$js}\n\t});\n";
+		$event = "\n\t$(" . $this->_prep_element($element) . ').' . $event . "(function(){\n\t\t{$js}\n\t});\n";
 		$this->jquery_code_for_compile[] = $event;
 		return $event;
 	}
@@ -945,7 +943,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Compile
+	 * Compile.
 	 *
 	 * As events are specified, they are stored in an array
 	 * This function compiles them all for output on a page
@@ -958,7 +956,7 @@ class CI_Jquery extends CI_Javascript {
 	{
 		// External references
 		$external_scripts = implode('', $this->jquery_code_for_load);
-		$this->CI->load->vars(array('library_src' => $external_scripts));
+		$this->CI->load->vars(['library_src' => $external_scripts]);
 
 		if (count($this->jquery_code_for_compile) === 0)
 		{
@@ -967,19 +965,19 @@ class CI_Jquery extends CI_Javascript {
 		}
 
 		// Inline references
-		$script = '$(document).ready(function() {'."\n"
-			.implode('', $this->jquery_code_for_compile)
-			.'});';
+		$script = '$(document).ready(function() {' . "\n"
+			. implode('', $this->jquery_code_for_compile)
+			. '});';
 
 		$output = ($script_tags === FALSE) ? $script : $this->inline($script);
 
-		$this->CI->load->vars(array($view_var => $output));
+		$this->CI->load->vars([$view_var => $output]);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Clear Compile
+	 * Clear Compile.
 	 *
 	 * Clears the array of script events collected for output
 	 *
@@ -987,13 +985,13 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _clear_compile()
 	{
-		$this->jquery_code_for_compile = array();
+		$this->jquery_code_for_compile = [];
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Document Ready
+	 * Document Ready.
 	 *
 	 * A wrapper for writing document.ready()
 	 *
@@ -1002,7 +1000,9 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _document_ready($js)
 	{
-		is_array($js) OR $js = array($js);
+		if (!is_array($js)) {
+            $js = [$js];
+        }
 
 		foreach ($js as $script)
 		{
@@ -1013,7 +1013,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Script Tag
+	 * Script Tag.
 	 *
 	 * Outputs the script tag that loads the jquery.js file into an HTML document
 	 *
@@ -1031,7 +1031,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Prep Element
+	 * Prep Element.
 	 *
 	 * Puts HTML element in quotes for use in jQuery code
 	 * unless the supplied element is the Javascript 'this'
@@ -1044,7 +1044,7 @@ class CI_Jquery extends CI_Javascript {
 	{
 		if ($element !== 'this')
 		{
-			$element = '"'.$element.'"';
+			$element = '"' . $element . '"';
 		}
 
 		return $element;
@@ -1053,7 +1053,7 @@ class CI_Jquery extends CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Validate Speed
+	 * Validate Speed.
 	 *
 	 * Ensures the speed parameter is valid for jQuery
 	 *
@@ -1062,9 +1062,9 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _validate_speed($speed)
 	{
-		if (in_array($speed, array('slow', 'normal', 'fast')))
+		if (in_array($speed, ['slow', 'normal', 'fast']))
 		{
-			return '"'.$speed.'"';
+			return '"' . $speed . '"';
 		}
 		elseif (preg_match('/[^0-9]/', $speed))
 		{

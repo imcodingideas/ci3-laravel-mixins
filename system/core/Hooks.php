@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,15 +36,13 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Hooks Class
+ * Hooks Class.
  *
  * Provides a mechanism to extend the base system without hacking.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Libraries
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/general/hooks.html
@@ -52,28 +50,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Hooks {
 
 	/**
-	 * Determines whether hooks are enabled
+	 * Determines whether hooks are enabled.
 	 *
 	 * @var	bool
 	 */
 	public $enabled = FALSE;
 
 	/**
-	 * List of all hooks set in config/hooks.php
+	 * List of all hooks set in config/hooks.php.
 	 *
 	 * @var	array
 	 */
-	public $hooks =	array();
+	public $hooks = [];
 
 	/**
-	 * Array with class objects to use hooks methods
+	 * Array with class objects to use hooks methods.
 	 *
 	 * @var array
 	 */
-	protected $_objects = array();
+	protected $_objects = [];
 
 	/**
-	 * In progress flag
+	 * In progress flag.
 	 *
 	 * Determines whether hook is in progress, used to prevent infinte loops
 	 *
@@ -82,13 +80,13 @@ class CI_Hooks {
 	protected $_in_progress = FALSE;
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * @return	void
 	 */
 	public function __construct()
 	{
-		$CFG =& load_class('Config', 'core');
+		$CFG = &load_class('Config', 'core');
 		log_message('info', 'Hooks Class Initialized');
 
 		// If hooks are not enabled in the config file
@@ -99,30 +97,30 @@ class CI_Hooks {
 		}
 
 		// Grab the "hooks" definition file.
-		if (file_exists(APPPATH.'config/hooks.php'))
+		if (file_exists(APPPATH . 'config/hooks.php'))
 		{
-			include(APPPATH.'config/hooks.php');
+			include APPPATH . 'config/hooks.php';
 		}
 
-		if (file_exists(APPPATH.'config/'.ENVIRONMENT.'/hooks.php'))
+		if (file_exists(APPPATH . 'config/' . ENVIRONMENT . '/hooks.php'))
 		{
-			include(APPPATH.'config/'.ENVIRONMENT.'/hooks.php');
+			include APPPATH . 'config/' . ENVIRONMENT . '/hooks.php';
 		}
 
 		// If there are no hooks, we're done.
-		if ( ! isset($hook) OR ! is_array($hook))
+		if ( !isset($hook) || !is_array($hook))
 		{
 			return;
 		}
 
-		$this->hooks =& $hook;
+		$this->hooks = &$hook;
 		$this->enabled = TRUE;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Call Hook
+	 * Call Hook.
 	 *
 	 * Calls a particular hook. Called by CodeIgniter.php.
 	 *
@@ -133,12 +131,12 @@ class CI_Hooks {
 	 */
 	public function call_hook($which = '')
 	{
-		if ( ! $this->enabled OR ! isset($this->hooks[$which]))
+		if ( !$this->enabled || !isset($this->hooks[$which]))
 		{
 			return FALSE;
 		}
 
-		if (is_array($this->hooks[$which]) && ! isset($this->hooks[$which]['function']))
+		if (is_array($this->hooks[$which]) && !isset($this->hooks[$which]['function']))
 		{
 			foreach ($this->hooks[$which] as $val)
 			{
@@ -156,7 +154,7 @@ class CI_Hooks {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Run Hook
+	 * Run Hook.
 	 *
 	 * Runs a particular hook
 	 *
@@ -174,7 +172,7 @@ class CI_Hooks {
 
 			return TRUE;
 		}
-		elseif ( ! is_array($data))
+		elseif ( !is_array($data))
 		{
 			return FALSE;
 		}
@@ -187,29 +185,29 @@ class CI_Hooks {
 		// hook call within it a loop can happen
 		if ($this->_in_progress === TRUE)
 		{
-			return;
+			return null;
 		}
 
 		// -----------------------------------
 		// Set file path
 		// -----------------------------------
 
-		if ( ! isset($data['filepath'], $data['filename']))
+		if ( !isset($data['filepath'], $data['filename']))
 		{
 			return FALSE;
 		}
 
-		$filepath = APPPATH.$data['filepath'].'/'.$data['filename'];
+		$filepath = APPPATH . $data['filepath'] . '/' . $data['filename'];
 
-		if ( ! file_exists($filepath))
+		if ( !file_exists($filepath))
 		{
 			return FALSE;
 		}
 
 		// Determine and class and/or function names
-		$class		= empty($data['class']) ? FALSE : $data['class'];
-		$function	= empty($data['function']) ? FALSE : $data['function'];
-		$params		= isset($data['params']) ? $data['params'] : '';
+		$class = empty($data['class']) ? FALSE : $data['class'];
+		$function = empty($data['function']) ? FALSE : $data['function'];
+		$params = $data['params'] ?? '';
 
 		if (empty($function))
 		{
@@ -234,31 +232,29 @@ class CI_Hooks {
 					return $this->_in_progress = FALSE;
 				}
 			}
-			else
-			{
-				class_exists($class, FALSE) OR require_once($filepath);
-
-				if ( ! class_exists($class, FALSE) OR ! method_exists($class, $function))
+			else {
+                if (!class_exists($class, FALSE)) {
+                    require_once $filepath;
+                }
+                if ( !class_exists($class, FALSE) || !method_exists($class, $function))
 				{
 					return $this->_in_progress = FALSE;
 				}
-
-				// Store the object and execute the method
-				$this->_objects[$class] = new $class();
-				$this->_objects[$class]->$function($params);
-			}
+                // Store the object and execute the method
+                $this->_objects[$class] = new $class();
+                $this->_objects[$class]->$function($params);
+            }
 		}
-		else
-		{
-			function_exists($function) OR require_once($filepath);
-
-			if ( ! function_exists($function))
+		else {
+            if (!function_exists($function)) {
+                require_once $filepath;
+            }
+            if ( !function_exists($function))
 			{
 				return $this->_in_progress = FALSE;
 			}
-
-			$function($params);
-		}
+            $function($params);
+        }
 
 		$this->_in_progress = FALSE;
 		return TRUE;

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,25 +36,42 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO Informix Database Adapter Class
+ * PDO Informix Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
  */
 class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 
+	public $dsn;
+    public $hostname;
+    public $host;
+    public $port;
+    public $service;
+    public $DSN;
+    public $database;
+    public $server;
+    public $protocol;
+    public $username;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    /**
+     * @var never[]
+     */
+    public $qb_orderby;
+    public $qb_offset;
 	/**
-	 * Sub-driver
+	 * Sub-driver.
 	 *
 	 * @var	string
 	 */
@@ -63,16 +80,16 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * ORDER BY random keyword
+	 * ORDER BY random keyword.
 	 *
 	 * @var	array
 	 */
-	protected $_random_keyword = array('ASC', 'ASC'); // Currently not supported
+	protected $_random_keyword = ['ASC', 'ASC']; // Currently not supported
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Builds the DSN if not already set.
 	 *
@@ -90,48 +107,52 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 			// Pre-defined DSN
 			if (empty($this->hostname) && empty($this->host) && empty($this->port) && empty($this->service))
 			{
-				if (isset($this->DSN))
+				if (property_exists($this, 'DSN') && $this->DSN !== null)
 				{
-					$this->dsn .= 'DSN='.$this->DSN;
+					$this->dsn .= 'DSN=' . $this->DSN;
 				}
-				elseif ( ! empty($this->database))
+				elseif ( !empty($this->database))
 				{
-					$this->dsn .= 'DSN='.$this->database;
+					$this->dsn .= 'DSN=' . $this->database;
 				}
 
 				return;
 			}
 
-			if (isset($this->host))
+			if (property_exists($this, 'host') && $this->host !== null)
 			{
-				$this->dsn .= 'host='.$this->host;
+				$this->dsn .= 'host=' . $this->host;
 			}
 			else
 			{
-				$this->dsn .= 'host='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
+				$this->dsn .= 'host=' . (empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 			}
 
-			if (isset($this->service))
+			if (property_exists($this, 'service') && $this->service !== null)
 			{
-				$this->dsn .= '; service='.$this->service;
+				$this->dsn .= '; service=' . $this->service;
 			}
-			elseif ( ! empty($this->port))
+			elseif ( !empty($this->port))
 			{
-				$this->dsn .= '; service='.$this->port;
+				$this->dsn .= '; service=' . $this->port;
 			}
 
-			empty($this->database) OR $this->dsn .= '; database='.$this->database;
-			empty($this->server) OR $this->dsn .= '; server='.$this->server;
+			if (!empty($this->database)) {
+                $this->dsn .= '; database=' . $this->database;
+            }
+			if (!empty($this->server)) {
+                $this->dsn .= '; server=' . $this->server;
+            }
 
-			$this->dsn .= '; protocol='.(isset($this->protocol) ? $this->protocol : 'onsoctcp')
-				.'; EnableScrollableCursors=1';
+			$this->dsn .= '; protocol=' . (property_exists($this, 'protocol') && $this->protocol !== null ? $this->protocol : 'onsoctcp')
+				. '; EnableScrollableCursors=1';
 		}
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show table query
+	 * Show table query.
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -141,12 +162,12 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	protected function _list_tables($prefix_limit = FALSE)
 	{
 		$sql = 'SELECT "tabname" FROM "systables"
-			WHERE "tabid" > 99 AND "tabtype" = \'T\' AND LOWER("owner") = '.$this->escape(strtolower($this->username));
+			WHERE "tabid" > 99 AND "tabtype" = \'T\' AND LOWER("owner") = ' . $this->escape(strtolower($this->username));
 
 		if ($prefix_limit === TRUE && $this->dbprefix !== '')
 		{
-			$sql .= ' AND "tabname" LIKE \''.$this->escape_like_str($this->dbprefix)."%' "
-				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			$sql .= ' AND "tabname" LIKE \'' . $this->escape_like_str($this->dbprefix) . "%' "
+				. sprintf($this->_like_escape_str, $this->_like_escape_chr);
 		}
 
 		return $sql;
@@ -155,7 +176,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show column query
+	 * Show column query.
 	 *
 	 * Generates a platform-specific query string so that the column names can be fetched
 	 *
@@ -176,14 +197,14 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 		return 'SELECT "colname" FROM "systables", "syscolumns"
 			WHERE "systables"."tabid" = "syscolumns"."tabid"
 				AND "systables"."tabtype" = \'T\'
-				AND LOWER("systables"."owner") = '.$this->escape(strtolower($owner)).'
-				AND LOWER("systables"."tabname") = '.$this->escape(strtolower($table));
+				AND LOWER("systables"."owner") = ' . $this->escape(strtolower($owner)) . '
+				AND LOWER("systables"."tabname") = ' . $this->escape(strtolower($table));
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Returns an object with field data
+	 * Returns an object with field data.
 	 *
 	 * @param	string	$table
 	 * @return	array
@@ -230,8 +251,8 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 				AND "systables"."tabid" = "sysdefaults"."tabid"
 				AND "syscolumns"."colno" = "sysdefaults"."colno"
 				AND "systables"."tabtype" = \'T\'
-				AND LOWER("systables"."owner") = '.$this->escape(strtolower($this->username)).'
-				AND LOWER("systables"."tabname") = '.$this->escape(strtolower($table)).'
+				AND LOWER("systables"."owner") = ' . $this->escape(strtolower($this->username)) . '
+				AND LOWER("systables"."tabname") = ' . $this->escape(strtolower($table)) . '
 			ORDER BY "syscolumns"."colno"';
 
 		return (($query = $this->query($sql)) !== FALSE)
@@ -242,7 +263,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Update statement
+	 * Update statement.
 	 *
 	 * Generates a platform-specific update string from the supplied data
 	 *
@@ -253,14 +274,14 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	protected function _update($table, $values)
 	{
 		$this->qb_limit = FALSE;
-		$this->qb_orderby = array();
+		$this->qb_orderby = [];
 		return parent::_update($table, $values);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Truncate statement
+	 * Truncate statement.
 	 *
 	 * Generates a platform-specific truncate string from the supplied data
 	 *
@@ -272,13 +293,13 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _truncate($table)
 	{
-		return 'TRUNCATE TABLE ONLY '.$table;
+		return 'TRUNCATE TABLE ONLY ' . $table;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Delete statement
+	 * Delete statement.
 	 *
 	 * Generates a platform-specific delete string from the supplied data
 	 *
@@ -294,7 +315,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * LIMIT
+	 * LIMIT.
 	 *
 	 * Generates a platform-specific LIMIT clause
 	 *
@@ -303,7 +324,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _limit($sql)
 	{
-		$select = 'SELECT '.($this->qb_offset ? 'SKIP '.$this->qb_offset : '').'FIRST '.$this->qb_limit.' ';
+		$select = 'SELECT ' . ($this->qb_offset ? 'SKIP ' . $this->qb_offset : '') . 'FIRST ' . $this->qb_limit . ' ';
 		return preg_replace('/^(SELECT\s)/i', $select, $sql, 1);
 	}
 

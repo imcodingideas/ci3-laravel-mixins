@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,16 +36,14 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Benchmark Class
+ * Benchmark Class.
  *
  * This class enables you to mark points and calculate the time difference
  * between them. Memory consumption can also be displayed.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Libraries
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/benchmark.html
@@ -53,14 +51,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Benchmark {
 
 	/**
-	 * List of all benchmark markers
+	 * List of all benchmark markers.
 	 *
 	 * @var	array
 	 */
-	public $marker = array();
+	public $marker = [];
 
 	/**
-	 * Set a benchmark marker
+	 * Set a benchmark marker.
 	 *
 	 * Multiple calls to this function can be made so that several
 	 * execution points can be timed.
@@ -76,7 +74,7 @@ class CI_Benchmark {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Elapsed time
+	 * Elapsed time.
 	 *
 	 * Calculates the time difference between two marked points.
 	 *
@@ -100,12 +98,12 @@ class CI_Benchmark {
 			return '{elapsed_time}';
 		}
 
-		if ( ! isset($this->marker[$point1]))
+		if ( !isset($this->marker[$point1]))
 		{
 			return '';
 		}
 
-		if ( ! isset($this->marker[$point2]))
+		if ( !isset($this->marker[$point2]))
 		{
 			$this->marker[$point2] = microtime(TRUE);
 		}
@@ -116,7 +114,7 @@ class CI_Benchmark {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Memory Usage
+	 * Memory Usage.
 	 *
 	 * Simply returns the {memory_usage} marker.
 	 *

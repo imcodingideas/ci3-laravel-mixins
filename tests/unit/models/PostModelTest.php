@@ -10,11 +10,11 @@ class PostModelTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
-        $this->CI =& get_instance();
+
+        $this->CI = &get_instance();
         $this->CI->load->model('Post_model');
         $this->post_model = $this->CI->Post_model;
-        
+
         // Reset database before each test
         reset_test_database();
     }
@@ -22,7 +22,7 @@ class PostModelTest extends TestCase
     public function testGetPostsReturnsArray()
     {
         $posts = $this->post_model->get_posts();
-        
+
         $this->assertIsArray($posts);
         $this->assertCount(3, $posts); // Should have 3 sample posts
     }
@@ -31,9 +31,9 @@ class PostModelTest extends TestCase
     {
         $posts = $this->post_model->get_posts();
         $first_post_id = $posts[0]['id'];
-        
+
         $post = $this->post_model->get_post($first_post_id);
-        
+
         $this->assertIsArray($post);
         $this->assertEquals($first_post_id, $post['id']);
         $this->assertArrayHasKey('title', $post);
@@ -44,7 +44,7 @@ class PostModelTest extends TestCase
     public function testGetNonexistentPostReturnsNull()
     {
         $post = $this->post_model->get_post(999);
-        
+
         $this->assertNull($post);
     }
 
@@ -54,14 +54,14 @@ class PostModelTest extends TestCase
             'title' => 'Test Post',
             'content' => 'This is test content',
             'author' => 'Test Author',
-            'status' => 'published'
+            'status' => 'published',
         ];
-        
+
         $post_id = $this->post_model->create_post($post_data);
-        
+
         $this->assertIsInt($post_id);
         $this->assertGreaterThan(0, $post_id);
-        
+
         // Verify post was created
         $created_post = $this->post_model->get_post($post_id);
         $this->assertEquals($post_data['title'], $created_post['title']);
@@ -73,12 +73,12 @@ class PostModelTest extends TestCase
     {
         $post_data = [
             'title' => 'Test Post',
-            'content' => 'This is test content'
+            'content' => 'This is test content',
         ];
-        
+
         $post_id = $this->post_model->create_post($post_data);
         $created_post = $this->post_model->get_post($post_id);
-        
+
         $this->assertEquals('Anonymous', $created_post['author']);
         $this->assertEquals('published', $created_post['status']);
     }
@@ -89,21 +89,21 @@ class PostModelTest extends TestCase
         $post_data = [
             'title' => 'Original Title',
             'content' => 'Original content',
-            'author' => 'Original Author'
+            'author' => 'Original Author',
         ];
-        
+
         $post_id = $this->post_model->create_post($post_data);
-        
+
         // Update the post
         $update_data = [
             'title' => 'Updated Title',
-            'content' => 'Updated content'
+            'content' => 'Updated content',
         ];
-        
+
         $result = $this->post_model->update_post($post_id, $update_data);
-        
+
         $this->assertTrue($result);
-        
+
         // Verify update
         $updated_post = $this->post_model->get_post($post_id);
         $this->assertEquals($update_data['title'], $updated_post['title']);
@@ -116,19 +116,19 @@ class PostModelTest extends TestCase
         // Create a post first
         $post_data = [
             'title' => 'Post to Delete',
-            'content' => 'This will be deleted'
+            'content' => 'This will be deleted',
         ];
-        
+
         $post_id = $this->post_model->create_post($post_data);
-        
+
         // Verify post exists
         $this->assertNotNull($this->post_model->get_post($post_id));
-        
+
         // Delete the post
         $result = $this->post_model->delete_post($post_id);
-        
+
         $this->assertTrue($result);
-        
+
         // Verify post is deleted
         $this->assertNull($this->post_model->get_post($post_id));
     }
@@ -136,17 +136,17 @@ class PostModelTest extends TestCase
     public function testCountPosts()
     {
         $count = $this->post_model->count_posts();
-        
+
         $this->assertEquals(3, $count); // Should have 3 sample posts
-        
+
         // Add a post and verify count increases
         $post_data = [
             'title' => 'New Post',
-            'content' => 'New content'
+            'content' => 'New content',
         ];
-        
+
         $this->post_model->create_post($post_data);
-        
+
         $new_count = $this->post_model->count_posts();
         $this->assertEquals(4, $new_count);
     }
@@ -157,24 +157,24 @@ class PostModelTest extends TestCase
         $this->post_model->create_post([
             'title' => 'Draft Post',
             'content' => 'Draft content',
-            'status' => 'draft'
+            'status' => 'draft',
         ]);
-        
+
         $this->post_model->create_post([
             'title' => 'Archived Post',
             'content' => 'Archived content',
-            'status' => 'archived'
+            'status' => 'archived',
         ]);
-        
+
         // Test published posts (default)
         $published_posts = $this->post_model->get_posts_by_status('published');
         $this->assertCount(3, $published_posts); // Original 3 sample posts
-        
+
         // Test draft posts
         $draft_posts = $this->post_model->get_posts_by_status('draft');
         $this->assertCount(1, $draft_posts);
         $this->assertEquals('draft', $draft_posts[0]['status']);
-        
+
         // Test archived posts
         $archived_posts = $this->post_model->get_posts_by_status('archived');
         $this->assertCount(1, $archived_posts);
@@ -184,7 +184,7 @@ class PostModelTest extends TestCase
     public function testGetPostsWithLimit()
     {
         $posts = $this->post_model->get_posts(2);
-        
+
         $this->assertCount(2, $posts);
     }
 
@@ -192,7 +192,7 @@ class PostModelTest extends TestCase
     {
         $all_posts = $this->post_model->get_posts();
         $posts_with_offset = $this->post_model->get_posts(10, 1);
-        
+
         $this->assertEquals($all_posts[1]['id'], $posts_with_offset[0]['id']);
     }
 } 

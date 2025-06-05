@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,15 +36,13 @@
  * @since	Version 2.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Utf8 Class
+ * Utf8 Class.
  *
  * Provides support for UTF-8 environments
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	UTF-8
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/utf8.html
@@ -52,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Utf8 {
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Determines if UTF-8 support is to be enabled.
 	 *
@@ -62,7 +60,7 @@ class CI_Utf8 {
 	{
 		if (
 			defined('PREG_BAD_UTF8_ERROR')				// PCRE must support UTF-8
-			&& (ICONV_ENABLED === TRUE OR MB_ENABLED === TRUE)	// iconv or mbstring must be installed
+			&& (ICONV_ENABLED || MB_ENABLED)	// iconv or mbstring must be installed
 			&& strtoupper(config_item('charset')) === 'UTF-8'	// Application charset must be UTF-8
 			)
 		{
@@ -81,7 +79,7 @@ class CI_Utf8 {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Clean UTF-8 strings
+	 * Clean UTF-8 strings.
 	 *
 	 * Ensures strings contain only valid UTF-8 characters.
 	 *
@@ -108,7 +106,7 @@ class CI_Utf8 {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Remove ASCII control characters
+	 * Remove ASCII control characters.
 	 *
 	 * Removes all ASCII control characters except horizontal tabs,
 	 * line feeds, and carriage returns, as all others can cause
@@ -125,7 +123,7 @@ class CI_Utf8 {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Convert to UTF-8
+	 * Convert to UTF-8.
 	 *
 	 * Attempts to convert a string to UTF-8.
 	 *

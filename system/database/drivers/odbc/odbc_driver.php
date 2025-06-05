@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,17 +36,15 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * ODBC Database Adapter Class
+ * ODBC Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -54,14 +52,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_odbc_driver extends CI_DB_driver {
 
 	/**
-	 * Database driver
+	 * Database driver.
 	 *
 	 * @var	string
 	 */
 	public $dbdriver = 'odbc';
 
 	/**
-	 * Database schema
+	 * Database schema.
 	 *
 	 * @var	string
 	 */
@@ -70,7 +68,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Identifier escape character
+	 * Identifier escape character.
 	 *
 	 * Must be empty for ODBC.
 	 *
@@ -79,39 +77,39 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	protected $_escape_char = '';
 
 	/**
-	 * ESCAPE statement string
+	 * ESCAPE statement string.
 	 *
 	 * @var	string
 	 */
 	protected $_like_escape_str = " {escape '%s'} ";
 
 	/**
-	 * ORDER BY random keyword
+	 * ORDER BY random keyword.
 	 *
 	 * @var	array
 	 */
-	protected $_random_keyword = array('RND()', 'RND(%d)');
+	protected $_random_keyword = ['RND()', 'RND(%d)'];
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * ODBC result ID resource returned from odbc_prepare()
+	 * ODBC result ID resource returned from odbc_prepare().
 	 *
 	 * @var	resource
 	 */
 	private $odbc_result;
 
 	/**
-	 * Values to use with odbc_execute() for prepared statements
+	 * Values to use with odbc_execute() for prepared statements.
 	 *
 	 * @var	array
 	 */
-	private $binds = array();
+	private $binds = [];
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * @param	array	$params
 	 * @return	void
@@ -130,7 +128,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Non-persistent database connection
+	 * Non-persistent database connection.
 	 *
 	 * @param	bool	$persistent
 	 * @return	resource
@@ -145,7 +143,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Compile Bindings
+	 * Compile Bindings.
 	 *
 	 * @param	string	$sql	SQL statement
 	 * @param	array	$binds	An array of values to bind
@@ -153,13 +151,13 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-		if (empty($binds) OR empty($this->bind_marker) OR strpos($sql, $this->bind_marker) === FALSE)
+		if (empty($binds) || empty($this->bind_marker) || strpos($sql, $this->bind_marker) === FALSE)
 		{
 			return $sql;
 		}
-		elseif ( ! is_array($binds))
+		elseif ( !is_array($binds))
 		{
-			$binds = array($binds);
+			$binds = [$binds];
 			$bind_count = 1;
 		}
 		else
@@ -175,11 +173,17 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 		// Make sure not to replace a chunk inside a string that happens to match the bind marker
 		if ($c = preg_match_all("/'[^']*'|\"[^\"]*\"/i", $sql, $matches))
 		{
-			$c = preg_match_all('/'.preg_quote($this->bind_marker, '/').'/i',
-				str_replace($matches[0],
-					str_replace($this->bind_marker, str_repeat(' ', $ml), $matches[0]),
-					$sql, $c),
-				$matches, PREG_OFFSET_CAPTURE);
+			$c = preg_match_all(
+			    '/' . preg_quote($this->bind_marker, '/') . '/i',
+			    str_replace(
+			        $matches[0],
+			        str_replace($this->bind_marker, str_repeat(' ', $ml), $matches[0]),
+			        $sql,
+			        $c
+			    ),
+			    $matches,
+			    PREG_OFFSET_CAPTURE
+			);
 
 			// Bind values' count must match the count of markers in the query
 			if ($bind_count !== $c)
@@ -187,7 +191,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 				return $sql;
 			}
 		}
-		elseif (($c = preg_match_all('/'.preg_quote($this->bind_marker, '/').'/i', $sql, $matches, PREG_OFFSET_CAPTURE)) !== $bind_count)
+		elseif (($c = preg_match_all('/' . preg_quote($this->bind_marker, '/') . '/i', $sql, $matches, PREG_OFFSET_CAPTURE)) !== $bind_count)
 		{
 			return $sql;
 		}
@@ -213,14 +217,14 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Execute the query
+	 * Execute the query.
 	 *
 	 * @param	string	$sql	an SQL query
 	 * @return	resource
 	 */
 	protected function _execute($sql)
 	{
-		if ( ! isset($this->odbc_result))
+		if ( $this->odbc_result === null)
 		{
 			return odbc_exec($this->conn_id, $sql);
 		}
@@ -229,14 +233,13 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 			return FALSE;
 		}
 
-		if (TRUE === ($success = odbc_execute($this->odbc_result, $this->binds)))
-		{
-			// For queries that return result sets, return the result_id resource on success
-			$this->is_write_type($sql) OR $success = $this->odbc_result;
-		}
+		// For queries that return result sets, return the result_id resource on success
+        if ((($success = odbc_execute($this->odbc_result, $this->binds))) && !$this->is_write_type($sql)) {
+            $success = $this->odbc_result;
+        }
 
 		$this->odbc_result = NULL;
-		$this->binds       = array();
+		$this->binds = [];
 
 		return $success;
 	}
@@ -244,7 +247,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Begin Transaction
+	 * Begin Transaction.
 	 *
 	 * @return	bool
 	 */
@@ -256,7 +259,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Commit Transaction
+	 * Commit Transaction.
 	 *
 	 * @return	bool
 	 */
@@ -274,7 +277,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Rollback Transaction
+	 * Rollback Transaction.
 	 *
 	 * @return	bool
 	 */
@@ -310,7 +313,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Platform-dependent string escape
+	 * Platform-dependent string escape.
 	 *
 	 * @param	string
 	 * @return	string
@@ -323,7 +326,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Affected Rows
+	 * Affected Rows.
 	 *
 	 * @return	int
 	 */
@@ -335,7 +338,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Insert ID
+	 * Insert ID.
 	 *
 	 * @return	bool
 	 */
@@ -347,7 +350,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show table query
+	 * Show table query.
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -356,12 +359,12 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	protected function _list_tables($prefix_limit = FALSE)
 	{
-		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '".$this->schema."'";
+		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '" . $this->schema . "'";
 
 		if ($prefix_limit !== FALSE && $this->dbprefix !== '')
 		{
-			return $sql." AND table_name LIKE '".$this->escape_like_str($this->dbprefix)."%' "
-				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			return $sql . " AND table_name LIKE '" . $this->escape_like_str($this->dbprefix) . "%' "
+				. sprintf($this->_like_escape_str, $this->_like_escape_chr);
 		}
 
 		return $sql;
@@ -370,7 +373,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show column query
+	 * Show column query.
 	 *
 	 * Generates a platform-specific query string so that the column names can be fetched
 	 *
@@ -379,13 +382,13 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	protected function _list_columns($table = '')
 	{
-		return 'SHOW COLUMNS FROM '.$table;
+		return 'SHOW COLUMNS FROM ' . $table;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data query
+	 * Field data query.
 	 *
 	 * Generates a platform-specific query so that the column data can be retrieved
 	 *
@@ -394,13 +397,13 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	protected function _field_data($table)
 	{
-		return 'SELECT TOP 1 FROM '.$table;
+		return 'SELECT TOP 1 FROM ' . $table;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Error
+	 * Error.
 	 *
 	 * Returns an array containing code and message of the last
 	 * database error that has occurred.
@@ -409,13 +412,13 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function error()
 	{
-		return array('code' => odbc_error($this->conn_id), 'message' => odbc_errormsg($this->conn_id));
+		return ['code' => odbc_error($this->conn_id), 'message' => odbc_errormsg($this->conn_id)];
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Close DB Connection
+	 * Close DB Connection.
 	 *
 	 * @return	void
 	 */

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,10 +36,10 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO Firebird Forge Class
+ * PDO Firebird Forge Class.
  *
  * @category	Database
  * @author		EllisLab Dev Team
@@ -47,35 +47,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 
+	public $hostname;
+    public $conn_id;
 	/**
-	 * RENAME TABLE statement
+	 * RENAME TABLE statement.
 	 *
 	 * @var	string
 	 */
-	protected $_rename_table	= FALSE;
+	protected $_rename_table = FALSE;
 
 	/**
-	 * UNSIGNED support
+	 * UNSIGNED support.
 	 *
 	 * @var	array
 	 */
-	protected $_unsigned		= array(
+	protected $_unsigned = [
 		'SMALLINT'	=> 'INTEGER',
 		'INTEGER'	=> 'INT64',
-		'FLOAT'		=> 'DOUBLE PRECISION'
-	);
+		'FLOAT'		=> 'DOUBLE PRECISION',
+	];
 
 	/**
-	 * NULL value representation in CREATE/ALTER TABLE statements
+	 * NULL value representation in CREATE/ALTER TABLE statements.
 	 *
 	 * @var	string
 	 */
-	protected $_null		= 'NULL';
+	protected $_null = 'NULL';
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Create database
+	 * Create database.
 	 *
 	 * @param	string	$db_name
 	 * @return	string
@@ -85,26 +87,28 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 		// Firebird databases are flat files, so a path is required
 
 		// Hostname is needed for remote access
-		empty($this->db->hostname) OR $db_name = $this->hostname.':'.$db_name;
+		if (!empty($this->db->hostname)) {
+            $db_name = $this->hostname . ':' . $db_name;
+        }
 
-		return parent::create_database('"'.$db_name.'"');
+		return parent::create_database('"' . $db_name . '"');
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Drop database
+	 * Drop database.
 	 *
 	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
 	public function drop_database($db_name)
 	{
-		if ( ! ibase_drop_db($this->conn_id))
+		if ( !ibase_drop_db($this->conn_id))
 		{
 			return ($this->db->db_debug) ? $this->db->display_error('db_unable_to_drop') : FALSE;
 		}
-		elseif ( ! empty($this->db->data_cache['db_names']))
+		elseif ( !empty($this->db->data_cache['db_names']))
 		{
 			$key = array_search(strtolower($this->db->database), array_map('strtolower', $this->db->data_cache['db_names']), TRUE);
 			if ($key !== FALSE)
@@ -119,7 +123,7 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * ALTER TABLE
+	 * ALTER TABLE.
 	 *
 	 * @param	string	$alter_type	ALTER type
 	 * @param	string	$table		Table name
@@ -128,13 +132,13 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
-		if (in_array($alter_type, array('DROP', 'ADD'), TRUE))
+		if (in_array($alter_type, ['DROP', 'ADD'], TRUE))
 		{
 			return parent::_alter_table($alter_type, $table, $field);
 		}
 
-		$sql = 'ALTER TABLE '.$this->db->escape_identifiers($table);
-		$sqls = array();
+		$sql = 'ALTER TABLE ' . $this->db->escape_identifiers($table);
+		$sqls = [];
 		for ($i = 0, $c = count($field); $i < $c; $i++)
 		{
 			if ($field[$i]['_literal'] !== FALSE)
@@ -144,28 +148,28 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 
 			if (isset($field[$i]['type']))
 			{
-				$sqls[] = $sql.' ALTER COLUMN '.$this->db->escape_identifiers($field[$i]['name'])
-					.' TYPE '.$field[$i]['type'].$field[$i]['length'];
+				$sqls[] = $sql . ' ALTER COLUMN ' . $this->db->escape_identifiers($field[$i]['name'])
+					. ' TYPE ' . $field[$i]['type'] . $field[$i]['length'];
 			}
 
-			if ( ! empty($field[$i]['default']))
+			if ( !empty($field[$i]['default']))
 			{
-				$sqls[] = $sql.' ALTER COLUMN '.$this->db->escape_identifiers($field[$i]['name'])
-					.' SET '.$field[$i]['default'];
+				$sqls[] = $sql . ' ALTER COLUMN ' . $this->db->escape_identifiers($field[$i]['name'])
+					. ' SET ' . $field[$i]['default'];
 			}
 
 			if (isset($field[$i]['null']))
 			{
 				$sqls[] = 'UPDATE "RDB$RELATION_FIELDS" SET "RDB$NULL_FLAG" = '
-					.($field[$i]['null'] === TRUE ? 'NULL' : '1')
-					.' WHERE "RDB$FIELD_NAME" = '.$this->db->escape($field[$i]['name'])
-					.' AND "RDB$RELATION_NAME" = '.$this->db->escape($table);
+					. ($field[$i]['null'] === TRUE ? 'NULL' : '1')
+					. ' WHERE "RDB$FIELD_NAME" = ' . $this->db->escape($field[$i]['name'])
+					. ' AND "RDB$RELATION_NAME" = ' . $this->db->escape($table);
 			}
 
-			if ( ! empty($field[$i]['new_name']))
+			if ( !empty($field[$i]['new_name']))
 			{
-				$sqls[] = $sql.' ALTER COLUMN '.$this->db->escape_identifiers($field[$i]['name'])
-					.' TO '.$this->db->escape_identifiers($field[$i]['new_name']);
+				$sqls[] = $sql . ' ALTER COLUMN ' . $this->db->escape_identifiers($field[$i]['name'])
+					. ' TO ' . $this->db->escape_identifiers($field[$i]['new_name']);
 			}
 		}
 
@@ -175,7 +179,7 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process column
+	 * Process column.
 	 *
 	 * @param	array	$field
 	 * @return	string
@@ -183,16 +187,16 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
-			.' '.$field['type'].$field['length']
-			.$field['null']
-			.$field['unique']
-			.$field['default'];
+			. ' ' . $field['type'] . $field['length']
+			. $field['null']
+			. $field['unique']
+			. $field['default'];
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute TYPE
+	 * Field attribute TYPE.
 	 *
 	 * Performs a data type mapping between different databases.
 	 *
@@ -224,7 +228,7 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute AUTO_INCREMENT
+	 * Field attribute AUTO_INCREMENT.
 	 *
 	 * @param	array	&$attributes
 	 * @param	array	&$field

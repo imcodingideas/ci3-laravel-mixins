@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,13 +36,11 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CodeIgniter Redis Caching Class
+ * CodeIgniter Redis Caching Class.
  *
- * @package	   CodeIgniter
- * @subpackage Libraries
  * @category   Core
  * @author	   Anton Lindqvist <anton@qvister.se>
  * @link
@@ -50,21 +48,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Cache_redis extends CI_Driver
 {
 	/**
-	 * Default config
+	 * Default config.
 	 *
 	 * @static
 	 * @var	array
 	 */
-	protected static $_default_config = array(
+	protected static $_default_config = [
 		'socket_type' => 'tcp',
 		'host' => '127.0.0.1',
 		'password' => NULL,
 		'port' => 6379,
-		'timeout' => 0
-	);
+		'timeout' => 0,
+	];
 
 	/**
-	 * Redis connection
+	 * Redis connection.
 	 *
 	 * @var	Redis
 	 */
@@ -75,17 +73,17 @@ class CI_Cache_redis extends CI_Driver
 	 *
 	 * @var	array
 	 */
-	protected $_serialized = array();
+	protected $_serialized = [];
 
 	/**
-	 * del()/delete() method name depending on phpRedis version
+	 * del()/delete() method name depending on phpRedis version.
 	 *
 	 * @var	string
 	 */
 	protected static $_delete_name;
 
 	/**
-	 * sRem()/sRemove() method name depending on phpRedis version
+	 * sRem()/sRemove() method name depending on phpRedis version.
 	 *
 	 * @var	string
 	 */
@@ -94,7 +92,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Setup Redis
 	 *
@@ -106,27 +104,27 @@ class CI_Cache_redis extends CI_Driver
 	 */
 	public function __construct()
 	{
-		if ( ! $this->is_supported())
+		if ( !$this->is_supported())
 		{
 			log_message('error', 'Cache: Failed to create Redis object; extension not loaded?');
 			return;
 		}
 
-		if ( ! isset(static::$_delete_name, static::$_sRemove_name))
+		if ( !isset(static::$_delete_name, static::$_sRemove_name))
 		{
 			if (version_compare(phpversion('redis'), '5', '>='))
 			{
-				static::$_delete_name  = 'del';
+				static::$_delete_name = 'del';
 				static::$_sRemove_name = 'sRem';
 			}
 			else
 			{
-				static::$_delete_name  = 'delete';
+				static::$_delete_name = 'delete';
 				static::$_sRemove_name = 'sRemove';
 			}
 		}
 
-		$CI =& get_instance();
+		$CI = &get_instance();
 
 		if ($CI->config->load('redis', TRUE, TRUE))
 		{
@@ -150,26 +148,26 @@ class CI_Cache_redis extends CI_Driver
 				$success = $this->_redis->connect($config['host'], $config['port'], $config['timeout']);
 			}
 
-			if ( ! $success)
+			if ( !$success)
 			{
 				log_message('error', 'Cache: Redis connection failed. Check your configuration.');
 			}
 
-			if (isset($config['password']) && ! $this->_redis->auth($config['password']))
+			if (isset($config['password']) && !$this->_redis->auth($config['password']))
 			{
 				log_message('error', 'Cache: Redis authentication failed.');
 			}
 		}
 		catch (RedisException $e)
 		{
-			log_message('error', 'Cache: Redis connection refused ('.$e->getMessage().')');
+			log_message('error', 'Cache: Redis connection refused (' . $e->getMessage() . ')');
 		}
 	}
 
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get cache
+	 * Get cache.
 	 *
 	 * @param	string	$key	Cache ID
 	 * @return	mixed
@@ -189,7 +187,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Save cache
+	 * Save cache.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	mixed	$data	Data to save
@@ -199,14 +197,16 @@ class CI_Cache_redis extends CI_Driver
 	 */
 	public function save($id, $data, $ttl = 60, $raw = FALSE)
 	{
-		if (is_array($data) OR is_object($data))
+		if (is_array($data) || is_object($data))
 		{
-			if ( ! $this->_redis->sIsMember('_ci_redis_serialized', $id) && ! $this->_redis->sAdd('_ci_redis_serialized', $id))
+			if ( !$this->_redis->sIsMember('_ci_redis_serialized', $id) && !$this->_redis->sAdd('_ci_redis_serialized', $id))
 			{
 				return FALSE;
 			}
 
-			isset($this->_serialized[$id]) OR $this->_serialized[$id] = TRUE;
+			if (!isset($this->_serialized[$id])) {
+                $this->_serialized[$id] = TRUE;
+            }
 			$data = serialize($data);
 		}
 		else
@@ -220,7 +220,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Delete from cache
+	 * Delete from cache.
 	 *
 	 * @param	string	$key	Cache key
 	 * @return	bool
@@ -240,7 +240,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Increment a raw value
+	 * Increment a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
@@ -254,7 +254,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Decrement a raw value
+	 * Decrement a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
@@ -268,7 +268,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Clean cache
+	 * Clean cache.
 	 *
 	 * @return	bool
 	 * @see		Redis::flushDB()
@@ -281,7 +281,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get cache driver info
+	 * Get cache driver info.
 	 *
 	 * @param	string	$type	Not supported in Redis.
 	 *				Only included in order to offer a
@@ -297,7 +297,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get cache metadata
+	 * Get cache metadata.
 	 *
 	 * @param	string	$key	Cache key
 	 * @return	array
@@ -308,10 +308,10 @@ class CI_Cache_redis extends CI_Driver
 
 		if ($value !== FALSE)
 		{
-			return array(
+			return [
 				'expire' => time() + $this->_redis->ttl($key),
-				'data' => $value
-			);
+				'data' => $value,
+			];
 		}
 
 		return FALSE;
@@ -320,7 +320,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Check if Redis driver is supported
+	 * Check if Redis driver is supported.
 	 *
 	 * @return	bool
 	 */
@@ -332,7 +332,7 @@ class CI_Cache_redis extends CI_Driver
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Class destructor
+	 * Class destructor.
 	 *
 	 * Closes the connection to Redis if present.
 	 *

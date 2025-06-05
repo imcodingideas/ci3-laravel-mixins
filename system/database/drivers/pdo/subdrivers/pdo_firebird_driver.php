@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -36,25 +36,34 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO Firebird Database Adapter Class
+ * PDO Firebird Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
  */
 class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 
+	public $dsn;
+    public $database;
+    public $hostname;
+    public $char_set;
+    public $role;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    public $qb_offset;
+    public $db_debug;
 	/**
-	 * Sub-driver
+	 * Sub-driver.
 	 *
 	 * @var	string
 	 */
@@ -63,16 +72,16 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * ORDER BY random keyword
+	 * ORDER BY random keyword.
 	 *
 	 * @var	array
 	 */
-	protected $_random_keyword = array('RAND()', 'RAND()');
+	protected $_random_keyword = ['RAND()', 'RAND()'];
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Builds the DSN if not already set.
 	 *
@@ -87,28 +96,32 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 		{
 			$this->dsn = 'firebird:';
 
-			if ( ! empty($this->database))
+			if ( !empty($this->database))
 			{
-				$this->dsn .= 'dbname='.$this->database;
+				$this->dsn .= 'dbname=' . $this->database;
 			}
-			elseif ( ! empty($this->hostname))
+			elseif ( !empty($this->hostname))
 			{
-				$this->dsn .= 'dbname='.$this->hostname;
+				$this->dsn .= 'dbname=' . $this->hostname;
 			}
 
-			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
-			empty($this->role) OR $this->dsn .= ';role='.$this->role;
+			if (!empty($this->char_set)) {
+                $this->dsn .= ';charset=' . $this->char_set;
+            }
+			if (!empty($this->role)) {
+                $this->dsn .= ';role=' . $this->role;
+            }
 		}
-		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 9) === FALSE)
+		elseif ( !empty($this->char_set) && strpos($this->dsn, 'charset=', 9) === FALSE)
 		{
-			$this->dsn .= ';charset='.$this->char_set;
+			$this->dsn .= ';charset=' . $this->char_set;
 		}
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show table query
+	 * Show table query.
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -121,8 +134,8 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 
 		if ($prefix_limit === TRUE && $this->dbprefix !== '')
 		{
-			return $sql.' AND "RDB$RELATION_NAME" LIKE \''.$this->escape_like_str($this->dbprefix)."%' "
-				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			return $sql . ' AND "RDB$RELATION_NAME" LIKE \'' . $this->escape_like_str($this->dbprefix) . "%' "
+				. sprintf($this->_like_escape_str, $this->_like_escape_chr);
 		}
 
 		return $sql;
@@ -131,7 +144,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show column query
+	 * Show column query.
 	 *
 	 * Generates a platform-specific query string so that the column names can be fetched
 	 *
@@ -140,13 +153,13 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _list_columns($table = '')
 	{
-		return 'SELECT "RDB$FIELD_NAME" FROM "RDB$RELATION_FIELDS" WHERE "RDB$RELATION_NAME" = '.$this->escape($table);
+		return 'SELECT "RDB$FIELD_NAME" FROM "RDB$RELATION_FIELDS" WHERE "RDB$RELATION_NAME" = ' . $this->escape($table);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Returns an object with field data
+	 * Returns an object with field data.
 	 *
 	 * @param	string	$table
 	 * @return	array
@@ -175,7 +188,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 				"rfields"."RDB$DEFAULT_VALUE" AS "default"
 			FROM "RDB$RELATION_FIELDS" "rfields"
 				JOIN "RDB$FIELDS" "fields" ON "rfields"."RDB$FIELD_SOURCE" = "fields"."RDB$FIELD_NAME"
-			WHERE "rfields"."RDB$RELATION_NAME" = '.$this->escape($table).'
+			WHERE "rfields"."RDB$RELATION_NAME" = ' . $this->escape($table) . '
 			ORDER BY "rfields"."RDB$FIELD_POSITION"';
 
 		return (($query = $this->query($sql)) !== FALSE)
@@ -186,7 +199,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Update statement
+	 * Update statement.
 	 *
 	 * Generates a platform-specific update string from the supplied data
 	 *
@@ -203,7 +216,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Truncate statement
+	 * Truncate statement.
 	 *
 	 * Generates a platform-specific truncate string from the supplied data
 	 *
@@ -215,13 +228,13 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _truncate($table)
 	{
-		return 'DELETE FROM '.$table;
+		return 'DELETE FROM ' . $table;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Delete statement
+	 * Delete statement.
 	 *
 	 * Generates a platform-specific delete string from the supplied data
 	 *
@@ -237,7 +250,7 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * LIMIT
+	 * LIMIT.
 	 *
 	 * Generates a platform-specific LIMIT clause
 	 *
@@ -249,22 +262,22 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 		// Limit clause depends on if Interbase or Firebird
 		if (stripos($this->version(), 'firebird') !== FALSE)
 		{
-			$select = 'FIRST '.$this->qb_limit
-				.($this->qb_offset > 0 ? ' SKIP '.$this->qb_offset : '');
+			$select = 'FIRST ' . $this->qb_limit
+				. ($this->qb_offset > 0 ? ' SKIP ' . $this->qb_offset : '');
 		}
 		else
 		{
 			$select = 'ROWS '
-				.($this->qb_offset > 0 ? $this->qb_offset.' TO '.($this->qb_limit + $this->qb_offset) : $this->qb_limit);
+				. ($this->qb_offset > 0 ? $this->qb_offset . ' TO ' . ($this->qb_limit + $this->qb_offset) : $this->qb_limit);
 		}
 
-		return preg_replace('`SELECT`i', 'SELECT '.$select, $sql);
+		return preg_replace('`SELECT`i', 'SELECT ' . $select, $sql);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Insert batch statement
+	 * Insert batch statement.
 	 *
 	 * Generates a platform-specific insert string from the supplied data.
 	 *
