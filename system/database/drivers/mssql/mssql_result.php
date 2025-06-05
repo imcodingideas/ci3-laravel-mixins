@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,12 +39,10 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * MSSQL Result Class
+ * MSSQL Result Class.
  *
  * This class extends the parent result class: CI_DB_result
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -52,7 +50,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_mssql_result extends CI_DB_result {
 
 	/**
-	 * Number of rows in the result set
+	 * Number of rows in the result set.
 	 *
 	 * @return	int
 	 */
@@ -66,7 +64,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Number of fields in the result set
+	 * Number of fields in the result set.
 	 *
 	 * @return	int
 	 */
@@ -78,7 +76,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * Generates an array of column names
 	 *
@@ -86,7 +84,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	 */
 	public function list_fields()
 	{
-		$field_names = array();
+		$field_names = [];
 		mssql_field_seek($this->result_id, 0);
 		while ($field = mssql_fetch_field($this->result_id))
 		{
@@ -99,7 +97,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data
+	 * Field data.
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
@@ -107,15 +105,15 @@ class CI_DB_mssql_result extends CI_DB_result {
 	 */
 	public function field_data()
 	{
-		$retval = array();
+		$retval = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
 		{
 			$field = mssql_fetch_field($this->result_id, $i);
 
-			$retval[$i]		= new stdClass();
-			$retval[$i]->name	= $field->name;
-			$retval[$i]->type	= $field->type;
-			$retval[$i]->max_length	= $field->max_length;
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = $field->name;
+			$retval[$i]->type = $field->type;
+			$retval[$i]->max_length = $field->max_length;
 		}
 
 		return $retval;
@@ -124,7 +122,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the result
+	 * Free the result.
 	 *
 	 * @return	void
 	 */
@@ -140,7 +138,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Data Seek
+	 * Data Seek.
 	 *
 	 * Moves the internal pointer to the desired offset. We call
 	 * this internally before fetching results to make sure the
@@ -157,7 +155,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - associative array
+	 * Result - associative array.
 	 *
 	 * Returns the result set as an array
 	 *
@@ -171,7 +169,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - object
+	 * Result - object.
 	 *
 	 * Returns the result set as an object
 	 *
@@ -182,7 +180,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	{
 		$row = mssql_fetch_object($this->result_id);
 
-		if ($class_name === 'stdClass' || ! $row)
+		if ($class_name === 'stdClass' || !$row)
 		{
 			return $row;
 		}

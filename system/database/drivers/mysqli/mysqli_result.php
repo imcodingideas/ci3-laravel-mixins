@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,12 +39,10 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * MySQLi Result Class
+ * MySQLi Result Class.
  *
  * This class extends the parent result class: CI_DB_result
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -52,7 +50,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_mysqli_result extends CI_DB_result {
 
 	/**
-	 * Number of rows in the result set
+	 * Number of rows in the result set.
 	 *
 	 * @return	int
 	 */
@@ -66,7 +64,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Number of fields in the result set
+	 * Number of fields in the result set.
 	 *
 	 * @return	int
 	 */
@@ -78,7 +76,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * Generates an array of column names
 	 *
@@ -86,7 +84,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 */
 	public function list_fields()
 	{
-		$field_names = array();
+		$field_names = [];
 		$this->result_id->field_seek(0);
 		while ($field = $this->result_id->fetch_field())
 		{
@@ -99,7 +97,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data
+	 * Field data.
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
@@ -107,16 +105,16 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 */
 	public function field_data()
 	{
-		$retval = array();
+		$retval = [];
 		$field_data = $this->result_id->fetch_fields();
 		for ($i = 0, $c = count($field_data); $i < $c; $i++)
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= $field_data[$i]->name;
-			$retval[$i]->type		= $this->_get_field_type($field_data[$i]->type);
-			$retval[$i]->max_length		= $field_data[$i]->max_length;
-			$retval[$i]->primary_key	= $field_data[$i]->flags & MYSQLI_PRI_KEY_FLAG;
-			$retval[$i]->default		= $field_data[$i]->def;
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = $field_data[$i]->name;
+			$retval[$i]->type = $this->_get_field_type($field_data[$i]->type);
+			$retval[$i]->max_length = $field_data[$i]->max_length;
+			$retval[$i]->primary_key = $field_data[$i]->flags & MYSQLI_PRI_KEY_FLAG;
+			$retval[$i]->default = $field_data[$i]->def;
 		}
 
 		return $retval;
@@ -125,7 +123,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Get field type
+	 * Get field type.
 	 *
 	 * Extracts field type info from the bitflags returned by
 	 * mysqli_result::fetch_fields()
@@ -138,7 +136,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	{
 		static $map;
 		if (!isset($map)) {
-            $map = array(
+            $map = [
     			MYSQLI_TYPE_DECIMAL     => 'decimal',
     			MYSQLI_TYPE_BIT         => 'bit',
     			MYSQLI_TYPE_TINY        => 'tinyint',
@@ -163,17 +161,17 @@ class CI_DB_mysqli_result extends CI_DB_result {
     			MYSQLI_TYPE_LONG_BLOB   => 'longblob',
     			MYSQLI_TYPE_STRING      => 'char',
     			MYSQLI_TYPE_VAR_STRING  => 'varchar',
-    			MYSQLI_TYPE_GEOMETRY    => 'geometry'
-    		);
+    			MYSQLI_TYPE_GEOMETRY    => 'geometry',
+    		];
         }
 
-		return isset($map[$type]) ? $map[$type] : $type;
+		return $map[$type] ?? $type;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the result
+	 * Free the result.
 	 *
 	 * @return	void
 	 */
@@ -189,7 +187,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Data Seek
+	 * Data Seek.
 	 *
 	 * Moves the internal pointer to the desired offset. We call
 	 * this internally before fetching results to make sure the
@@ -206,7 +204,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - associative array
+	 * Result - associative array.
 	 *
 	 * Returns the result set as an array
 	 *
@@ -220,7 +218,7 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - object
+	 * Result - object.
 	 *
 	 * Returns the result set as an object
 	 *

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,10 +39,8 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Javascript Class
+ * Javascript Class.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Javascript
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/javascript.html
@@ -52,8 +50,8 @@ class CI_Javascript {
 
 	public $CI;
     public $js;
-    /**
-	 * JavaScript location
+	/**
+	 * JavaScript location.
 	 *
 	 * @var	string
 	 */
@@ -62,14 +60,14 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param	array	$params
 	 * @return	void
 	 */
-	public function __construct($params = array())
+	public function __construct($params = [])
 	{
-		$defaults = array('js_library_driver' => 'jquery', 'autoload' => TRUE);
+		$defaults = ['js_library_driver' => 'jquery', 'autoload' => TRUE];
 
 		foreach (array_keys($defaults) as $key)
 		{
@@ -81,14 +79,14 @@ class CI_Javascript {
 
 		extract($defaults);
 
-		$this->CI =& get_instance();
+		$this->CI = &get_instance();
 
 		// load the requested js library
-		$this->CI->load->library('Javascript/'.$js_library_driver, array('autoload' => $autoload));
+		$this->CI->load->library('Javascript/' . $js_library_driver, ['autoload' => $autoload]);
 		// make js to refer to current library
-		$this->js =& $this->CI->$js_library_driver;
+		$this->js = &$this->CI->$js_library_driver;
 
-		log_message('info', 'Javascript Class Initialized and loaded. Driver used: '.$js_library_driver);
+		log_message('info', 'Javascript Class Initialized and loaded. Driver used: ' . $js_library_driver);
 	}
 
 	// --------------------------------------------------------------------
@@ -96,7 +94,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Blur
+	 * Blur.
 	 *
 	 * Outputs a javascript library blur event
 	 *
@@ -112,7 +110,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Change
+	 * Change.
 	 *
 	 * Outputs a javascript library change event
 	 *
@@ -128,7 +126,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Click
+	 * Click.
 	 *
 	 * Outputs a javascript library click event
 	 *
@@ -145,7 +143,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Double Click
+	 * Double Click.
 	 *
 	 * Outputs a javascript library dblclick event
 	 *
@@ -161,7 +159,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Error
+	 * Error.
 	 *
 	 * Outputs a javascript library error event
 	 *
@@ -177,7 +175,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Focus
+	 * Focus.
 	 *
 	 * Outputs a javascript library focus event
 	 *
@@ -193,7 +191,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Hover
+	 * Hover.
 	 *
 	 * Outputs a javascript library hover event
 	 *
@@ -210,7 +208,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Keydown
+	 * Keydown.
 	 *
 	 * Outputs a javascript library keydown event
 	 *
@@ -226,7 +224,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Keyup
+	 * Keyup.
 	 *
 	 * Outputs a javascript library keydown event
 	 *
@@ -242,7 +240,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Load
+	 * Load.
 	 *
 	 * Outputs a javascript library load event
 	 *
@@ -258,7 +256,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mousedown
+	 * Mousedown.
 	 *
 	 * Outputs a javascript library mousedown event
 	 *
@@ -274,7 +272,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mouse Out
+	 * Mouse Out.
 	 *
 	 * Outputs a javascript library mouseout event
 	 *
@@ -290,7 +288,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mouse Over
+	 * Mouse Over.
 	 *
 	 * Outputs a javascript library mouseover event
 	 *
@@ -306,7 +304,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Mouseup
+	 * Mouseup.
 	 *
 	 * Outputs a javascript library mouseup event
 	 *
@@ -322,7 +320,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Output
+	 * Output.
 	 *
 	 * Outputs the called javascript to the screen
 	 *
@@ -337,7 +335,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Ready
+	 * Ready.
 	 *
 	 * Outputs a javascript library mouseup event
 	 *
@@ -352,7 +350,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Resize
+	 * Resize.
 	 *
 	 * Outputs a javascript library resize event
 	 *
@@ -368,7 +366,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Scroll
+	 * Scroll.
 	 *
 	 * Outputs a javascript library scroll event
 	 *
@@ -384,7 +382,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Unload
+	 * Unload.
 	 *
 	 * Outputs a javascript library unload event
 	 *
@@ -402,7 +400,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Add Class
+	 * Add Class.
 	 *
 	 * Outputs a javascript library addClass event
 	 *
@@ -418,7 +416,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Animate
+	 * Animate.
 	 *
 	 * Outputs a javascript library animate event
 	 *
@@ -428,7 +426,7 @@ class CI_Javascript {
 	 * @param	string	$extra
 	 * @return	string
 	 */
-	public function animate($element = 'this', $params = array(), $speed = '', $extra = '')
+	public function animate($element = 'this', $params = [], $speed = '', $extra = '')
 	{
 		return $this->js->_animate($element, $params, $speed, $extra);
 	}
@@ -436,7 +434,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fade In
+	 * Fade In.
 	 *
 	 * Outputs a javascript library hide event
 	 *
@@ -453,7 +451,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fade Out
+	 * Fade Out.
 	 *
 	 * Outputs a javascript library hide event
 	 *
@@ -469,7 +467,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Slide Up
+	 * Slide Up.
 	 *
 	 * Outputs a javascript library slideUp event
 	 *
@@ -487,7 +485,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Remove Class
+	 * Remove Class.
 	 *
 	 * Outputs a javascript library removeClass event
 	 *
@@ -503,7 +501,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Slide Down
+	 * Slide Down.
 	 *
 	 * Outputs a javascript library slideDown event
 	 *
@@ -520,7 +518,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Slide Toggle
+	 * Slide Toggle.
 	 *
 	 * Outputs a javascript library slideToggle event
 	 *
@@ -538,7 +536,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Hide
+	 * Hide.
 	 *
 	 * Outputs a javascript library hide action
 	 *
@@ -555,7 +553,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Toggle
+	 * Toggle.
 	 *
 	 * Outputs a javascript library toggle event
 	 *
@@ -571,7 +569,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Toggle Class
+	 * Toggle Class.
 	 *
 	 * Outputs a javascript library toggle class event
 	 *
@@ -587,7 +585,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show
+	 * Show.
 	 *
 	 * Outputs a javascript library show event
 	 *
@@ -604,7 +602,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Compile
+	 * Compile.
 	 *
 	 * gather together all script needing to be output
 	 *
@@ -620,7 +618,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Clear Compile
+	 * Clear Compile.
 	 *
 	 * Clears any previous javascript collected for output
 	 *
@@ -634,7 +632,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * External
+	 * External.
 	 *
 	 * Outputs a <script> tag with the source as an external js file
 	 *
@@ -659,20 +657,20 @@ class CI_Javascript {
 		}
 		elseif (strpos($this->_javascript_location, 'http://') !== FALSE)
 		{
-			$str = $this->_open_script($this->_javascript_location.$external_file);
+			$str = $this->_open_script($this->_javascript_location . $external_file);
 		}
 		else
 		{
-			$str = $this->_open_script($this->CI->config->slash_item('base_url').$this->_javascript_location.$external_file);
+			$str = $this->_open_script($this->CI->config->slash_item('base_url') . $this->_javascript_location . $external_file);
 		}
 
-		return $str.$this->_close_script();
+		return $str . $this->_close_script();
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Inline
+	 * Inline.
 	 *
 	 * Outputs a <script> tag
 	 *
@@ -683,14 +681,14 @@ class CI_Javascript {
 	public function inline($script, $cdata = TRUE)
 	{
 		return $this->_open_script()
-			. ($cdata ? "\n// <![CDATA[\n".$script."\n// ]]>\n" : "\n".$script."\n")
+			. ($cdata ? "\n// <![CDATA[\n" . $script . "\n// ]]>\n" : "\n" . $script . "\n")
 			. $this->_close_script();
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Open Script
+	 * Open Script.
 	 *
 	 * Outputs an opening <script>
 	 *
@@ -699,14 +697,14 @@ class CI_Javascript {
 	 */
 	protected function _open_script($src = '')
 	{
-		return '<script type="text/javascript" charset="'.strtolower($this->CI->config->item('charset')).'"'
-			.($src === '' ? '>' : ' src="'.$src.'">');
+		return '<script type="text/javascript" charset="' . strtolower($this->CI->config->item('charset')) . '"'
+			. ($src === '' ? '>' : ' src="' . $src . '">');
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Close Script
+	 * Close Script.
 	 *
 	 * Outputs an closing </script>
 	 *
@@ -715,7 +713,7 @@ class CI_Javascript {
 	 */
 	protected function _close_script($extra = "\n")
 	{
-		return '</script>'.$extra;
+		return '</script>' . $extra;
 	}
 
 	// --------------------------------------------------------------------
@@ -723,7 +721,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Update
+	 * Update.
 	 *
 	 * Outputs a javascript library slideDown event
 	 *
@@ -740,7 +738,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Generate JSON
+	 * Generate JSON.
 	 *
 	 * Can be passed a database result or associative array and returns a JSON formatted string
 	 *
@@ -756,7 +754,7 @@ class CI_Javascript {
 		{
 			if (is_object($result))
 			{
-				$json_result = is_callable(array($result, 'result_array')) ? $result->result_array() : (array) $result;
+				$json_result = is_callable([$result, 'result_array']) ? $result->result_array() : (array) $result;
 			}
 			elseif (is_array($result))
 			{
@@ -772,10 +770,10 @@ class CI_Javascript {
 			return 'null';
 		}
 
-		$json = array();
+		$json = [];
 		$_is_assoc = TRUE;
 
-		if ( ! is_array($json_result) && empty($json_result))
+		if ( !is_array($json_result) && empty($json_result))
 		{
 			show_error('Generate JSON Failed - Illegal key, value pair.');
 		}
@@ -788,7 +786,7 @@ class CI_Javascript {
 		{
 			if ($_is_assoc)
 			{
-				$json[] = $this->_prep_args($k, TRUE).':'.$this->generate_json($v, $match_array_type);
+				$json[] = $this->_prep_args($k, TRUE) . ':' . $this->generate_json($v, $match_array_type);
 			}
 			else
 			{
@@ -798,14 +796,14 @@ class CI_Javascript {
 
 		$json = implode(',', $json);
 
-		return $_is_assoc ? '{'.$json.'}' : '['.$json.']';
+		return $_is_assoc ? '{' . $json . '}' : '[' . $json . ']';
 
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Is associative array
+	 * Is associative array.
 	 *
 	 * Checks for an associative array
 	 *
@@ -828,7 +826,7 @@ class CI_Javascript {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Prep Args
+	 * Prep Args.
 	 *
 	 * Ensures a standard json value and escapes values
 	 *
@@ -848,7 +846,7 @@ class CI_Javascript {
 		}
 		elseif (is_string($result) || $is_key)
 		{
-			return '"'.str_replace(array('\\', "\t", "\n", "\r", '"', '/'), array('\\\\', '\\t', '\\n', "\\r", '\"', '\/'), $result).'"';
+			return '"' . str_replace(['\\', "\t", "\n", "\r", '"', '/'], ['\\\\', '\\t', '\\n', '\\r', '\"', '\/'], $result) . '"';
 		}
 		elseif (is_scalar($result))
 		{

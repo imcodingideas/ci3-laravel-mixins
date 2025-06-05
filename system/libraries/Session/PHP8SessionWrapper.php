@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2022, CodeIgniter Foundation (https://codeigniter.com/)
  * @license	https://opensource.org/licenses/MIT	MIT License
@@ -37,12 +37,10 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PHP8SessionWrapper
+ * PHP8SessionWrapper.
  *
  * PHP 8 Session handler compatibility wrapper
  *
- * @package	CodeIgniter
- * @subpackage	Libraries
  * @category	Sessions
  * @author	Andrey Andreev
  * @link	https://codeigniter.com/userguide3/libraries/sessions.html
@@ -88,7 +86,7 @@ class CI_SessionWrapper implements SessionHandlerInterface, SessionUpdateTimesta
 		return $this->driver->gc($maxlifetime);
 	}
 
-	public function updateTimestamp(string $id, string$data): bool
+	public function updateTimestamp(string $id, string $data): bool
 	{
 		return $this->driver->updateTimestamp($id, $data);
 	}

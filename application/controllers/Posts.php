@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') || exit('No direct script access allowed');
 
 class Posts extends CI_Controller {
@@ -7,7 +8,7 @@ class Posts extends CI_Controller {
     public $input;
     public $Post_model;
     public $output;
-	
+
     public function __construct()
     {
         parent::__construct();
@@ -16,20 +17,20 @@ class Posts extends CI_Controller {
     }
 
     /**
-     * List all posts
+     * List all posts.
      */
     public function index()
     {
         $data['posts'] = $this->Post_model->get_posts();
         $data['title'] = 'All Posts';
-        
+
         $this->load->view('templates/header', $data);
         $this->load->view('posts/index', $data);
         $this->load->view('templates/footer');
     }
 
     /**
-     * Show single post
+     * Show single post.
      */
     public function view($id = NULL)
     {
@@ -51,7 +52,7 @@ class Posts extends CI_Controller {
     }
 
     /**
-     * Create new post form
+     * Create new post form.
      */
     public function create()
     {
@@ -68,14 +69,14 @@ class Posts extends CI_Controller {
             $this->load->view('posts/create');
             $this->load->view('templates/footer');
         } else {
-            $post_data = array(
+            $post_data = [
                 'title' => $this->input->post('title'),
                 'content' => $this->input->post('content'),
-                'author' => $this->input->post('author')
-            );
+                'author' => $this->input->post('author'),
+            ];
 
             $post_id = $this->Post_model->create_post($post_data);
-            
+
             if ($post_id) {
                 redirect('posts/view/' . $post_id);
             } else {
@@ -85,7 +86,7 @@ class Posts extends CI_Controller {
     }
 
     /**
-     * Edit post
+     * Edit post.
      */
     public function edit($id = NULL)
     {
@@ -112,11 +113,11 @@ class Posts extends CI_Controller {
             $this->load->view('posts/edit', $data);
             $this->load->view('templates/footer');
         } else {
-            $post_data = array(
+            $post_data = [
                 'title' => $this->input->post('title'),
                 'content' => $this->input->post('content'),
-                'author' => $this->input->post('author')
-            );
+                'author' => $this->input->post('author'),
+            ];
 
             if ($this->Post_model->update_post($id, $post_data)) {
                 redirect('posts/view/' . $id);
@@ -127,7 +128,7 @@ class Posts extends CI_Controller {
     }
 
     /**
-     * Delete post
+     * Delete post.
      */
     public function delete($id = NULL)
     {
@@ -149,12 +150,12 @@ class Posts extends CI_Controller {
     }
 
     /**
-     * API endpoint to get posts as JSON
+     * API endpoint to get posts as JSON.
      */
     public function api()
     {
         $posts = $this->Post_model->get_posts();
-        
+
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($posts));

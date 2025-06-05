@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') || exit('No direct script access allowed');
 
 class Post_model extends CI_Model {
@@ -10,7 +11,7 @@ class Post_model extends CI_Model {
     }
 
     /**
-     * Get all posts
+     * Get all posts.
      * 
      * @param int $limit
      * @param int $offset
@@ -25,33 +26,33 @@ class Post_model extends CI_Model {
     }
 
     /**
-     * Get post by ID
+     * Get post by ID.
      * 
      * @param int $id
      * @return array|null
      */
     public function get_post($id)
     {
-        $query = $this->db->get_where('posts', array('id' => $id));
+        $query = $this->db->get_where('posts', ['id' => $id]);
         return $query->row_array();
     }
 
     /**
-     * Create new post
+     * Create new post.
      * 
      * @param array $data
      * @return int|bool
      */
     public function create_post($data)
     {
-        $post_data = array(
+        $post_data = [
             'title' => $data['title'],
             'content' => $data['content'],
-            'author' => isset($data['author']) ? $data['author'] : 'Anonymous',
-            'status' => isset($data['status']) ? $data['status'] : 'published',
+            'author' => $data['author'] ?? 'Anonymous',
+            'status' => $data['status'] ?? 'published',
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-        );
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
 
         if ($this->db->insert('posts', $post_data)) {
             return $this->db->insert_id();
@@ -60,7 +61,7 @@ class Post_model extends CI_Model {
     }
 
     /**
-     * Update post
+     * Update post.
      * 
      * @param int $id
      * @param array $data
@@ -68,9 +69,9 @@ class Post_model extends CI_Model {
      */
     public function update_post($id, $data)
     {
-        $post_data = array(
-            'updated_at' => date('Y-m-d H:i:s')
-        );
+        $post_data = [
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
 
         if (isset($data['title'])) {
             $post_data['title'] = $data['title'];
@@ -90,7 +91,7 @@ class Post_model extends CI_Model {
     }
 
     /**
-     * Delete post
+     * Delete post.
      * 
      * @param int $id
      * @return bool
@@ -102,7 +103,7 @@ class Post_model extends CI_Model {
     }
 
     /**
-     * Count total posts
+     * Count total posts.
      * 
      * @return int
      */
@@ -112,7 +113,7 @@ class Post_model extends CI_Model {
     }
 
     /**
-     * Get posts by status
+     * Get posts by status.
      * 
      * @param string $status
      * @param int $limit

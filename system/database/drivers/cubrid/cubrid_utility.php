@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,7 +39,7 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CUBRID Utility Class
+ * CUBRID Utility Class.
  *
  * @category	Database
  * @author		Esen Sagynov
@@ -48,7 +48,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_cubrid_utility extends CI_DB_utility {
 
 	/**
-	 * List databases
+	 * List databases.
 	 *
 	 * @return	array
 	 */
@@ -65,12 +65,12 @@ class CI_DB_cubrid_utility extends CI_DB_utility {
 	// --------------------------------------------------------------------
 
 	/**
-	 * CUBRID Export
+	 * CUBRID Export.
 	 *
 	 * @param	array	Preferences
 	 * @return	mixed
 	 */
-	protected function _backup($params = array())
+	protected function _backup($params = [])
 	{
 		// No SQL based support in CUBRID as of version 8.4.0. Database or
 		// table backup can be performed using CUBRID Manager

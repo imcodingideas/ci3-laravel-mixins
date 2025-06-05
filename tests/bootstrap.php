@@ -56,7 +56,7 @@ if ($isFeatureTest) {
 if (!function_exists('reset_test_database')) {
     function reset_test_database()
     {
-        $CI =& get_instance();
+        $CI = &get_instance();
 
         // Drop table if exists
         $CI->db->query('DROP TABLE IF EXISTS posts');

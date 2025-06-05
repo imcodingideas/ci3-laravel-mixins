@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,7 +39,7 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * oci8 Result Class
+ * oci8 Result Class.
  *
  * This class extends the parent result class: CI_DB_result
  *
@@ -50,28 +50,28 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_oci8_result extends CI_DB_result {
 
 	/**
-	 * Statement ID
+	 * Statement ID.
 	 *
 	 * @var	resource
 	 */
 	public $stmt_id;
 
 	/**
-	 * Cursor ID
+	 * Cursor ID.
 	 *
 	 * @var	resource
 	 */
 	public $curs_id;
 
 	/**
-	 * Limit used flag
+	 * Limit used flag.
 	 *
 	 * @var	bool
 	 */
 	public $limit_used;
 
 	/**
-	 * Commit mode flag
+	 * Commit mode flag.
 	 *
 	 * @var	int
 	 */
@@ -80,7 +80,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * @param	object	&$driver_object
 	 * @return	void
@@ -92,14 +92,14 @@ class CI_DB_oci8_result extends CI_DB_result {
 		$this->stmt_id = $driver_object->stmt_id;
 		$this->curs_id = $driver_object->curs_id;
 		$this->limit_used = $driver_object->limit_used;
-		$this->commit_mode =& $driver_object->commit_mode;
+		$this->commit_mode = &$driver_object->commit_mode;
 		$driver_object->stmt_id = FALSE;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Number of fields in the result set
+	 * Number of fields in the result set.
 	 *
 	 * @return	int
 	 */
@@ -114,7 +114,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * Generates an array of column names
 	 *
@@ -122,7 +122,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 */
 	public function list_fields()
 	{
-		$field_names = array();
+		$field_names = [];
 		for ($c = 1, $fieldCount = $this->num_fields(); $c <= $fieldCount; $c++)
 		{
 			$field_names[] = oci_field_name($this->stmt_id, $c);
@@ -133,7 +133,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data
+	 * Field data.
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
@@ -141,13 +141,13 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 */
 	public function field_data()
 	{
-		$retval = array();
+		$retval = [];
 		for ($c = 1, $fieldCount = $this->num_fields(); $c <= $fieldCount; $c++)
 		{
-			$F		= new stdClass();
-			$F->name	= oci_field_name($this->stmt_id, $c);
-			$F->type	= oci_field_type($this->stmt_id, $c);
-			$F->max_length	= oci_field_size($this->stmt_id, $c);
+			$F = new stdClass();
+			$F->name = oci_field_name($this->stmt_id, $c);
+			$F->type = oci_field_type($this->stmt_id, $c);
+			$F->max_length = oci_field_size($this->stmt_id, $c);
 
 			$retval[] = $F;
 		}
@@ -158,7 +158,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the result
+	 * Free the result.
 	 *
 	 * @return	void
 	 */
@@ -185,7 +185,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - associative array
+	 * Result - associative array.
 	 *
 	 * Returns the result set as an array
 	 *
@@ -200,7 +200,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - object
+	 * Result - object.
 	 *
 	 * Returns the result set as an object
 	 *
@@ -213,7 +213,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 			? oci_fetch_object($this->curs_id)
 			: oci_fetch_object($this->stmt_id);
 
-		if ($class_name === 'stdClass' || ! $row)
+		if ($class_name === 'stdClass' || !$row)
 		{
 			return $row;
 		}

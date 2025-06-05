@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Directory Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('directory_map'))
+if ( !function_exists('directory_map'))
 {
 	/**
-	 * Create a Directory Map
+	 * Create a Directory Map.
 	 *
 	 * Reads the specified directory and builds an array
 	 * representation of it. Sub-folders contained with the
@@ -69,9 +69,9 @@ if ( ! function_exists('directory_map'))
 	{
 		if ($fp = @opendir($source_dir))
 		{
-			$filedata	= array();
-			$new_depth	= $directory_depth - 1;
-			$source_dir	= rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+			$filedata = [];
+			$new_depth = $directory_depth - 1;
+			$source_dir = rtrim($source_dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 			while (FALSE !== ($file = readdir($fp)))
 			{
@@ -81,13 +81,13 @@ if ( ! function_exists('directory_map'))
 					continue;
 				}
 
-				if (is_dir($source_dir.$file)) {
+				if (is_dir($source_dir . $file)) {
                     $file .= DIRECTORY_SEPARATOR;
                 }
 
-				if (($directory_depth < 1 || $new_depth > 0) && is_dir($source_dir.$file))
+				if (($directory_depth < 1 || $new_depth > 0) && is_dir($source_dir . $file))
 				{
-					$filedata[$file] = directory_map($source_dir.$file, $new_depth, $hidden);
+					$filedata[$file] = directory_map($source_dir . $file, $new_depth, $hidden);
 				}
 				else
 				{

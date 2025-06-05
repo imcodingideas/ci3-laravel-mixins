@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,7 +39,7 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CUBRID Result Class
+ * CUBRID Result Class.
  *
  * This class extends the parent result class: CI_DB_result
  *
@@ -50,7 +50,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_cubrid_result extends CI_DB_result {
 
 	/**
-	 * Number of rows in the result set
+	 * Number of rows in the result set.
 	 *
 	 * @return	int
 	 */
@@ -64,7 +64,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Number of fields in the result set
+	 * Number of fields in the result set.
 	 *
 	 * @return	int
 	 */
@@ -76,7 +76,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * Generates an array of column names
 	 *
@@ -90,7 +90,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data
+	 * Field data.
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
@@ -98,15 +98,15 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	 */
 	public function field_data()
 	{
-		$retval = array();
+		$retval = [];
 
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= cubrid_field_name($this->result_id, $i);
-			$retval[$i]->type		= cubrid_field_type($this->result_id, $i);
-			$retval[$i]->max_length		= cubrid_field_len($this->result_id, $i);
-			$retval[$i]->primary_key	= (int) (strpos(cubrid_field_flags($this->result_id, $i), 'primary_key') !== FALSE);
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = cubrid_field_name($this->result_id, $i);
+			$retval[$i]->type = cubrid_field_type($this->result_id, $i);
+			$retval[$i]->max_length = cubrid_field_len($this->result_id, $i);
+			$retval[$i]->primary_key = (int) (strpos(cubrid_field_flags($this->result_id, $i), 'primary_key') !== FALSE);
 		}
 
 		return $retval;
@@ -115,7 +115,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the result
+	 * Free the result.
 	 *
 	 * @return	void
 	 */
@@ -131,7 +131,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Data Seek
+	 * Data Seek.
 	 *
 	 * Moves the internal pointer to the desired offset. We call
 	 * this internally before fetching results to make sure the
@@ -148,7 +148,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - associative array
+	 * Result - associative array.
 	 *
 	 * Returns the result set as an array
 	 *
@@ -162,7 +162,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - object
+	 * Result - object.
 	 *
 	 * Returns the result set as an object
 	 *

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,10 +39,8 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Security Class
+ * Security Class.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Security
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/libraries/security.html
@@ -50,11 +48,11 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_Security {
 
 	/**
-	 * List of sanitize filename strings
+	 * List of sanitize filename strings.
 	 *
 	 * @var	array
 	 */
-	public $filename_bad_chars =	array(
+	public $filename_bad_chars = [
 		'../', '<!--', '-->', '<', '>',
 		"'", '"', '&', '$', '#',
 		'{', '}', '[', ']', '=',
@@ -70,11 +68,11 @@ class CI_Security {
 		'%24',		// $
 		'%3f',		// ?
 		'%3b',		// ;
-		'%3d'		// =
-	);
+		'%3d',		// =
+	];
 
 	/**
-	 * Character set
+	 * Character set.
 	 *
 	 * Will be overridden by the constructor.
 	 *
@@ -83,7 +81,7 @@ class CI_Security {
 	public $charset = 'UTF-8';
 
 	/**
-	 * XSS Hash
+	 * XSS Hash.
 	 *
 	 * Random Hash for protecting URLs.
 	 *
@@ -92,7 +90,7 @@ class CI_Security {
 	protected $_xss_hash;
 
 	/**
-	 * CSRF Hash
+	 * CSRF Hash.
 	 *
 	 * Random hash for Cross Site Request Forgery protection cookie
 	 *
@@ -101,39 +99,39 @@ class CI_Security {
 	protected $_csrf_hash;
 
 	/**
-	 * CSRF Expire time
+	 * CSRF Expire time.
 	 *
 	 * Expiration time for Cross Site Request Forgery protection cookie.
 	 * Defaults to two hours (in seconds).
 	 *
 	 * @var	int
 	 */
-	protected $_csrf_expire =	7200;
+	protected $_csrf_expire = 7200;
 
 	/**
-	 * CSRF Token name
+	 * CSRF Token name.
 	 *
 	 * Token name for Cross Site Request Forgery protection cookie.
 	 *
 	 * @var	string
 	 */
-	protected $_csrf_token_name =	'ci_csrf_token';
+	protected $_csrf_token_name = 'ci_csrf_token';
 
 	/**
-	 * CSRF Cookie name
+	 * CSRF Cookie name.
 	 *
 	 * Cookie name for Cross Site Request Forgery protection cookie.
 	 *
 	 * @var	string
 	 */
-	protected $_csrf_cookie_name =	'ci_csrf_token';
+	protected $_csrf_cookie_name = 'ci_csrf_token';
 
 	/**
-	 * List of never allowed strings
+	 * List of never allowed strings.
 	 *
 	 * @var	array
 	 */
-	protected $_never_allowed_str =	array(
+	protected $_never_allowed_str = [
 		'document.cookie' => '[removed]',
 		'(document).cookie' => '[removed]',
 		'document.write'  => '[removed]',
@@ -145,15 +143,15 @@ class CI_Security {
 		'-->'             => '--&gt;',
 		'<![CDATA['       => '&lt;![CDATA[',
 		'<comment>'	  => '&lt;comment&gt;',
-		'<%'              => '&lt;&#37;'
-	);
+		'<%'              => '&lt;&#37;',
+	];
 
 	/**
-	 * List of never allowed regex replacements
+	 * List of never allowed regex replacements.
 	 *
 	 * @var	array
 	 */
-	protected $_never_allowed_regex = array(
+	protected $_never_allowed_regex = [
 		'javascript\s*:',
 		'(\(?document\)?|\(?window\)?(\.document)?)\.(location|on\w*)',
 		'expression\s*(\(|&\#40;)', // CSS and IE
@@ -162,11 +160,11 @@ class CI_Security {
 		'jscript\s*:', // IE
 		'vbs\s*:', // IE
 		'Redirect\s+30\d',
-		"([\"'])?data\s*:[^\\1]*?base64[^\\1]*?,[^\\1]*?\\1?"
-	);
+		"([\"'])?data\s*:[^\\1]*?base64[^\\1]*?,[^\\1]*?\\1?",
+	];
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * @return	void
 	 */
@@ -176,18 +174,18 @@ class CI_Security {
 		if (config_item('csrf_protection'))
 		{
 			// CSRF config
-			foreach (array('csrf_expire', 'csrf_token_name', 'csrf_cookie_name') as $key)
+			foreach (['csrf_expire', 'csrf_token_name', 'csrf_cookie_name'] as $key)
 			{
 				if (NULL !== ($val = config_item($key)))
 				{
-					$this->{'_'.$key} = $val;
+					$this->{'_' . $key} = $val;
 				}
 			}
 
 			// Append application specific cookie prefix
 			if ($cookie_prefix = config_item('cookie_prefix'))
 			{
-				$this->_csrf_cookie_name = $cookie_prefix.$this->_csrf_cookie_name;
+				$this->_csrf_cookie_name = $cookie_prefix . $this->_csrf_cookie_name;
 			}
 
 			// Set the CSRF hash
@@ -202,7 +200,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * CSRF Verify
+	 * CSRF Verify.
 	 *
 	 * @return	CI_Security
 	 */
@@ -220,7 +218,7 @@ class CI_Security {
 			$uri = load_class('URI', 'core');
 			foreach ($exclude_uris as $excluded)
 			{
-				if (preg_match('#^'.$excluded.'$#i'.(UTF8_ENABLED ? 'u' : ''), $uri->uri_string()))
+				if (preg_match('#^' . $excluded . '$#i' . (UTF8_ENABLED ? 'u' : ''), $uri->uri_string()))
 				{
 					return $this;
 				}
@@ -258,7 +256,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * CSRF Set Cookie
+	 * CSRF Set Cookie.
 	 *
 	 * @codeCoverageIgnore
 	 * @return	CI_Security
@@ -268,7 +266,7 @@ class CI_Security {
 		$expire = time() + $this->_csrf_expire;
 		$secure_cookie = (bool) config_item('cookie_secure');
 
-		if ($secure_cookie && ! is_https())
+		if ($secure_cookie && !is_https())
 		{
 			return FALSE;
 		}
@@ -276,29 +274,30 @@ class CI_Security {
 		if (is_php('7.3'))
 		{
 			setcookie(
-				$this->_csrf_cookie_name,
-				$this->_csrf_hash,
-				array(
+			    $this->_csrf_cookie_name,
+			    $this->_csrf_hash,
+			    [
 					'expires'  => $expire,
 					'path'     => config_item('cookie_path'),
 					'domain'   => config_item('cookie_domain'),
 					'secure'   => $secure_cookie,
 					'httponly' => config_item('cookie_httponly'),
-					'samesite' => 'Strict'
-				)
+					'samesite' => 'Strict',
+				]
 			);
 		}
 		else
 		{
 			$domain = trim(config_item('cookie_domain'));
-			header('Set-Cookie: '.$this->_csrf_cookie_name.'='.$this->_csrf_hash
-					.'; Expires='.gmdate('D, d-M-Y H:i:s T', $expire)
-					.'; Max-Age='.$this->_csrf_expire
-					.'; Path='.rawurlencode(config_item('cookie_path'))
-					.($domain === '' ? '' : '; Domain='.$domain)
-					.($secure_cookie ? '; Secure' : '')
-					.(config_item('cookie_httponly') ? '; HttpOnly' : '')
-					.'; SameSite=Strict'
+			header(
+			    'Set-Cookie: ' . $this->_csrf_cookie_name . '=' . $this->_csrf_hash
+					. '; Expires=' . gmdate('D, d-M-Y H:i:s T', $expire)
+					. '; Max-Age=' . $this->_csrf_expire
+					. '; Path=' . rawurlencode(config_item('cookie_path'))
+					. ($domain === '' ? '' : '; Domain=' . $domain)
+					. ($secure_cookie ? '; Secure' : '')
+					. (config_item('cookie_httponly') ? '; HttpOnly' : '')
+					. '; SameSite=Strict'
 			);
 		}
 
@@ -310,7 +309,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show CSRF Error
+	 * Show CSRF Error.
 	 *
 	 * @return	void
 	 */
@@ -322,7 +321,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Get CSRF Hash
+	 * Get CSRF Hash.
 	 *
 	 * @see		CI_Security::$_csrf_hash
 	 * @return 	string	CSRF hash
@@ -335,7 +334,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Get CSRF Token Name
+	 * Get CSRF Token Name.
 	 *
 	 * @see		CI_Security::$_csrf_token_name
 	 * @return	string	CSRF token name
@@ -348,7 +347,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * XSS Clean
+	 * XSS Clean.
 	 *
 	 * Sanitizes data so that Cross Site Scripting Hacks can be
 	 * prevented.  This method does a fair amount of work but
@@ -404,7 +403,7 @@ class CI_Security {
 			{
 				$oldstr = $str;
 				$str = rawurldecode($str);
-				$str = preg_replace_callback('#%(?:\s*[0-9a-f]){2,}#i', array($this, '_urldecodespaces'), $str);
+				$str = preg_replace_callback('#%(?:\s*[0-9a-f]){2,}#i', [$this, '_urldecodespaces'], $str);
 			}
 			while ($oldstr !== $str);
 			unset($oldstr);
@@ -417,8 +416,8 @@ class CI_Security {
 		 * We only convert entities that are within tags since
 		 * these are the ones that will pose security problems.
 		 */
-		$str = preg_replace_callback("/[^a-z0-9>]+[a-z0-9]+=([\'\"]).*?\\1/si", array($this, '_convert_attribute'), $str);
-		$str = preg_replace_callback('/<\w+.*/si', array($this, '_decode_entity'), $str);
+		$str = preg_replace_callback("/[^a-z0-9>]+[a-z0-9]+=([\'\"]).*?\\1/si", [$this, '_convert_attribute'], $str);
+		$str = preg_replace_callback('/<\w+.*/si', [$this, '_decode_entity'], $str);
 
 		// Remove Invisible Characters Again!
 		$str = remove_invisible_characters($str);
@@ -457,7 +456,7 @@ class CI_Security {
 		}
 		else
 		{
-			$str = str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $str);
+			$str = str_replace(['<?', '?>'], ['&lt;?', '?&gt;'], $str);
 		}
 
 		/*
@@ -466,19 +465,19 @@ class CI_Security {
 		 * This corrects words like:  j a v a s c r i p t
 		 * These words are compacted back to their correct state.
 		 */
-		$words = array(
+		$words = [
 			'javascript', 'expression', 'vbscript', 'jscript', 'wscript',
 			'vbs', 'script', 'base64', 'applet', 'alert', 'document',
-			'write', 'cookie', 'window', 'confirm', 'prompt', 'eval'
-		);
+			'write', 'cookie', 'window', 'confirm', 'prompt', 'eval',
+		];
 
 		foreach ($words as $word)
 		{
-			$word = implode('\s*', str_split($word)).'\s*';
+			$word = implode('\s*', str_split($word)) . '\s*';
 
 			// We only want to do this when it is followed by a non-word character
 			// That way valid stuff like "dealer to" does not become "dealerto"
-			$str = preg_replace_callback('#('.substr($word, 0, -3).')(\W)#is', array($this, '_compact_exploded_words'), $str);
+			$str = preg_replace_callback('#(' . substr($word, 0, -3) . ')(\W)#is', [$this, '_compact_exploded_words'], $str);
 		}
 
 		/*
@@ -499,12 +498,12 @@ class CI_Security {
 
 			if (preg_match('/<a/i', $str))
 			{
-				$str = preg_replace_callback('#<a(?:rea)?[^a-z0-9>]+([^>]*?)(?:>|$)#si', array($this, '_js_link_removal'), $str);
+				$str = preg_replace_callback('#<a(?:rea)?[^a-z0-9>]+([^>]*?)(?:>|$)#si', [$this, '_js_link_removal'], $str);
 			}
 
 			if (preg_match('/<img/i', $str))
 			{
-				$str = preg_replace_callback('#<img[^a-z0-9]+([^>]*?)(?:\s?/?>|$)#si', array($this, '_js_img_removal'), $str);
+				$str = preg_replace_callback('#<img[^a-z0-9]+([^>]*?)(?:\s?/?>|$)#si', [$this, '_js_img_removal'], $str);
 			}
 
 			if (preg_match('/script|xss/i', $str))
@@ -525,17 +524,17 @@ class CI_Security {
 		 * Becomes: &lt;blink&gt;
 		 */
 		$pattern = '#'
-			.'<((?<slash>/*\s*)((?<tagName>[a-z0-9]+)(?=[^a-z0-9]|$)|.+)' // tag start and name, followed by a non-tag character
-			.'[^\s\042\047a-z0-9>/=]*' // a valid attribute character immediately after the tag would count as a separator
+			. '<((?<slash>/*\s*)((?<tagName>[a-z0-9]+)(?=[^a-z0-9]|$)|.+)' // tag start and name, followed by a non-tag character
+			. '[^\s\042\047a-z0-9>/=]*' // a valid attribute character immediately after the tag would count as a separator
 			// optional attributes
-			.'(?<attributes>(?:[\s\042\047/=]*' // non-attribute characters, excluding > (tag close) for obvious reasons
-			.'[^\s\042\047>/=]+' // attribute characters
+			. '(?<attributes>(?:[\s\042\047/=]*' // non-attribute characters, excluding > (tag close) for obvious reasons
+			. '[^\s\042\047>/=]+' // attribute characters
 			// optional attribute-value
-				.'(?:\s*=' // attribute-value separator
-					.'(?:[^\s\042\047=><`]+|\s*\042[^\042]*\042|\s*\047[^\047]*\047|\s*(?U:[^\s\042\047=><`]*))' // single, double or non-quoted value
-				.')?' // end optional attribute-value group
-			.')*)' // end optional attributes group
-			.'[^>]*)(?<closeTag>\>)?#isS';
+				. '(?:\s*=' // attribute-value separator
+					. '(?:[^\s\042\047=><`]+|\s*\042[^\042]*\042|\s*\047[^\047]*\047|\s*(?U:[^\s\042\047=><`]*))' // single, double or non-quoted value
+				. ')?' // end optional attribute-value group
+			. ')*)' // end optional attributes group
+			. '[^>]*)(?<closeTag>\>)?#isS';
 
 		// Note: It would be nice to optimize this for speed, BUT
 		//       only matching the naughty elements here results in
@@ -543,7 +542,7 @@ class CI_Security {
 		do
 		{
 			$old_str = $str;
-			$str = preg_replace_callback($pattern, array($this, '_sanitize_naughty_html'), $str);
+			$str = preg_replace_callback($pattern, [$this, '_sanitize_naughty_html'], $str);
 		}
 		while ($old_str !== $str);
 		unset($old_str);
@@ -561,17 +560,17 @@ class CI_Security {
 		 * Becomes:	eval&#40;'some code'&#41;
 		 */
 		$str = preg_replace(
-			'#(alert|prompt|confirm|cmd|passthru|eval|exec|expression|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si',
-			'\\1\\2&#40;\\3&#41;',
-			$str
+		    '#(alert|prompt|confirm|cmd|passthru|eval|exec|expression|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si',
+		    '\\1\\2&#40;\\3&#41;',
+		    $str
 		);
 
 		// Same thing, but for "tag functions" (e.g. eval`some code`)
 		// See https://github.com/bcit-ci/CodeIgniter/issues/5420
 		$str = preg_replace(
-			'#(alert|prompt|confirm|cmd|passthru|eval|exec|expression|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)`(.*?)`#si',
-			'\\1\\2&#96;\\3&#96;',
-			$str
+		    '#(alert|prompt|confirm|cmd|passthru|eval|exec|expression|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)`(.*?)`#si',
+		    '\\1\\2&#96;\\3&#96;',
+		    $str
 		);
 
 		// Final clean up
@@ -599,7 +598,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * XSS Hash
+	 * XSS Hash.
 	 *
 	 * Generates the XSS hash if needed and returns it.
 	 *
@@ -622,14 +621,14 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Get random bytes
+	 * Get random bytes.
 	 *
 	 * @param	int	$length	Output length
 	 * @return	string
 	 */
 	public function get_random_bytes($length)
 	{
-		if (empty($length) || ! ctype_digit((string) $length))
+		if (empty($length) || !ctype_digit((string) $length))
 		{
 			return FALSE;
 		}
@@ -680,7 +679,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * HTML Entities Decode
+	 * HTML Entities Decode.
 	 *
 	 * A replacement for html_entity_decode()
 	 *
@@ -712,7 +711,7 @@ class CI_Security {
 			? ENT_COMPAT | ENT_HTML5
 			: ENT_COMPAT;
 
-		if ( ! isset($_entities))
+		if ( !isset($_entities))
 		{
 			$_entities = array_map('strtolower', get_html_translation_table(HTML_ENTITIES, $flag, $charset));
 
@@ -735,11 +734,11 @@ class CI_Security {
 			// Decode standard entities, avoiding false positives
 			if (preg_match_all('/&[a-z]{2,}(?![a-z;])/i', $str, $matches))
 			{
-				$replace = array();
+				$replace = [];
 				$matches = array_unique(array_map('strtolower', $matches[0]));
 				foreach ($matches as &$match)
 				{
-					if (($char = array_search($match.';', $_entities, TRUE)) !== FALSE)
+					if (($char = array_search($match . ';', $_entities, TRUE)) !== FALSE)
 					{
 						$replace[$match] = $char;
 					}
@@ -750,9 +749,9 @@ class CI_Security {
 
 			// Decode numeric & UTF16 two byte entities
 			$str = html_entity_decode(
-				preg_replace('/(&#(?:x0*[0-9a-f]{2,5}(?![0-9a-f;])|(?:0*\d{2,4}(?![0-9;]))))/iS', '$1;', $str),
-				$flag,
-				$charset
+			    preg_replace('/(&#(?:x0*[0-9a-f]{2,5}(?![0-9a-f;])|(?:0*\d{2,4}(?![0-9;]))))/iS', '$1;', $str),
+			    $flag,
+			    $charset
 			);
 
 			if ($flag === ENT_COMPAT)
@@ -767,7 +766,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Sanitize Filename
+	 * Sanitize Filename.
 	 *
 	 * @param	string	$str		Input file name
 	 * @param 	bool	$relative_path	Whether to preserve paths
@@ -777,7 +776,7 @@ class CI_Security {
 	{
 		$bad = $this->filename_bad_chars;
 
-		if ( ! $relative_path)
+		if ( !$relative_path)
 		{
 			$bad[] = './';
 			$bad[] = '/';
@@ -798,7 +797,7 @@ class CI_Security {
 	// ----------------------------------------------------------------
 
 	/**
-	 * Strip Image Tags
+	 * Strip Image Tags.
 	 *
 	 * @param	string	$str
 	 * @return	string
@@ -806,19 +805,19 @@ class CI_Security {
 	public function strip_image_tags($str)
 	{
 		return preg_replace(
-			array(
+		    [
 				'#<img[\s/]+.*?src\s*=\s*(["\'])([^\\1]+?)\\1.*?\>#i',
-				'#<img[\s/]+.*?src\s*=\s*?(([^\s"\'=<>`]+)).*?\>#i'
-			),
-			'\\2',
-			$str
+				'#<img[\s/]+.*?src\s*=\s*?(([^\s"\'=<>`]+)).*?\>#i',
+			],
+		    '\\2',
+		    $str
 		);
 	}
 
 	// ----------------------------------------------------------------
 
 	/**
-	 * URL-decode taking spaces into account
+	 * URL-decode taking spaces into account.
 	 *
 	 * @see		https://github.com/bcit-ci/CodeIgniter/issues/4877
 	 * @param	array	$matches
@@ -826,7 +825,7 @@ class CI_Security {
 	 */
 	protected function _urldecodespaces($matches)
 	{
-		$input    = $matches[0];
+		$input = $matches[0];
 		$nospaces = preg_replace('#\s+#', '', $input);
 		return ($nospaces === $input)
 			? $input
@@ -836,7 +835,7 @@ class CI_Security {
 	// ----------------------------------------------------------------
 
 	/**
-	 * Compact Exploded Words
+	 * Compact Exploded Words.
 	 *
 	 * Callback method for xss_clean() to remove whitespace from
 	 * things like 'j a v a s c r i p t'.
@@ -847,13 +846,13 @@ class CI_Security {
 	 */
 	protected function _compact_exploded_words($matches)
 	{
-		return preg_replace('/\s+/s', '', $matches[1]).$matches[2];
+		return preg_replace('/\s+/s', '', $matches[1]) . $matches[2];
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Sanitize Naughty HTML
+	 * Sanitize Naughty HTML.
 	 *
 	 * Callback method for xss_clean() to remove naughty HTML elements.
 	 *
@@ -863,42 +862,42 @@ class CI_Security {
 	 */
 	protected function _sanitize_naughty_html($matches)
 	{
-		static $naughty_tags    = array(
+		static $naughty_tags = [
 			'alert', 'area', 'prompt', 'confirm', 'applet', 'audio', 'basefont', 'base', 'behavior', 'bgsound',
 			'blink', 'body', 'embed', 'expression', 'form', 'frameset', 'frame', 'head', 'html', 'ilayer',
 			'iframe', 'input', 'button', 'select', 'isindex', 'layer', 'link', 'meta', 'keygen', 'object',
-			'plaintext', 'style', 'script', 'textarea', 'title', 'math', 'video', 'svg', 'xml', 'xss'
-		);
+			'plaintext', 'style', 'script', 'textarea', 'title', 'math', 'video', 'svg', 'xml', 'xss',
+		];
 
-		static $evil_attributes = array(
-			'on\w+', 'style', 'xmlns', 'formaction', 'form', 'xlink:href', 'FSCommand', 'seekSegmentTime'
-		);
+		static $evil_attributes = [
+			'on\w+', 'style', 'xmlns', 'formaction', 'form', 'xlink:href', 'FSCommand', 'seekSegmentTime',
+		];
 
 		// First, escape unclosed tags
 		if (empty($matches['closeTag']))
 		{
-			return '&lt;'.$matches[1];
+			return '&lt;' . $matches[1];
 		}
 		// Is the element that we caught naughty? If so, escape it
 		elseif (in_array(strtolower($matches['tagName']), $naughty_tags, TRUE))
 		{
-			return '&lt;'.$matches[1].'&gt;';
+			return '&lt;' . $matches[1] . '&gt;';
 		}
 		// For other tags, see if their attributes are "evil" and strip those
 		elseif (isset($matches['attributes']))
 		{
 			// We'll store the already filtered attributes here
-			$attributes = array();
+			$attributes = [];
 
 			// Attribute-catching pattern
 			$attributes_pattern = '#'
-				.'(?<name>[^\s\042\047>/=]+)' // attribute characters
+				. '(?<name>[^\s\042\047>/=]+)' // attribute characters
 				// optional attribute-value
-				.'(?:\s*=(?<value>[^\s\042\047=><`]+|\s*\042[^\042]*\042|\s*\047[^\047]*\047|\s*(?U:[^\s\042\047=><`]*)))' // attribute-value separator
-				.'#i';
+				. '(?:\s*=(?<value>[^\s\042\047=><`]+|\s*\042[^\042]*\042|\s*\047[^\047]*\047|\s*(?U:[^\s\042\047=><`]*)))' // attribute-value separator
+				. '#i';
 
 			// Blacklist pattern for evil attribute names
-			$is_evil_pattern = '#^('.implode('|', $evil_attributes).')$#i';
+			$is_evil_pattern = '#^(' . implode('|', $evil_attributes) . ')$#i';
 
 			// Each iteration filters a single attribute
 			do
@@ -908,7 +907,7 @@ class CI_Security {
 				// of numerous XSS issues we've had.
 				$matches['attributes'] = preg_replace('#^[^a-z]+#i', '', $matches['attributes']);
 
-				if ( ! preg_match($attributes_pattern, $matches['attributes'], $attribute, PREG_OFFSET_CAPTURE))
+				if ( !preg_match($attributes_pattern, $matches['attributes'], $attribute, PREG_OFFSET_CAPTURE))
 				{
 					// No (valid) attribute found? Discard everything else inside the tag
 					break;
@@ -932,8 +931,8 @@ class CI_Security {
 
 			$attributes = $attributes === []
 				? ''
-				: ' '.implode(' ', $attributes);
-			return '<'.$matches['slash'].$matches['tagName'].$attributes.'>';
+				: ' ' . implode(' ', $attributes);
+			return '<' . $matches['slash'] . $matches['tagName'] . $attributes . '>';
 		}
 
 		return $matches[0];
@@ -942,7 +941,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * JS Link Removal
+	 * JS Link Removal.
 	 *
 	 * Callback method for xss_clean() to sanitize links.
 	 *
@@ -957,20 +956,20 @@ class CI_Security {
 	protected function _js_link_removal($match)
 	{
 		return str_replace(
-			$match[1],
-			preg_replace(
-				'#href=.*?(?:(?:alert|prompt|confirm)(?:\(|&\#40;|`|&\#96;)|javascript:|livescript:|mocha:|charset=|window\.|\(?document\)?\.|\.cookie|<script|<xss|d\s*a\s*t\s*a\s*:)#si',
-				'',
-				$this->_filter_attributes($match[1])
-			),
-			$match[0]
+		    $match[1],
+		    preg_replace(
+		        '#href=.*?(?:(?:alert|prompt|confirm)(?:\(|&\#40;|`|&\#96;)|javascript:|livescript:|mocha:|charset=|window\.|\(?document\)?\.|\.cookie|<script|<xss|d\s*a\s*t\s*a\s*:)#si',
+		        '',
+		        $this->_filter_attributes($match[1])
+		    ),
+		    $match[0]
 		);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * JS Image Removal
+	 * JS Image Removal.
 	 *
 	 * Callback method for xss_clean() to sanitize image tags.
 	 *
@@ -985,20 +984,20 @@ class CI_Security {
 	protected function _js_img_removal($match)
 	{
 		return str_replace(
-			$match[1],
-			preg_replace(
-				'#src=.*?(?:(?:alert|prompt|confirm|eval)(?:\(|&\#40;|`|&\#96;)|javascript:|livescript:|mocha:|charset=|window\.|\(?document\)?\.|\.cookie|<script|<xss|base64\s*,)#si',
-				'',
-				$this->_filter_attributes($match[1])
-			),
-			$match[0]
+		    $match[1],
+		    preg_replace(
+		        '#src=.*?(?:(?:alert|prompt|confirm|eval)(?:\(|&\#40;|`|&\#96;)|javascript:|livescript:|mocha:|charset=|window\.|\(?document\)?\.|\.cookie|<script|<xss|base64\s*,)#si',
+		        '',
+		        $this->_filter_attributes($match[1])
+		    ),
+		    $match[0]
 		);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Attribute Conversion
+	 * Attribute Conversion.
 	 *
 	 * @used-by	CI_Security::xss_clean()
 	 * @param	array	$match
@@ -1006,13 +1005,13 @@ class CI_Security {
 	 */
 	protected function _convert_attribute($match)
 	{
-		return str_replace(array('>', '<', '\\'), array('&gt;', '&lt;', '\\\\'), $match[0]);
+		return str_replace(['>', '<', '\\'], ['&gt;', '&lt;', '\\\\'], $match[0]);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Filter Attributes
+	 * Filter Attributes.
 	 *
 	 * Filters tag attributes for consistency and safety.
 	 *
@@ -1038,7 +1037,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * HTML Entity Decode Callback
+	 * HTML Entity Decode Callback.
 	 *
 	 * @used-by	CI_Security::xss_clean()
 	 * @param	array	$match
@@ -1048,20 +1047,20 @@ class CI_Security {
 	{
 		// Protect GET variables in URLs
 		// 901119URL5918AMP18930PROTECT8198
-		$match = preg_replace('|\&([a-z\_0-9\-]+)\=([a-z\_0-9\-/]+)|i', $this->xss_hash().'\\1=\\2', $match[0]);
+		$match = preg_replace('|\&([a-z\_0-9\-]+)\=([a-z\_0-9\-/]+)|i', $this->xss_hash() . '\\1=\\2', $match[0]);
 
 		// Decode, then un-protect URL GET vars
 		return str_replace(
-			$this->xss_hash(),
-			'&',
-			$this->entity_decode($match, $this->charset)
+		    $this->xss_hash(),
+		    '&',
+		    $this->entity_decode($match, $this->charset)
 		);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Do Never Allowed
+	 * Do Never Allowed.
 	 *
 	 * @used-by	CI_Security::xss_clean()
 	 * @param 	string
@@ -1073,7 +1072,7 @@ class CI_Security {
 
 		foreach ($this->_never_allowed_regex as $regex)
 		{
-			$str = preg_replace('#'.$regex.'#is', '[removed]', $str);
+			$str = preg_replace('#' . $regex . '#is', '[removed]', $str);
 		}
 
 		return $str;
@@ -1082,7 +1081,7 @@ class CI_Security {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Set CSRF Hash and Cookie
+	 * Set CSRF Hash and Cookie.
 	 *
 	 * @return	string
 	 */

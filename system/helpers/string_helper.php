@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter String Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('trim_slashes'))
+if ( !function_exists('trim_slashes'))
 {
 	/**
-	 * Trim Slashes
+	 * Trim Slashes.
 	 *
 	 * Removes any leading/trailing slashes from a string:
 	 *
@@ -77,10 +77,10 @@ if ( ! function_exists('trim_slashes'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('strip_slashes'))
+if ( !function_exists('strip_slashes'))
 {
 	/**
-	 * Strip Slashes
+	 * Strip Slashes.
 	 *
 	 * Removes slashes contained in a string or in an array
 	 *
@@ -89,7 +89,7 @@ if ( ! function_exists('strip_slashes'))
 	 */
 	function strip_slashes($str)
 	{
-		if ( ! is_array($str))
+		if ( !is_array($str))
 		{
 			return stripslashes($str);
 		}
@@ -105,10 +105,10 @@ if ( ! function_exists('strip_slashes'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('strip_quotes'))
+if ( !function_exists('strip_quotes'))
 {
 	/**
-	 * Strip Quotes
+	 * Strip Quotes.
 	 *
 	 * Removes single and double quotes from a string
 	 *
@@ -117,16 +117,16 @@ if ( ! function_exists('strip_quotes'))
 	 */
 	function strip_quotes($str)
 	{
-		return str_replace(array('"', "'"), '', $str);
+		return str_replace(['"', "'"], '', $str);
 	}
 }
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('quotes_to_entities'))
+if ( !function_exists('quotes_to_entities'))
 {
 	/**
-	 * Quotes to Entities
+	 * Quotes to Entities.
 	 *
 	 * Converts single and double quotes to entities
 	 *
@@ -135,16 +135,16 @@ if ( ! function_exists('quotes_to_entities'))
 	 */
 	function quotes_to_entities($str)
 	{
-		return str_replace(array("\'","\"","'",'"'), array("&#39;","&quot;","&#39;","&quot;"), $str);
+		return str_replace(["\'", '"', "'", '"'], ['&#39;', '&quot;', '&#39;', '&quot;'], $str);
 	}
 }
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('reduce_double_slashes'))
+if ( !function_exists('reduce_double_slashes'))
 {
 	/**
-	 * Reduce Double Slashes
+	 * Reduce Double Slashes.
 	 *
 	 * Converts double slashes in a string to a single slash,
 	 * except those found in http://
@@ -166,10 +166,10 @@ if ( ! function_exists('reduce_double_slashes'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('reduce_multiples'))
+if ( !function_exists('reduce_multiples'))
 {
 	/**
-	 * Reduce Multiples
+	 * Reduce Multiples.
 	 *
 	 * Reduces multiple instances of a particular character.  Example:
 	 *
@@ -186,17 +186,17 @@ if ( ! function_exists('reduce_multiples'))
 	 */
 	function reduce_multiples($str, $character = ',', $trim = FALSE)
 	{
-		$str = preg_replace('#'.preg_quote($character, '#').'{2,}#', $character, $str);
+		$str = preg_replace('#' . preg_quote($character, '#') . '{2,}#', $character, $str);
 		return ($trim === TRUE) ? trim($str, $character) : $str;
 	}
 }
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('random_string'))
+if ( !function_exists('random_string'))
 {
 	/**
-	 * Create a "Random" String
+	 * Create a "Random" String.
 	 *
 	 * @param	string	type of random string.  basic, alpha, alnum, numeric, nozero, unique, md5, encrypt and sha1
 	 * @param	int	number of characters
@@ -241,10 +241,10 @@ if ( ! function_exists('random_string'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('increment_string'))
+if ( !function_exists('increment_string'))
 {
 	/**
-	 * Add's _1 to a string or increment the ending number to allow _2, _3, etc
+	 * Add's _1 to a string or increment the ending number to allow _2, _3, etc.
 	 *
 	 * @param	string	required
 	 * @param	string	What should the duplicate number be appended with
@@ -253,17 +253,17 @@ if ( ! function_exists('increment_string'))
 	 */
 	function increment_string($str, $separator = '_', $first = 1)
 	{
-		preg_match('/(.+)'.preg_quote($separator, '/').'([0-9]+)$/', $str, $match);
-		return isset($match[2]) ? $match[1].$separator.($match[2] + 1) : $str.$separator.$first;
+		preg_match('/(.+)' . preg_quote($separator, '/') . '([0-9]+)$/', $str, $match);
+		return isset($match[2]) ? $match[1] . $separator . ($match[2] + 1) : $str . $separator . $first;
 	}
 }
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('alternator'))
+if ( !function_exists('alternator'))
 {
 	/**
-	 * Alternator
+	 * Alternator.
 	 *
 	 * Allows strings to be alternated. See docs...
 	 *
@@ -287,10 +287,10 @@ if ( ! function_exists('alternator'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('repeater'))
+if ( !function_exists('repeater'))
 {
 	/**
-	 * Repeater function
+	 * Repeater function.
 	 *
 	 * @todo	Remove in version 3.1+.
 	 * @deprecated	3.0.0	This is just an alias for PHP's native str_repeat()

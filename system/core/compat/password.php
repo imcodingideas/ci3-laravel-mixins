@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * PHP ext/standard/password compatibility package
  *
  * @package		CodeIgniter
@@ -51,7 +51,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if (is_php('5.5') || ! defined('CRYPT_BLOWFISH') || CRYPT_BLOWFISH !== 1 || defined('HHVM_VERSION'))
+if (is_php('5.5') || !defined('CRYPT_BLOWFISH') || CRYPT_BLOWFISH !== 1 || defined('HHVM_VERSION'))
 {
 	return;
 }
@@ -63,10 +63,10 @@ defined('PASSWORD_DEFAULT') || define('PASSWORD_DEFAULT', PASSWORD_BCRYPT);
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('password_get_info'))
+if ( !function_exists('password_get_info'))
 {
 	/**
-	 * password_get_info()
+	 * password_get_info().
 	 *
 	 * @link	http://php.net/password_get_info
 	 * @param	string	$hash
@@ -75,24 +75,24 @@ if ( ! function_exists('password_get_info'))
 	function password_get_info($hash)
 	{
 		return (strlen($hash) < 60 || sscanf($hash, '$2y$%d', $hash) !== 1)
-			? array('algo' => 0, 'algoName' => 'unknown', 'options' => array())
-			: array('algo' => 1, 'algoName' => 'bcrypt', 'options' => array('cost' => $hash));
+			? ['algo' => 0, 'algoName' => 'unknown', 'options' => []]
+			: ['algo' => 1, 'algoName' => 'bcrypt', 'options' => ['cost' => $hash]];
 	}
 }
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('password_hash'))
+if ( !function_exists('password_hash'))
 {
-	/**
-     * password_hash()
+    /**
+     * password_hash().
      *
      * @link	http://php.net/password_hash
      * @param	string	$password
      * @param	int	$algo
      * @return	mixed
      */
-    function password_hash($password, $algo, array $options = array())
+    function password_hash($password, $algo, array $options = [])
 	{
 		static $func_overload;
 		if (!isset($func_overload)) {
@@ -101,22 +101,22 @@ if ( ! function_exists('password_hash'))
 
 		if ($algo !== 1)
 		{
-			trigger_error('password_hash(): Unknown hashing algorithm: '.(int) $algo, E_USER_WARNING);
+			trigger_error('password_hash(): Unknown hashing algorithm: ' . (int) $algo, E_USER_WARNING);
 			return NULL;
 		}
 
 		if (isset($options['cost']) && ($options['cost'] < 4 || $options['cost'] > 31))
 		{
-			trigger_error('password_hash(): Invalid bcrypt cost parameter specified: '.(int) $options['cost'], E_USER_WARNING);
+			trigger_error('password_hash(): Invalid bcrypt cost parameter specified: ' . (int) $options['cost'], E_USER_WARNING);
 			return NULL;
 		}
 
 		if (isset($options['salt']) && ($saltlen = ($func_overload ? mb_strlen($options['salt'], '8bit') : strlen($options['salt']))) < 22)
 		{
-			trigger_error('password_hash(): Provided salt is too short: '.$saltlen.' expecting 22', E_USER_WARNING);
+			trigger_error('password_hash(): Provided salt is too short: ' . $saltlen . ' expecting 22', E_USER_WARNING);
 			return NULL;
 		}
-		elseif ( ! isset($options['salt']))
+		elseif ( !isset($options['salt']))
 		{
 			if (function_exists('random_bytes'))
 			{
@@ -126,7 +126,7 @@ if ( ! function_exists('password_hash'))
 				}
 				catch (Exception $e)
 				{
-					log_message('error', 'compat/password: Error while trying to use random_bytes(): '.$e->getMessage());
+					log_message('error', 'compat/password: Error while trying to use random_bytes(): ' . $e->getMessage());
 					return FALSE;
 				}
 			}
@@ -138,7 +138,7 @@ if ( ! function_exists('password_hash'))
 			{
 				if (($fp = fopen($dev, 'rb')) === FALSE)
 				{
-					log_message('error', 'compat/password: Unable to open '.$dev.' for reading.');
+					log_message('error', 'compat/password: Unable to open ' . $dev . ' for reading.');
 					return FALSE;
 				}
 
@@ -152,7 +152,7 @@ if ( ! function_exists('password_hash'))
 				{
 					if (($read = fread($fp, 16 - $read)) === FALSE)
 					{
-						log_message('error', 'compat/password: Error while reading from '.$dev.'.');
+						log_message('error', 'compat/password: Error while reading from ' . $dev . '.');
 						return FALSE;
 					}
 					$options['salt'] .= $read;
@@ -178,7 +178,7 @@ if ( ! function_exists('password_hash'))
 
 			$options['salt'] = str_replace('+', '.', rtrim(base64_encode($options['salt']), '='));
 		}
-		elseif ( ! preg_match('#^[a-zA-Z0-9./]+$#D', $options['salt']))
+		elseif ( !preg_match('#^[a-zA-Z0-9./]+$#D', $options['salt']))
 		{
 			$options['salt'] = str_replace('+', '.', rtrim(base64_encode($options['salt']), '='));
 		}
@@ -195,17 +195,17 @@ if ( ! function_exists('password_hash'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('password_needs_rehash'))
+if ( !function_exists('password_needs_rehash'))
 {
-	/**
-     * password_needs_rehash()
+    /**
+     * password_needs_rehash().
      *
      * @link	http://php.net/password_needs_rehash
      * @param	string	$hash
      * @param	int	$algo
      * @return	bool
      */
-    function password_needs_rehash($hash, $algo, array $options = array())
+    function password_needs_rehash($hash, $algo, array $options = [])
 	{
 		$info = password_get_info($hash);
 
@@ -228,10 +228,10 @@ if ( ! function_exists('password_needs_rehash'))
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('password_verify'))
+if ( !function_exists('password_verify'))
 {
 	/**
-	 * password_verify()
+	 * password_verify().
 	 *
 	 * @link	http://php.net/password_verify
 	 * @param	string	$password

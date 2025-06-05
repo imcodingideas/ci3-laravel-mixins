@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,14 +39,12 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO SQLite Database Adapter Class
+ * PDO SQLite Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -59,8 +57,8 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
     public $dbprefix;
     public $_like_escape_str;
     public $_like_escape_chr;
-    /**
-	 * Sub-driver
+	/**
+	 * Sub-driver.
 	 *
 	 * @var	string
 	 */
@@ -69,16 +67,16 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * ORDER BY random keyword
+	 * ORDER BY random keyword.
 	 *
 	 * @var	array
 	 */
-	protected $_random_keyword = array('RANDOM()', 'RANDOM()');
+	protected $_random_keyword = ['RANDOM()', 'RANDOM()'];
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Builds the DSN if not already set.
 	 *
@@ -105,7 +103,7 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Show table query
+	 * Show table query.
 	 *
 	 * Generates a platform-specific query string so that the table names can be fetched
 	 *
@@ -118,8 +116,8 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 
 		if ($prefix_limit === TRUE && $this->dbprefix !== '')
 		{
-			return $sql.' AND "NAME" LIKE \''.$this->escape_like_str($this->dbprefix)."%' "
-				.sprintf($this->_like_escape_str, $this->_like_escape_chr);
+			return $sql . ' AND "NAME" LIKE \'' . $this->escape_like_str($this->dbprefix) . "%' "
+				. sprintf($this->_like_escape_str, $this->_like_escape_chr);
 		}
 
 		return $sql;
@@ -128,19 +126,19 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * @param	string	$table	Table name
 	 * @return	array
 	 */
 	public function list_fields($table)
 	{
-		if (($result = $this->query('PRAGMA TABLE_INFO('.$this->protect_identifiers($table, TRUE, NULL, FALSE).')')) === FALSE)
+		if (($result = $this->query('PRAGMA TABLE_INFO(' . $this->protect_identifiers($table, TRUE, NULL, FALSE) . ')')) === FALSE)
 		{
 			return FALSE;
 		}
 
-		$fields = array();
+		$fields = [];
 		foreach ($result->result_array() as $row)
 		{
 			$fields[] = $row['name'];
@@ -152,14 +150,14 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Returns an object with field data
+	 * Returns an object with field data.
 	 *
 	 * @param	string	$table
 	 * @return	array
 	 */
 	public function field_data($table)
 	{
-		if (($query = $this->query('PRAGMA TABLE_INFO('.$this->protect_identifiers($table, TRUE, NULL, FALSE).')')) === FALSE)
+		if (($query = $this->query('PRAGMA TABLE_INFO(' . $this->protect_identifiers($table, TRUE, NULL, FALSE) . ')')) === FALSE)
 		{
 			return FALSE;
 		}
@@ -170,15 +168,15 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 			return FALSE;
 		}
 
-		$retval = array();
+		$retval = [];
 		for ($i = 0, $c = count($query); $i < $c; $i++)
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= $query[$i]['name'];
-			$retval[$i]->type		= $query[$i]['type'];
-			$retval[$i]->max_length		= NULL;
-			$retval[$i]->default		= $query[$i]['dflt_value'];
-			$retval[$i]->primary_key	= isset($query[$i]['pk']) ? (int) $query[$i]['pk'] : 0;
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = $query[$i]['name'];
+			$retval[$i]->type = $query[$i]['type'];
+			$retval[$i]->max_length = NULL;
+			$retval[$i]->default = $query[$i]['dflt_value'];
+			$retval[$i]->primary_key = isset($query[$i]['pk']) ? (int) $query[$i]['pk'] : 0;
 		}
 
 		return $retval;
@@ -187,7 +185,7 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Replace statement
+	 * Replace statement.
 	 *
 	 * @param	string	$table	Table name
 	 * @param	array	$keys	INSERT keys
@@ -196,13 +194,13 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _replace($table, $keys, $values)
 	{
-		return 'INSERT OR '.parent::_replace($table, $keys, $values);
+		return 'INSERT OR ' . parent::_replace($table, $keys, $values);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Truncate statement
+	 * Truncate statement.
 	 *
 	 * Generates a platform-specific truncate string from the supplied data
 	 *
@@ -214,7 +212,7 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _truncate($table)
 	{
-		return 'DELETE FROM '.$table;
+		return 'DELETE FROM ' . $table;
 	}
 
 }

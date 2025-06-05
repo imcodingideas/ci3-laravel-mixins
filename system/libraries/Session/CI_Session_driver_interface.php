@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2022, CodeIgniter Foundation (https://codeigniter.com/)
  * @license	https://opensource.org/licenses/MIT	MIT License
@@ -37,12 +37,10 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CI_Session_driver_interface
+ * CI_Session_driver_interface.
  *
  * A compatibility typeless SessionHandlerInterface alias
  *
- * @package	CodeIgniter
- * @subpackage	Libraries
  * @category	Sessions
  * @author	Andrey Andreev
  * @link	https://codeigniter.com/userguide3/libraries/sessions.html

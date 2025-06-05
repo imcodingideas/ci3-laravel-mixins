@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Path Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('set_realpath'))
+if ( !function_exists('set_realpath'))
 {
 	/**
-	 * Set Realpath
+	 * Set Realpath.
 	 *
 	 * @param	string
 	 * @param	bool	checks to see if the path exists
@@ -72,12 +72,12 @@ if ( ! function_exists('set_realpath'))
 		{
 			$path = realpath($path);
 		}
-		elseif ($check_existance && ! is_dir($path) && ! is_file($path))
+		elseif ($check_existance && !is_dir($path) && !is_file($path))
 		{
-			show_error('Not a valid path: '.$path);
+			show_error('Not a valid path: ' . $path);
 		}
 
 		// Add a trailing slash, if this is a directory
-		return is_dir($path) ? rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR : $path;
+		return is_dir($path) ? rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : $path;
 	}
 }

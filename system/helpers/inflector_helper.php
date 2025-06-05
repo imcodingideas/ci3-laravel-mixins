@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Inflector Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('singular'))
+if ( !function_exists('singular'))
 {
 	/**
-	 * Singular
+	 * Singular.
 	 *
 	 * Takes a plural word and makes it singular
 	 *
@@ -64,12 +64,12 @@ if ( ! function_exists('singular'))
 	{
 		$result = strval($str);
 
-		if ( ! word_is_countable($result))
+		if ( !word_is_countable($result))
 		{
 			return $result;
 		}
 
-		$singular_rules = array(
+		$singular_rules = [
 			'/(matr)ices$/'		=> '\1ix',
 			'/(vert|ind)ices$/'	=> '\1ex',
 			'/^(ox)en/'		=> '\1',
@@ -97,8 +97,8 @@ if ( ! function_exists('singular'))
 			'/(c)hildren$/'		=> '\1\2hild',
 			'/(n)ews$/'		=> '\1\2ews',
 			'/(quiz)zes$/'		=> '\1',
-			'/([^us])s$/'		=> '\1'
-		);
+			'/([^us])s$/'		=> '\1',
+		];
 
 		foreach ($singular_rules as $rule => $replacement)
 		{
@@ -115,10 +115,10 @@ if ( ! function_exists('singular'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('plural'))
+if ( !function_exists('plural'))
 {
 	/**
-	 * Plural
+	 * Plural.
 	 *
 	 * Takes a singular word and makes it plural
 	 *
@@ -129,12 +129,12 @@ if ( ! function_exists('plural'))
 	{
 		$result = strval($str);
 
-		if ( ! word_is_countable($result))
+		if ( !word_is_countable($result))
 		{
 			return $result;
 		}
 
-		$plural_rules = array(
+		$plural_rules = [
 			'/(quiz)$/'                => '\1zes',      // quizzes
 			'/^(ox)$/'                 => '\1\2en',     // ox
 			'/([m|l])ouse$/'           => '\1ice',      // mouse, louse
@@ -155,7 +155,7 @@ if ( ! function_exists('plural'))
 			'/(ax|cris|test)is$/'      => '\1es',       // axis, crisis
 			'/s$/'                     => 's',          // no change (compatibility)
 			'/$/'                      => 's',
-		);
+		];
 
 		foreach ($plural_rules as $rule => $replacement)
 		{
@@ -172,10 +172,10 @@ if ( ! function_exists('plural'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('camelize'))
+if ( !function_exists('camelize'))
 {
 	/**
-	 * Camelize
+	 * Camelize.
 	 *
 	 * Takes multiple words separated by spaces or underscores and camelizes them
 	 *
@@ -184,16 +184,16 @@ if ( ! function_exists('camelize'))
 	 */
 	function camelize($str)
 	{
-		return strtolower($str[0]).substr(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', $str))), 1);
+		return strtolower($str[0]) . substr(str_replace(' ', '', ucwords(preg_replace('/[\s_]+/', ' ', $str))), 1);
 	}
 }
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('underscore'))
+if ( !function_exists('underscore'))
 {
 	/**
-	 * Underscore
+	 * Underscore.
 	 *
 	 * Takes multiple words separated by spaces and underscores them
 	 *
@@ -208,10 +208,10 @@ if ( ! function_exists('underscore'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('humanize'))
+if ( !function_exists('humanize'))
 {
 	/**
-	 * Humanize
+	 * Humanize.
 	 *
 	 * Takes multiple words separated by the separator and changes them to spaces
 	 *
@@ -221,13 +221,13 @@ if ( ! function_exists('humanize'))
 	 */
 	function humanize($str, $separator = '_')
 	{
-		return ucwords(preg_replace('/['.preg_quote($separator).']+/', ' ', trim(MB_ENABLED ? mb_strtolower($str) : strtolower($str))));
+		return ucwords(preg_replace('/[' . preg_quote($separator) . ']+/', ' ', trim(MB_ENABLED ? mb_strtolower($str) : strtolower($str))));
 	}
 }
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('word_is_countable'))
+if ( !function_exists('word_is_countable'))
 {
 	/**
 	 * Checks if the given word has a plural version.
@@ -237,9 +237,9 @@ if ( ! function_exists('word_is_countable'))
 	 */
 	function word_is_countable($word)
 	{
-		return ! in_array(
-			strtolower($word),
-			array(
+		return !in_array(
+		    strtolower($word),
+		    [
 				'audio',
 				'bison',
 				'chassis',
@@ -270,15 +270,15 @@ if ( ! function_exists('word_is_countable'))
 				'species',
 				'swine',
 				'traffic',
-				'wheat'
-			)
+				'wheat',
+			]
 		);
 	}
 }
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('is_countable'))
+if ( !function_exists('is_countable'))
 {
 	function is_countable($word)
 	{

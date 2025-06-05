@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,7 +39,7 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO ODBC Forge Class
+ * PDO ODBC Forge Class.
  *
  * @category	Database
  * @author		EllisLab Dev Team
@@ -48,16 +48,16 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_pdo_odbc_forge extends CI_DB_pdo_forge {
 
 	/**
-	 * UNSIGNED support
+	 * UNSIGNED support.
 	 *
 	 * @var	bool|array
 	 */
-	protected $_unsigned		= FALSE;
+	protected $_unsigned = FALSE;
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field attribute AUTO_INCREMENT
+	 * Field attribute AUTO_INCREMENT.
 	 *
 	 * @param	array	&$attributes
 	 * @param	array	&$field

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Download Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('force_download'))
+if ( !function_exists('force_download'))
 {
 	/**
-	 * Force Download
+	 * Force Download.
 	 *
 	 * Generates headers that force a download to happen
 	 *
@@ -70,7 +70,7 @@ if ( ! function_exists('force_download'))
 		}
 		elseif ($data === NULL)
 		{
-			if ( ! @is_file($filename) || $filesize = @filesize($filename) === FALSE)
+			if ( !@is_file($filename) || $filesize = @filesize($filename) === FALSE)
 			{
 				return;
 			}
@@ -101,7 +101,7 @@ if ( ! function_exists('force_download'))
 			}
 
 			// Load the mime types
-			$mimes =& get_mimes();
+			$mimes = &get_mimes();
 
 			// Only change the default MIME if we can find one
 			if (isset($mimes[$extension]))
@@ -134,11 +134,11 @@ if ( ! function_exists('force_download'))
 		}
 
 		// Generate the server headers
-		header('Content-Type: '.$mime);
-		header('Content-Disposition: attachment; filename="'.$filename.'"');
+		header('Content-Type: ' . $mime);
+		header('Content-Disposition: attachment; filename="' . $filename . '"');
 		header('Expires: 0');
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: '.$filesize);
+		header('Content-Length: ' . $filesize);
 		header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
 		// If we have raw data - just dump it
@@ -148,7 +148,7 @@ if ( ! function_exists('force_download'))
 		}
 
 		// Flush 1MB chunks of data
-		while ( ! feof($fp) && ($data = fread($fp, 1048576)) !== FALSE)
+		while ( !feof($fp) && ($data = fread($fp, 1048576)) !== FALSE)
 		{
 			echo $data;
 		}

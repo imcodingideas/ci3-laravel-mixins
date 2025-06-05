@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,10 +39,8 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CodeIgniter Dummy Caching Class
+ * CodeIgniter Dummy Caching Class.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Core
  * @author		EllisLab Dev Team
  * @link
@@ -50,7 +48,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_Cache_dummy extends CI_Driver {
 
 	/**
-	 * Get
+	 * Get.
 	 *
 	 * Since this is the dummy class, it's always going to return FALSE.
 	 *
@@ -65,7 +63,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Cache Save
+	 * Cache Save.
 	 *
 	 * @param	string	Unique Key
 	 * @param	mixed	Data to store
@@ -81,7 +79,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Delete from Cache
+	 * Delete from Cache.
 	 *
 	 * @param	mixed	unique identifier of the item in the cache
 	 * @return	bool	TRUE, simulating success
@@ -94,7 +92,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Increment a raw value
+	 * Increment a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
@@ -108,7 +106,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Decrement a raw value
+	 * Decrement a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
@@ -122,7 +120,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Clean the cache
+	 * Clean the cache.
 	 *
 	 * @return	bool	TRUE, simulating success
 	 */
@@ -134,7 +132,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Cache Info
+	 * Cache Info.
 	 *
 	 * @param	string	user/filehits
 	 * @return	bool	FALSE
@@ -147,7 +145,7 @@ class CI_Cache_dummy extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get Cache Metadata
+	 * Get Cache Metadata.
 	 *
 	 * @param	mixed	key to get cache metadata on
 	 * @return	bool	FALSE

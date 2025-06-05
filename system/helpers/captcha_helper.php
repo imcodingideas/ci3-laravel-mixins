@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter CAPTCHA Helper
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('create_captcha'))
+if ( !function_exists('create_captcha'))
 {
 	/**
-	 * Create CAPTCHA
+	 * Create CAPTCHA.
 	 *
 	 * @param	array	$data		Data for the CAPTCHA
 	 * @param	string	$img_path	Path to create the image in (deprecated)
@@ -63,7 +63,7 @@ if ( ! function_exists('create_captcha'))
 	 */
 	function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = '')
 	{
-		$defaults = array(
+		$defaults = [
 			'word'		=> '',
 			'img_path'	=> '',
 			'img_url'	=> '',
@@ -75,27 +75,27 @@ if ( ! function_exists('create_captcha'))
 			'font_size'	=> 16,
 			'img_id'	=> '',
 			'pool'		=> '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-			'colors'	=> array(
-				'background'	=> array(255,255,255),
-				'border'	=> array(153,102,102),
-				'text'		=> array(204,153,153),
-				'grid'		=> array(255,182,182)
-			)
-		);
+			'colors'	=> [
+				'background'	=> [255, 255, 255],
+				'border'	=> [153, 102, 102],
+				'text'		=> [204, 153, 153],
+				'grid'		=> [255, 182, 182],
+			],
+		];
 
 		foreach ($defaults as $key => $val)
 		{
-			if ( ! is_array($data) && empty($$key))
+			if ( !is_array($data) && empty($$key))
 			{
 				$$key = $val;
 			}
 			else
 			{
-				$$key = isset($data[$key]) ? $data[$key] : $val;
+				$$key = $data[$key] ?? $val;
 			}
 		}
 
-		if ( ! extension_loaded('gd'))
+		if ( !extension_loaded('gd'))
 		{
 			log_message('error', 'create_captcha(): GD extension is not loaded.');
 			return FALSE;
@@ -107,7 +107,7 @@ if ( ! function_exists('create_captcha'))
 			return FALSE;
 		}
 
-		if ( ! is_dir($img_path) || ! is_really_writable($img_path))
+		if ( !is_dir($img_path) || !is_really_writable($img_path))
 		{
 			log_message('error', "create_captcha(): '{$img_path}' is not a dir, nor is it writable.");
 			return FALSE;
@@ -122,10 +122,10 @@ if ( ! function_exists('create_captcha'))
 		$current_dir = @opendir($img_path);
 		while ($filename = @readdir($current_dir))
 		{
-			if (in_array(substr($filename, -4), array('.jpg', '.png'))
-				&& (str_replace(array('.jpg', '.png'), '', $filename) + $expiration) < $now)
+			if (in_array(substr($filename, -4), ['.jpg', '.png'])
+				&& (str_replace(['.jpg', '.png'], '', $filename) + $expiration) < $now)
 			{
-				@unlink($img_path.$filename);
+				@unlink($img_path . $filename);
 			}
 		}
 
@@ -211,7 +211,7 @@ if ( ! function_exists('create_captcha'))
 						}
 					}
 
-					list(, $rand_index) = unpack('C', $bytes[$byte_index++]);
+					[, $rand_index] = unpack('C', $bytes[$byte_index++]);
 					if ($rand_index > $rand_max)
 					{
 						continue;
@@ -230,7 +230,7 @@ if ( ! function_exists('create_captcha'))
 				$word .= $pool[mt_rand(0, $rand_max)];
 			}
 		}
-		elseif ( ! is_string($word))
+		elseif ( !is_string($word))
 		{
 			$word = (string) $word;
 		}
@@ -238,9 +238,9 @@ if ( ! function_exists('create_captcha'))
 		// -----------------------------------
 		// Determine angle and position
 		// -----------------------------------
-		$length	= strlen($word);
-		$angle	= ($length >= 6) ? mt_rand(-($length-6), ($length-6)) : 0;
-		$x_axis	= mt_rand(6, (360/$length)-16);
+		$length = strlen($word);
+		$angle = ($length >= 6) ? mt_rand(-($length - 6), ($length - 6)) : 0;
+		$x_axis = mt_rand(6, (360 / $length) - 16);
 		$y_axis = ($angle >= 0) ? mt_rand($img_height, $img_width) : mt_rand(6, $img_height);
 
 		// Create image
@@ -267,16 +267,16 @@ if ( ! function_exists('create_captcha'))
 		}
 
 		// Create the rectangle
-		ImageFilledRectangle($im, 0, 0, $img_width, $img_height, $colors['background']);
+		imagefilledrectangle($im, 0, 0, $img_width, $img_height, $colors['background']);
 
 		// -----------------------------------
 		//  Create the spiral pattern
 		// -----------------------------------
-		$theta		= 1;
-		$thetac		= 7;
-		$radius		= 16;
-		$circles	= 20;
-		$points		= 32;
+		$theta = 1;
+		$thetac = 7;
+		$radius = 16;
+		$circles = 20;
+		$points = 32;
 
 		for ($i = 0, $cp = ($circles * $points) - 1; $i < $cp; $i++)
 		{
@@ -315,7 +315,7 @@ if ( ! function_exists('create_captcha'))
 		{
 			if ($use_font === FALSE)
 			{
-				$y = mt_rand(0 , $img_height / 2);
+				$y = mt_rand(0, $img_height / 2);
 				imagestring($im, $font_size, $x, $y, $word[$i], $colors['text']);
 				$x += ($font_size * 2);
 			}
@@ -333,26 +333,26 @@ if ( ! function_exists('create_captcha'))
 		// -----------------------------------
 		//  Generate the image
 		// -----------------------------------
-		$img_url = rtrim($img_url, '/').'/';
+		$img_url = rtrim($img_url, '/') . '/';
 
 		if (function_exists('imagejpeg'))
 		{
-			$img_filename = $now.'.jpg';
-			imagejpeg($im, $img_path.$img_filename);
+			$img_filename = $now . '.jpg';
+			imagejpeg($im, $img_path . $img_filename);
 		}
 		elseif (function_exists('imagepng'))
 		{
-			$img_filename = $now.'.png';
-			imagepng($im, $img_path.$img_filename);
+			$img_filename = $now . '.png';
+			imagepng($im, $img_path . $img_filename);
 		}
 		else
 		{
 			return FALSE;
 		}
 
-		$img = '<img '.($img_id === '' ? '' : 'id="'.$img_id.'"').' src="'.$img_url.$img_filename.'" style="width: '.$img_width.'px; height: '.$img_height .'px; border: 0;" alt=" " />';
-		ImageDestroy($im);
+		$img = '<img ' . ($img_id === '' ? '' : 'id="' . $img_id . '"') . ' src="' . $img_url . $img_filename . '" style="width: ' . $img_width . 'px; height: ' . $img_height . 'px; border: 0;" alt=" " />';
+		imagedestroy($im);
 
-		return array('word' => $word, 'time' => $now, 'image' => $img, 'filename' => $img_filename);
+		return ['word' => $word, 'time' => $now, 'image' => $img, 'filename' => $img_filename];
 	}
 }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,13 +39,11 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * CodeIgniter Wincache Caching Class
+ * CodeIgniter Wincache Caching Class.
  *
  * Read more about Wincache functions here:
  * https://www.php.net/manual/en/ref.wincache.php
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
  * @category	Core
  * @author		Mike Murkovic
  * @link
@@ -53,7 +51,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_Cache_wincache extends CI_Driver {
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Only present so that an error message is logged
 	 * if APC is not available.
@@ -62,7 +60,7 @@ class CI_Cache_wincache extends CI_Driver {
 	 */
 	public function __construct()
 	{
-		if ( ! $this->is_supported())
+		if ( !$this->is_supported())
 		{
 			log_message('error', 'Cache: Failed to initialize Wincache; extension not loaded/enabled?');
 		}
@@ -71,7 +69,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get
+	 * Get.
 	 *
 	 * Look for a value in the cache. If it exists, return the data,
 	 * if not, return FALSE
@@ -91,7 +89,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Cache Save
+	 * Cache Save.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	mixed	$data	Data to store
@@ -107,7 +105,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Delete from Cache
+	 * Delete from Cache.
 	 *
 	 * @param	mixed	unique identifier of the item in the cache
 	 * @return	bool	true on success/false on failure
@@ -120,7 +118,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Increment a raw value
+	 * Increment a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to add
@@ -137,7 +135,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Decrement a raw value
+	 * Decrement a raw value.
 	 *
 	 * @param	string	$id	Cache ID
 	 * @param	int	$offset	Step/value to reduce by
@@ -154,7 +152,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Clean the cache
+	 * Clean the cache.
 	 *
 	 * @return	bool	false on failure/true on success
 	 */
@@ -166,7 +164,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Cache Info
+	 * Cache Info.
 	 *
 	 * @return	mixed	array on success, false on failure
 	 */
@@ -178,7 +176,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * Get Cache Metadata
+	 * Get Cache Metadata.
 	 *
 	 * @param	mixed	key to get cache metadata on
 	 * @return	mixed	array on success/false on failure
@@ -191,12 +189,12 @@ class CI_Cache_wincache extends CI_Driver {
 			$ttl = $stored['ucache_entries'][1]['ttl_seconds'];
 			$hitcount = $stored['ucache_entries'][1]['hitcount'];
 
-			return array(
+			return [
 				'expire'	=> $ttl - $age,
 				'hitcount'	=> $hitcount,
 				'age'		=> $age,
-				'ttl'		=> $ttl
-			);
+				'ttl'		=> $ttl,
+			];
 		}
 
 		return FALSE;
@@ -205,7 +203,7 @@ class CI_Cache_wincache extends CI_Driver {
 	// ------------------------------------------------------------------------
 
 	/**
-	 * is_supported()
+	 * is_supported().
 	 *
 	 * Check to see if WinCache is available on this system, bail if it isn't.
 	 *

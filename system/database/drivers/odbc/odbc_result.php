@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,12 +39,10 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * ODBC Result Class
+ * ODBC Result Class.
  *
  * This class extends the parent result class: CI_DB_result
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -52,7 +50,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_odbc_result extends CI_DB_result {
 
 	/**
-	 * Number of rows in the result set
+	 * Number of rows in the result set.
 	 *
 	 * @return	int
 	 */
@@ -83,7 +81,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Number of fields in the result set
+	 * Number of fields in the result set.
 	 *
 	 * @return	int
 	 */
@@ -95,7 +93,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Field Names
+	 * Fetch Field Names.
 	 *
 	 * Generates an array of column names
 	 *
@@ -103,7 +101,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 */
 	public function list_fields()
 	{
-		$field_names = array();
+		$field_names = [];
 		$num_fields = $this->num_fields();
 
 		if ($num_fields > 0)
@@ -120,7 +118,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data
+	 * Field data.
 	 *
 	 * Generates an array of objects containing field meta-data
 	 *
@@ -128,15 +126,15 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 */
 	public function field_data()
 	{
-		$retval = array();
+		$retval = [];
 		for ($i = 0, $odbc_index = 1, $c = $this->num_fields(); $i < $c; $i++, $odbc_index++)
 		{
-			$retval[$i]			= new stdClass();
-			$retval[$i]->name		= odbc_field_name($this->result_id, $odbc_index);
-			$retval[$i]->type		= odbc_field_type($this->result_id, $odbc_index);
-			$retval[$i]->max_length		= odbc_field_len($this->result_id, $odbc_index);
-			$retval[$i]->primary_key	= 0;
-			$retval[$i]->default		= '';
+			$retval[$i] = new stdClass();
+			$retval[$i]->name = odbc_field_name($this->result_id, $odbc_index);
+			$retval[$i]->type = odbc_field_type($this->result_id, $odbc_index);
+			$retval[$i]->max_length = odbc_field_len($this->result_id, $odbc_index);
+			$retval[$i]->primary_key = 0;
+			$retval[$i]->default = '';
 		}
 
 		return $retval;
@@ -145,7 +143,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the result
+	 * Free the result.
 	 *
 	 * @return	void
 	 */
@@ -161,7 +159,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - associative array
+	 * Result - associative array.
 	 *
 	 * Returns the result set as an array
 	 *
@@ -175,7 +173,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Result - object
+	 * Result - object.
 	 *
 	 * Returns the result set as an object
 	 *
@@ -186,7 +184,7 @@ class CI_DB_odbc_result extends CI_DB_result {
 	{
 		$row = odbc_fetch_object($this->result_id);
 
-		if ($class_name === 'stdClass' || ! $row)
+		if ($class_name === 'stdClass' || !$row)
 		{
 			return $row;
 		}
@@ -204,10 +202,10 @@ class CI_DB_odbc_result extends CI_DB_result {
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('odbc_fetch_array'))
+if ( !function_exists('odbc_fetch_array'))
 {
 	/**
-	 * ODBC Fetch array
+	 * ODBC Fetch array.
 	 *
 	 * Emulates the native odbc_fetch_array() function when
 	 * it is not available (odbc_fetch_array() requires unixODBC)
@@ -218,16 +216,16 @@ if ( ! function_exists('odbc_fetch_array'))
 	 */
 	function odbc_fetch_array(&$result, $rownumber = 1)
 	{
-		$rs = array();
-		if ( ! odbc_fetch_into($result, $rs, $rownumber))
+		$rs = [];
+		if ( !odbc_fetch_into($result, $rs, $rownumber))
 		{
 			return FALSE;
 		}
 
-		$rs_assoc = array();
+		$rs_assoc = [];
 		foreach ($rs as $k => $v)
 		{
-			$field_name = odbc_field_name($result, $k+1);
+			$field_name = odbc_field_name($result, $k + 1);
 			$rs_assoc[$field_name] = $v;
 		}
 
@@ -237,10 +235,10 @@ if ( ! function_exists('odbc_fetch_array'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('odbc_fetch_object'))
+if ( !function_exists('odbc_fetch_object'))
 {
 	/**
-	 * ODBC Fetch object
+	 * ODBC Fetch object.
 	 *
 	 * Emulates the native odbc_fetch_object() function when
 	 * it is not available.
@@ -251,8 +249,8 @@ if ( ! function_exists('odbc_fetch_object'))
 	 */
 	function odbc_fetch_object(&$result, $rownumber = 1)
 	{
-		$rs = array();
-		if ( ! odbc_fetch_into($result, $rs, $rownumber))
+		$rs = [];
+		if ( !odbc_fetch_into($result, $rs, $rownumber))
 		{
 			return FALSE;
 		}
@@ -260,7 +258,7 @@ if ( ! function_exists('odbc_fetch_object'))
 		$rs_object = new stdClass();
 		foreach ($rs as $k => $v)
 		{
-			$field_name = odbc_field_name($result, $k+1);
+			$field_name = odbc_field_name($result, $k + 1);
 			$rs_object->$field_name = $v;
 		}
 

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -38,7 +38,7 @@
  */
 defined('BASEPATH') || exit('No direct script access allowed');
 
-/**
+/*
  * CodeIgniter Number Helpers
  *
  * @package		CodeIgniter
@@ -50,10 +50,10 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('byte_format'))
+if ( !function_exists('byte_format'))
 {
 	/**
-	 * Formats a numbers as bytes, based on size, and adds the appropriate suffix
+	 * Formats a numbers as bytes, based on size, and adds the appropriate suffix.
 	 *
 	 * @param	mixed	will be cast as int
 	 * @param	int
@@ -61,7 +61,7 @@ if ( ! function_exists('byte_format'))
 	 */
 	function byte_format($num, $precision = 1)
 	{
-		$CI =& get_instance();
+		$CI = &get_instance();
 		$CI->lang->load('number');
 
 		if ($num >= 1000000000000)
@@ -87,9 +87,9 @@ if ( ! function_exists('byte_format'))
 		else
 		{
 			$unit = $CI->lang->line('bytes');
-			return number_format($num).' '.$unit;
+			return number_format($num) . ' ' . $unit;
 		}
 
-		return number_format($num, $precision).' '.$unit;
+		return number_format($num, $precision) . ' ' . $unit;
 	}
 }

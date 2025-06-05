@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : 'CodeIgniter Blog'; ?></title>
+    <title><?php echo $title ?? 'CodeIgniter Blog'; ?></title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -94,4 +94,4 @@
             <a href="<?php echo base_url('posts/create'); ?>">Create Post</a>
         </div>
         
-        <h1><?php echo isset($title) ? $title : 'CodeIgniter Blog'; ?></h1> 
+        <h1><?php echo $title ?? 'CodeIgniter Blog'; ?></h1> 

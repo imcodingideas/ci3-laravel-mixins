@@ -1,6 +1,7 @@
 <?php
+
 /**
- * CodeIgniter
+ * CodeIgniter.
  *
  * An open source application development framework for PHP
  *
@@ -26,7 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
@@ -39,14 +39,12 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * PDO Database Adapter Class
+ * PDO Database Adapter Class.
  *
  * Note: _DB is an extender class that the app controller
  * creates dynamically based on whether the query builder
  * class is being used or not.
  *
- * @package		CodeIgniter
- * @subpackage	Drivers
  * @category	Database
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/database/
@@ -54,23 +52,23 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class CI_DB_pdo_driver extends CI_DB {
 
 	/**
-	 * Database driver
+	 * Database driver.
 	 *
 	 * @var	string
 	 */
 	public $dbdriver = 'pdo';
 
 	/**
-	 * PDO Options
+	 * PDO Options.
 	 *
 	 * @var	array
 	 */
-	public $options = array();
+	public $options = [];
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 *
 	 * Validates the DSN string and/or detects the subdriver.
 	 *
@@ -96,7 +94,7 @@ class CI_DB_pdo_driver extends CI_DB {
 			$this->subdriver = $match[1];
 			return;
 		}
-		elseif (in_array($this->subdriver, array('mssql', 'sybase'), TRUE))
+		elseif (in_array($this->subdriver, ['mssql', 'sybase'], TRUE))
 		{
 			$this->subdriver = 'dblib';
 		}
@@ -104,7 +102,7 @@ class CI_DB_pdo_driver extends CI_DB {
 		{
 			$this->subdriver = '4d';
 		}
-		elseif ( ! in_array($this->subdriver, array('4d', 'cubrid', 'dblib', 'firebird', 'ibm', 'informix', 'mysql', 'oci', 'odbc', 'pgsql', 'sqlite', 'sqlsrv'), TRUE))
+		elseif ( !in_array($this->subdriver, ['4d', 'cubrid', 'dblib', 'firebird', 'ibm', 'informix', 'mysql', 'oci', 'odbc', 'pgsql', 'sqlite', 'sqlsrv'], TRUE))
 		{
 			log_message('error', 'PDO: Invalid or non-existent subdriver');
 
@@ -120,7 +118,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Database connection
+	 * Database connection.
 	 *
 	 * @param	bool	$persistent
 	 * @return	object
@@ -135,7 +133,7 @@ class CI_DB_pdo_driver extends CI_DB {
 		// From PHP8.0, default PDO::ATTR_ERRMODE is changed
 		// from PDO::ERRMODE_SILENT to PDO::ERRMODE_EXCEPTION
 		// as https://wiki.php.net/rfc/pdo_default_errmode
-		if ( ! isset($this->options[PDO::ATTR_ERRMODE]))
+		if ( !isset($this->options[PDO::ATTR_ERRMODE]))
 		{
 			$this->options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_SILENT;
 		}
@@ -158,7 +156,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Database version number
+	 * Database version number.
 	 *
 	 * @return	string
 	 */
@@ -183,7 +181,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Execute the query
+	 * Execute the query.
 	 *
 	 * @param	string	$sql	SQL query
 	 * @return	mixed
@@ -196,7 +194,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Begin Transaction
+	 * Begin Transaction.
 	 *
 	 * @return	bool
 	 */
@@ -208,7 +206,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Commit Transaction
+	 * Commit Transaction.
 	 *
 	 * @return	bool
 	 */
@@ -220,7 +218,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Rollback Transaction
+	 * Rollback Transaction.
 	 *
 	 * @return	bool
 	 */
@@ -232,7 +230,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Platform-dependent string escape
+	 * Platform-dependent string escape.
 	 *
 	 * @param	string
 	 * @return	string
@@ -251,7 +249,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Affected Rows
+	 * Affected Rows.
 	 *
 	 * @return	int
 	 */
@@ -263,7 +261,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Insert ID
+	 * Insert ID.
 	 *
 	 * @param	string	$name
 	 * @return	int
@@ -276,7 +274,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Field data query
+	 * Field data query.
 	 *
 	 * Generates a platform-specific query so that the column data can be retrieved
 	 *
@@ -285,13 +283,13 @@ class CI_DB_pdo_driver extends CI_DB {
 	 */
 	protected function _field_data($table)
 	{
-		return 'SELECT TOP 1 * FROM '.$this->protect_identifiers($table);
+		return 'SELECT TOP 1 * FROM ' . $this->protect_identifiers($table);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Error
+	 * Error.
 	 *
 	 * Returns an array containing code and message of the last
 	 * database error that has occurred.
@@ -300,7 +298,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	 */
 	public function error()
 	{
-		$error = array('code' => '00000', 'message' => '');
+		$error = ['code' => '00000', 'message' => ''];
 		$pdo_error = $this->conn_id->errorInfo();
 
 		if (empty($pdo_error[0]))
@@ -308,7 +306,7 @@ class CI_DB_pdo_driver extends CI_DB {
 			return $error;
 		}
 
-		$error['code'] = isset($pdo_error[1]) ? $pdo_error[0].'/'.$pdo_error[1] : $pdo_error[0];
+		$error['code'] = isset($pdo_error[1]) ? $pdo_error[0] . '/' . $pdo_error[1] : $pdo_error[0];
 		if (isset($pdo_error[2]))
 		{
 			$error['message'] = $pdo_error[2];
@@ -320,7 +318,7 @@ class CI_DB_pdo_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Truncate statement
+	 * Truncate statement.
 	 *
 	 * Generates a platform-specific truncate string from the supplied data
 	 *
@@ -332,13 +330,13 @@ class CI_DB_pdo_driver extends CI_DB {
 	 */
 	protected function _truncate($table)
 	{
-		return 'TRUNCATE TABLE '.$table;
+		return 'TRUNCATE TABLE ' . $table;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Close DB Connection
+	 * Close DB Connection.
 	 *
 	 * @return	void
 	 */
