@@ -1,9 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Load environment variables
-require_once(APPPATH . 'config/dotenv.php');
-
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -82,6 +79,7 @@ $db['default'] = array(
 	'username' => env('DB_USERNAME', ''),
 	'password' => env('DB_PASSWORD', ''),
 	'database' => env('DB_DATABASE', ''),
+	'port' => env('DB_PORT', '3306'),
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

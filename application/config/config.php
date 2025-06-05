@@ -1,6 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+// Load environment variables before configuration
+if (file_exists(FCPATH . 'vendor/autoload.php')) {
+    require_once FCPATH . 'vendor/autoload.php';
+    
+    if (class_exists('Dotenv\Dotenv')) {
+        $dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
+        $dotenv->safeLoad();
+    }
+}
+
+// Include env function
+require_once(APPPATH . 'config/dotenv.php');
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -23,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = env('APP_URL', 'http://localhost') . '/';
 
 /*
 |--------------------------------------------------------------------------
