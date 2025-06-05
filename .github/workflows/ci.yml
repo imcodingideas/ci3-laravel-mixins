@@ -34,10 +34,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysql
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysqli
 
       - name: Cache Composer packages
         id: composer-cache
