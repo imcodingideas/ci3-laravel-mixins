@@ -52,10 +52,10 @@ The database and sample data will be created automatically when you start the co
 Since we're using PHP locally, start a development server:
 
 ```bash
-# Navigate to your project directory
-cd /path/to/your/codeigniter-project
+# Option 1: Using Composer (recommended)
+composer serve
 
-# Start PHP development server
+# Option 2: Direct PHP command
 php -S localhost:8000
 ```
 
