@@ -397,7 +397,7 @@ if ( ! function_exists('form_dropdown'))
         }
 
 		// If no selected state was submitted we will attempt to set it automatically
-		if (empty($selected))
+		if ($selected === [])
 		{
 			if (is_array($data))
 			{

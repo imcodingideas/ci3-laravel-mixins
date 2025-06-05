@@ -127,7 +127,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 *
 	 * @var	int
 	 */
-	protected $qb_limit			= FALSE;
+	public $qb_limit			= FALSE;
 
 	/**
 	 * QB OFFSET data
@@ -162,7 +162,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 *
 	 * @var	array
 	 */
-	protected $qb_aliased_tables		= array();
+	public $qb_aliased_tables		= array();
 
 	/**
 	 * QB WHERE group started flag
@@ -2193,12 +2193,12 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
             if (empty($where)) {
                 $reset_data = FALSE;
             }
-            foreach ($table as $single_table)
+			foreach ($table as $single_table)
 			{
 				$this->delete($single_table, $where, $limit, $reset_data);
 			}
             return null;
-        }
+		}
 		else
 		{
 			$table = $this->protect_identifiers($table, TRUE, NULL, FALSE);
@@ -2353,7 +2353,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 		}
 		else
 		{
-			$sql = ( $this->qb_distinct) ? 'SELECT DISTINCT ' : 'SELECT ';
+			$sql = ($this->qb_distinct) ? 'SELECT DISTINCT ' : 'SELECT ';
 
 			if (count($this->qb_select) === 0)
 			{
@@ -2441,7 +2441,8 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 				for ($ci = 0, $cc = count($conditions); $ci < $cc; $ci++)
 				{
-					if ($op = $this->_get_operator($conditions[$ci]) === FALSE || ! preg_match('/^(\(?)(.*)('.preg_quote($op, '/').')\s*(.*(?<!\)))?(\)?)$/i', $conditions[$ci], $matches))
+					$op = $this->_get_operator($conditions[$ci]);
+					if ($op === FALSE || ! preg_match('/^(\(?)(.*)('.preg_quote($op, '/').')\s*(.*(?<!\)))?(\)?)$/i', $conditions[$ci], $matches))
 					{
 						continue;
 					}
@@ -2459,8 +2460,8 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
                         if (!$this->_is_literal($matches[4])) {
                             $matches[4] = $this->protect_identifiers(trim($matches[4]));
                         }
-                        $matches[4] = ' '.$matches[4];
-                    }
+						$matches[4] = ' '.$matches[4];
+					}
 
 					$conditions[$ci] = $matches[1].$this->protect_identifiers(trim($matches[2]))
 						.' '.trim($matches[3]).$matches[4].$matches[5];
