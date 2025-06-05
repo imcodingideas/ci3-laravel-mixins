@@ -20,6 +20,7 @@
 	"scripts": {
 		"serve": "php -S localhost:8000",
 		"dev": "php -S localhost:8000",
+		"test": "phpunit tests/unit",
 		"test:coverage": [
 			"@putenv XDEBUG_MODE=coverage",
 			"phpunit --color=always --coverage-text --configuration tests/travis/sqlite.phpunit.xml"

@@ -20,6 +20,9 @@ docker-compose up -d
 
 # Start development server
 composer dev
+
+# Run tests
+composer test
 ```
 
 ## Access
