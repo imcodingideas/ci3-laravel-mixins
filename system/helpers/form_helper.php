@@ -72,7 +72,7 @@ if ( !function_exists('form_open'))
 			$action = $CI->config->site_url($CI->uri->uri_string());
 		}
 		// If an action is not a full URL then turn it into one
-		elseif (strpos($action, '://') === FALSE)
+		elseif (!str_contains((string) $action, '://'))
 		{
 			$action = $CI->config->site_url($action);
 		}
@@ -86,7 +86,7 @@ if ( !function_exists('form_open'))
 
 		if (stripos($attributes, 'accept-charset=') === FALSE)
 		{
-			$attributes .= ' accept-charset="' . strtolower(config_item('charset')) . '"';
+			$attributes .= ' accept-charset="' . strtolower((string) config_item('charset')) . '"';
 		}
 
 		$form = '<form action="' . $action . '"' . $attributes . ">\n";
@@ -100,13 +100,13 @@ if ( !function_exists('form_open'))
 		}
 
 		// Add CSRF field if enabled, but leave it out for GET requests and requests to external websites
-		if ($CI->config->item('csrf_protection') === TRUE && strpos($action, $CI->config->base_url()) !== FALSE && !stripos($form, 'method="get"'))
+		if ($CI->config->item('csrf_protection') === TRUE && str_contains((string) $action, (string) $CI->config->base_url()) && !stripos($form, 'method="get"'))
 		{
 			// Prepend/append random-length "white noise" around the CSRF
 			// token input, as a form of protection against BREACH attacks
 			if (FALSE !== ($noise = $CI->security->get_random_bytes(1)))
 			{
-				[, $noise] = unpack('c', $noise);
+				[, $noise] = unpack('c', (string) $noise);
 			}
 			else
 			{
@@ -977,7 +977,7 @@ if ( !function_exists('_parse_form_attributes'))
 			{
 				$val = html_escape($val);
 			}
-			elseif ($key === 'name' && !strlen($default['name']))
+			elseif ($key === 'name' && !strlen((string) $default['name']))
 			{
 				continue;
 			}

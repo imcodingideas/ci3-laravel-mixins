@@ -88,7 +88,7 @@ class CI_DB_sqlite3_driver extends CI_DB {
 				? new SQLite3($this->database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->password)
 				: new SQLite3($this->database);
 		}
-		catch (Exception $e)
+		catch (Exception)
 		{
 			return FALSE;
 		}

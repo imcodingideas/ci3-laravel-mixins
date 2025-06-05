@@ -89,7 +89,7 @@ class CI_Config {
 		{
 			if (isset($_SERVER['SERVER_ADDR']))
 			{
-				if (strpos($_SERVER['SERVER_ADDR'], ':') !== FALSE)
+				if (str_contains((string) $_SERVER['SERVER_ADDR'], ':'))
 				{
 					$server_addr = '[' . $_SERVER['SERVER_ADDR'] . ']';
 				}
@@ -99,7 +99,7 @@ class CI_Config {
 				}
 
 				$base_url = (is_https() ? 'https' : 'http') . '://' . $server_addr
-					. substr($_SERVER['SCRIPT_NAME'], 0, strpos($_SERVER['SCRIPT_NAME'], basename($_SERVER['SCRIPT_FILENAME'])));
+					. substr((string) $_SERVER['SCRIPT_NAME'], 0, strpos((string) $_SERVER['SCRIPT_NAME'], basename((string) $_SERVER['SCRIPT_FILENAME'])));
 			}
 			else
 			{
@@ -248,11 +248,11 @@ class CI_Config {
 			// For protocol-relative links
 			if ($protocol === '')
 			{
-				$base_url = substr($base_url, strpos($base_url, '//'));
+				$base_url = substr((string) $base_url, strpos((string) $base_url, '//'));
 			}
 			else
 			{
-				$base_url = $protocol . substr($base_url, strpos($base_url, '://'));
+				$base_url = $protocol . substr((string) $base_url, strpos((string) $base_url, '://'));
 			}
 		}
 
@@ -281,7 +281,7 @@ class CI_Config {
 
 			return $base_url . $this->slash_item('index_page') . $uri;
 		}
-		elseif (strpos($uri, '?') === FALSE)
+		elseif (!str_contains($uri, '?'))
 		{
 			$uri = '?' . $uri;
 		}
@@ -311,11 +311,11 @@ class CI_Config {
 			// For protocol-relative links
 			if ($protocol === '')
 			{
-				$base_url = substr($base_url, strpos($base_url, '//'));
+				$base_url = substr((string) $base_url, strpos((string) $base_url, '//'));
 			}
 			else
 			{
-				$base_url = $protocol . substr($base_url, strpos($base_url, '://'));
+				$base_url = $protocol . substr((string) $base_url, strpos((string) $base_url, '://'));
 			}
 		}
 
@@ -358,7 +358,7 @@ class CI_Config {
 	 */
 	public function system_url()
 	{
-		$x = explode('/', preg_replace('|/*(.+?)/*$|', '\\1', BASEPATH));
+		$x = explode('/', (string) preg_replace('|/*(.+?)/*$|', '\\1', BASEPATH));
 		return $this->slash_item('base_url') . end($x) . '/';
 	}
 

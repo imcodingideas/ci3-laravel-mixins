@@ -172,7 +172,7 @@ class CI_DB_pdo_driver extends CI_DB {
 		{
 			return $this->data_cache['version'] = $this->conn_id->getAttribute(PDO::ATTR_SERVER_VERSION);
 		}
-		catch (PDOException $e)
+		catch (PDOException)
 		{
 			return parent::version();
 		}
@@ -242,7 +242,7 @@ class CI_DB_pdo_driver extends CI_DB {
 
 		// If there are duplicated quotes, trim them away
 		return ($str[0] === "'")
-			? substr($str, 1, -1)
+			? substr((string) $str, 1, -1)
 			: $str;
 	}
 

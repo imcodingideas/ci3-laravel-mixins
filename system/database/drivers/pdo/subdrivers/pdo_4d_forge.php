@@ -151,7 +151,7 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_type(&$attributes)
 	{
-		switch (strtoupper($attributes['TYPE']))
+		switch (strtoupper((string) $attributes['TYPE']))
 		{
 			case 'TINYINT':
 				$attributes['TYPE'] = 'SMALLINT';
@@ -204,11 +204,11 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	{
 		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
 		{
-			if (stripos($field['type'], 'int') !== FALSE)
+			if (stripos((string) $field['type'], 'int') !== FALSE)
 			{
 				$field['auto_increment'] = ' AUTO_INCREMENT';
 			}
-			elseif (strcasecmp($field['type'], 'UUID') === 0)
+			elseif (strcasecmp((string) $field['type'], 'UUID') === 0)
 			{
 				$field['auto_increment'] = ' AUTO_GENERATE';
 			}

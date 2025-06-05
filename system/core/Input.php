@@ -197,7 +197,7 @@ class CI_Input {
 		{
 			$value = $array[$index];
 		}
-		elseif (($count = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', $index, $matches)) > 1) // Does the index contain array notation
+		elseif (($count = preg_match_all('/(?:^[^\[]+)|\[[^]]*\]/', (string) $index, $matches)) > 1) // Does the index contain array notation
 		{
 			$value = $array;
 			for ($i = 0; $i < $count; $i++)
@@ -371,7 +371,7 @@ class CI_Input {
 			{
 				if (isset($name[$item]))
 				{
-					$$item = $name[$item];
+					${$item} = $name[$item];
 				}
 			}
 		}
@@ -506,7 +506,7 @@ class CI_Input {
 				for ($i = 0, $c = count($proxy_ips); $i < $c; $i++)
 				{
 					// Check if we have an IP address or a subnet
-					if (strpos($proxy_ips[$i], '/') === FALSE)
+					if (!str_contains((string) $proxy_ips[$i], '/'))
 					{
 						// An IP address (and not a subnet) is specified.
 						// We can compare right away.
@@ -525,7 +525,7 @@ class CI_Input {
                     }
 
 					// If the proxy entry doesn't match the IP protocol - skip it
-					if (strpos($proxy_ips[$i], $separator) === FALSE)
+					if (!str_contains((string) $proxy_ips[$i], $separator))
 					{
 						continue;
 					}
@@ -540,7 +540,7 @@ class CI_Input {
 							    ':',
 							    str_replace(
 							        '::',
-							        str_repeat(':', 9 - substr_count($this->ip_address, ':')),
+							        str_repeat(':', 9 - substr_count((string) $this->ip_address, ':')),
 							        $this->ip_address
 							    )
 							);
@@ -554,7 +554,7 @@ class CI_Input {
 						}
 						else
 						{
-							$ip = explode('.', $this->ip_address);
+							$ip = explode('.', (string) $this->ip_address);
 							$sprintf = '%08b%08b%08b%08b';
 						}
 
@@ -607,18 +607,11 @@ class CI_Input {
 	 */
 	public function valid_ip($ip, $which = '')
 	{
-		switch (strtolower($which))
-		{
-			case 'ipv4':
-				$which = FILTER_FLAG_IPV4;
-				break;
-			case 'ipv6':
-				$which = FILTER_FLAG_IPV6;
-				break;
-			default:
-				$which = 0;
-				break;
-		}
+		$which = match (strtolower($which)) {
+            'ipv4' => FILTER_FLAG_IPV4,
+            'ipv6' => FILTER_FLAG_IPV6,
+            default => 0,
+        };
 
 		return (bool) filter_var($ip, FILTER_VALIDATE_IP, $which);
 	}
@@ -686,7 +679,7 @@ class CI_Input {
 			}
 
 		// Sanitize PHP_SELF
-		$_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
+		$_SERVER['PHP_SELF'] = strip_tags((string) $_SERVER['PHP_SELF']);
 
 		log_message('debug', 'Global POST, GET and COOKIE data sanitized');
 	}
@@ -864,7 +857,7 @@ class CI_Input {
 	 */
 	public function is_ajax_request()
 	{
-		return ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+		return ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower((string) $_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
 	}
 
 	// --------------------------------------------------------------------
@@ -896,8 +889,8 @@ class CI_Input {
 	public function method($upper = FALSE)
 	{
 		return ($upper)
-			? strtoupper($this->server('REQUEST_METHOD'))
-			: strtolower($this->server('REQUEST_METHOD'));
+			? strtoupper((string) $this->server('REQUEST_METHOD'))
+			: strtolower((string) $this->server('REQUEST_METHOD'));
 	}
 
 	// ------------------------------------------------------------------------

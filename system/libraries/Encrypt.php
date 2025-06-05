@@ -127,7 +127,7 @@ class CI_Encrypt {
 			}
 		}
 
-		return md5($key);
+		return md5((string) $key);
 	}
 
 	// --------------------------------------------------------------------
@@ -179,7 +179,7 @@ class CI_Encrypt {
 	 */
 	public function decode($string, $key = '')
 	{
-		if (preg_match('/[^a-zA-Z0-9\/\+=]/', $string) || base64_encode(base64_decode($string)) !== $string)
+		if (preg_match('/[^a-zA-Z0-9\/\+=]/', (string) $string) || base64_encode(base64_decode((string) $string)) !== $string)
 		{
 			return FALSE;
 		}
@@ -206,7 +206,7 @@ class CI_Encrypt {
 	 */
 	public function encode_from_legacy($string, $legacy_mode = MCRYPT_MODE_ECB, $key = '')
 	{
-		if (preg_match('/[^a-zA-Z0-9\/\+=]/', $string))
+		if (preg_match('/[^a-zA-Z0-9\/\+=]/', (string) $string))
 		{
 			return FALSE;
 		}
@@ -218,7 +218,7 @@ class CI_Encrypt {
 		$this->set_mode($legacy_mode);
 
 		$key = $this->get_key($key);
-		$dec = base64_decode($string);
+		$dec = base64_decode((string) $string);
 		if (($dec = $this->mcrypt_decode($dec, $key)) === FALSE)
 		{
 			$this->set_mode($current_mode);
@@ -475,7 +475,7 @@ class CI_Encrypt {
 	 */
 	public function hash($str)
 	{
-		return hash($this->_hash_type, $str);
+		return hash($this->_hash_type, (string) $str);
 	}
 
 	// --------------------------------------------------------------------

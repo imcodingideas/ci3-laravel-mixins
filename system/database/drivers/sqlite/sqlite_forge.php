@@ -170,7 +170,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	 */
 	protected function _attr_type(&$attributes)
 	{
-		switch (strtoupper($attributes['TYPE']))
+		switch (strtoupper((string) $attributes['TYPE']))
 		{
 			case 'ENUM':
 			case 'SET':
@@ -191,7 +191,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos($field['type'], 'int') !== FALSE)
+		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos((string) $field['type'], 'int') !== FALSE)
 		{
 			$field['type'] = 'INTEGER PRIMARY KEY';
 			$field['default'] = '';

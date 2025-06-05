@@ -134,7 +134,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 	{
 		if ( !is_dir($save_path))
 		{
-			if ( !mkdir($save_path, 0700, TRUE))
+			if ( !mkdir($save_path, 0o700, TRUE))
 			{
 				log_message('error', "Session: Configured save path '" . $this->_config['save_path'] . "' is not a directory, doesn't exist or cannot be created.");
 				return $this->_failure;
@@ -149,7 +149,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 		$this->_config['save_path'] = $save_path;
 		$this->_file_path = $this->_config['save_path'] . DIRECTORY_SEPARATOR
 			. $name // we'll use the session cookie name as a prefix to avoid collisions
-			. ($this->_config['match_ip'] ? md5($_SERVER['REMOTE_ADDR']) : '');
+			. ($this->_config['match_ip'] ? md5((string) $_SERVER['REMOTE_ADDR']) : '');
 
 		$this->php5_validate_id();
 
@@ -193,7 +193,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 
 			if ($this->_file_new)
 			{
-				chmod($this->_file_path . $session_id, 0600);
+				chmod($this->_file_path . $session_id, 0o600);
 				$this->_fingerprint = md5('');
 				return '';
 			}
@@ -376,7 +376,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 
 		$pattern = sprintf(
 		    '#\A%s' . $pattern . $this->_sid_regexp . '\z#',
-		    preg_quote($this->_config['cookie_name'])
+		    preg_quote((string) $this->_config['cookie_name'])
 		);
 
 		while (($file = readdir($directory)) !== FALSE)

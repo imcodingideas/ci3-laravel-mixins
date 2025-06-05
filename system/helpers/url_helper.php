@@ -162,7 +162,7 @@ if ( !function_exists('anchor'))
 
 		$site_url = is_array($uri)
 			? site_url($uri)
-			: (preg_match('#^(\w+:)?//#i', $uri) ? $uri : site_url($uri));
+			: (preg_match('#^(\w+:)?//#i', (string) $uri) ? $uri : site_url($uri));
 
 		if ($title === '')
 		{
@@ -196,7 +196,7 @@ if ( !function_exists('anchor_popup'))
 	function anchor_popup($uri = '', $title = '', $attributes = FALSE)
 	{
 		$title = (string) $title;
-		$site_url = preg_match('#^(\w+:)?//#i', $uri) ? $uri : site_url($uri);
+		$site_url = preg_match('#^(\w+:)?//#i', (string) $uri) ? $uri : site_url($uri);
 
 		if ($title === '')
 		{
@@ -289,7 +289,7 @@ if ( !function_exists('safe_mailto'))
 
 		$x = str_split('<a href="mailto:', 1);
 
-		for ($i = 0, $l = strlen($email); $i < $l; $i++)
+		for ($i = 0, $l = strlen((string) $email); $i < $l; $i++)
 		{
 			$x[] = '|' . ord($email[$i]);
 		}
@@ -303,7 +303,7 @@ if ( !function_exists('safe_mailto'))
 				foreach ($attributes as $key => $val)
 				{
 					$x[] = ' ' . $key . '="';
-					for ($i = 0, $l = strlen($val); $i < $l; $i++)
+					for ($i = 0, $l = strlen((string) $val); $i < $l; $i++)
 					{
 						$x[] = '|' . ord($val[$i]);
 					}
@@ -312,7 +312,7 @@ if ( !function_exists('safe_mailto'))
 			}
 			else
 			{
-				for ($i = 0, $l = strlen($attributes); $i < $l; $i++)
+				for ($i = 0, $l = strlen((string) $attributes); $i < $l; $i++)
 				{
 					$x[] = $attributes[$i];
 				}
@@ -322,7 +322,7 @@ if ( !function_exists('safe_mailto'))
 		$x[] = '>';
 
 		$temp = [];
-		for ($i = 0, $l = strlen($title); $i < $l; $i++)
+		for ($i = 0, $l = strlen((string) $title); $i < $l; $i++)
 		{
 			$ordinal = ord($title[$i]);
 
@@ -387,7 +387,7 @@ if ( !function_exists('auto_link'))
 	function auto_link($str, $type = 'both', $popup = FALSE)
 	{
 		// Find and replace any URLs.
-		if ($type !== 'email' && preg_match_all('#(\w*://|www\.)[a-z0-9]+(-+[a-z0-9]+)*(\.[a-z0-9]+(-+[a-z0-9]+)*)+(/([^\s()<>;]+\w)?/?)?#i', $str, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER))
+		if ($type !== 'email' && preg_match_all('#(\w*://|www\.)[a-z0-9]+(-+[a-z0-9]+)*(\.[a-z0-9]+(-+[a-z0-9]+)*)+(/([^\s()<>;]+\w)?/?)?#i', (string) $str, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER))
 		{
 			// Set our target HTML if using popup links.
 			$target = ($popup) ? ' target="_blank" rel="noopener"' : '';
@@ -408,7 +408,7 @@ if ( !function_exists('auto_link'))
 		}
 
 		// Find and replace any emails.
-		if ($type !== 'url' && preg_match_all('#([\w\.\-\+]+@[a-z0-9\-]+\.[a-z0-9\-\.]+[^[:punct:]\s])#i', $str, $matches, PREG_OFFSET_CAPTURE))
+		if ($type !== 'url' && preg_match_all('#([\w\.\-\+]+@[a-z0-9\-]+\.[a-z0-9\-\.]+[^[:punct:]\s])#i', (string) $str, $matches, PREG_OFFSET_CAPTURE))
 		{
 			foreach (array_reverse($matches[0]) as $match)
 			{
@@ -442,7 +442,7 @@ if ( !function_exists('prep_url'))
 			return '';
 		}
 
-		$url = parse_url($str);
+		$url = parse_url((string) $str);
 
 		if ( !$url || !isset($url['scheme']))
 		{
@@ -494,15 +494,15 @@ if ( !function_exists('url_title'))
 		$str = strip_tags($str);
 		foreach ($trans as $key => $val)
 		{
-			$str = preg_replace('#' . $key . '#i' . (UTF8_ENABLED ? 'u' : ''), $val, $str);
+			$str = preg_replace('#' . $key . '#i' . (UTF8_ENABLED ? 'u' : ''), $val, (string) $str);
 		}
 
 		if ($lowercase === TRUE)
 		{
-			$str = strtolower($str);
+			$str = strtolower((string) $str);
 		}
 
-		return trim(trim($str, $separator));
+		return trim(trim((string) $str, $separator));
 	}
 }
 
@@ -531,7 +531,7 @@ if ( !function_exists('redirect'))
 		}
 
 		// IIS environment likely? Use 'refresh' for better compatibility
-		if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== FALSE)
+		if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && str_contains((string) $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS'))
 		{
 			$method = 'refresh';
 		}
@@ -549,15 +549,10 @@ if ( !function_exists('redirect'))
 			}
 		}
 
-		switch ($method)
-		{
-			case 'refresh':
-				header('Refresh:0;url=' . $uri);
-				break;
-			default:
-				header('Location: ' . $uri, TRUE, $code);
-				break;
-		}
+		match ($method) {
+            'refresh' => header('Refresh:0;url=' . $uri),
+            default => header('Location: ' . $uri, TRUE, $code),
+        };
 		exit;
 	}
 }

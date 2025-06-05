@@ -79,8 +79,8 @@ class CI_DB_sqlite_driver extends CI_DB {
 	{
 		$error = NULL;
 		$conn_id = ($persistent === TRUE)
-			? sqlite_popen($this->database, 0666, $error)
-			: sqlite_open($this->database, 0666, $error);
+			? sqlite_popen($this->database, 0o666, $error)
+			: sqlite_open($this->database, 0o666, $error);
 
 		if (isset($error)) {
             log_message('error', $error);

@@ -162,7 +162,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	protected function _list_tables($prefix_limit = FALSE)
 	{
 		$sql = 'SELECT "tabname" FROM "systables"
-			WHERE "tabid" > 99 AND "tabtype" = \'T\' AND LOWER("owner") = ' . $this->escape(strtolower($this->username));
+			WHERE "tabid" > 99 AND "tabtype" = \'T\' AND LOWER("owner") = ' . $this->escape(strtolower((string) $this->username));
 
 		if ($prefix_limit === TRUE && $this->dbprefix !== '')
 		{
@@ -185,7 +185,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _list_columns($table = '')
 	{
-		if (strpos($table, '.') !== FALSE)
+		if (str_contains($table, '.'))
 		{
 			sscanf($table, '%[^.].%s', $owner, $table);
 		}
@@ -197,7 +197,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 		return 'SELECT "colname" FROM "systables", "syscolumns"
 			WHERE "systables"."tabid" = "syscolumns"."tabid"
 				AND "systables"."tabtype" = \'T\'
-				AND LOWER("systables"."owner") = ' . $this->escape(strtolower($owner)) . '
+				AND LOWER("systables"."owner") = ' . $this->escape(strtolower((string) $owner)) . '
 				AND LOWER("systables"."tabname") = ' . $this->escape(strtolower($table));
 	}
 
@@ -251,7 +251,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 				AND "systables"."tabid" = "sysdefaults"."tabid"
 				AND "syscolumns"."colno" = "sysdefaults"."colno"
 				AND "systables"."tabtype" = \'T\'
-				AND LOWER("systables"."owner") = ' . $this->escape(strtolower($this->username)) . '
+				AND LOWER("systables"."owner") = ' . $this->escape(strtolower((string) $this->username)) . '
 				AND LOWER("systables"."tabname") = ' . $this->escape(strtolower($table)) . '
 			ORDER BY "syscolumns"."colno"';
 

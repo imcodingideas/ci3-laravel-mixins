@@ -240,7 +240,7 @@ class CI_Output {
 	 */
 	public function set_content_type($mime_type, $charset = NULL)
 	{
-		if (strpos($mime_type, '/') === FALSE)
+		if (!str_contains($mime_type, '/'))
 		{
 			$extension = ltrim($mime_type, '.');
 
@@ -301,10 +301,7 @@ class CI_Output {
 	public function get_header($header)
 	{
 		// We only need [x][0] from our multi-dimensional array
-		$header_lines = array_map(function ($headers)
-		{
-			return array_shift($headers);
-		}, $this->headers);
+		$header_lines = array_map(fn($headers) => array_shift($headers), $this->headers);
 
 		$headers = array_merge(
 		    $header_lines,
@@ -319,7 +316,7 @@ class CI_Output {
 		// Count backwards, in order to get the last matching header
 		for ($c = count($headers) - 1; $c > -1; $c--)
 		{
-			if (strncasecmp($header, $headers[$c], $l = self::strlen($header)) === 0)
+			if (strncasecmp($header, (string) $headers[$c], $l = self::strlen($header)) === 0)
 			{
 				return trim(self::substr($headers[$c], $l + 1));
 			}
@@ -467,7 +464,7 @@ class CI_Output {
 		// Is compression requested?
 		if (isset($CI) // This means that we're not serving a cache file, if we were, it would already be compressed
 			&& $this->_compress_output === TRUE
-			&& isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
+			&& isset($_SERVER['HTTP_ACCEPT_ENCODING']) && str_contains((string) $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip'))
 		{
 			ob_start('ob_gzhandler');
 		}
@@ -489,7 +486,7 @@ class CI_Output {
 		{
 			if ($this->_compress_output === TRUE)
 			{
-				if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
+				if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && str_contains((string) $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip'))
 				{
 					header('Content-Encoding: gzip');
 					header('Content-Length: ' . self::strlen($output));
@@ -636,7 +633,7 @@ class CI_Output {
 			return;
 		}
 
-		chmod($cache_path, 0640);
+		chmod($cache_path, 0o640);
 		log_message('debug', 'Cache file written: ' . $cache_path);
 
 		// Send HTTP cache-control headers to browser to match file cache settings.
@@ -763,7 +760,7 @@ class CI_Output {
 			}
 		}
 
-		$cache_path .= md5($CI->config->item('base_url') . $CI->config->item('index_page') . ltrim($uri, '/'));
+		$cache_path .= md5($CI->config->item('base_url') . $CI->config->item('index_page') . ltrim((string) $uri, '/'));
 
 		if ( !@unlink($cache_path))
 		{
@@ -790,7 +787,7 @@ class CI_Output {
 	{
 		$max_age = $expiration - $_SERVER['REQUEST_TIME'];
 
-		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $last_modified <= strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']))
+		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $last_modified <= strtotime((string) $_SERVER['HTTP_IF_MODIFIED_SINCE']))
 		{
 			$this->set_status_header(304);
 			exit;

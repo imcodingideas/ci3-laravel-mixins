@@ -52,7 +52,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 function &DB($params = '', $query_builder_override = NULL)
 {
 	// Load the DB config file if a DSN string wasn't passed
-	if (is_string($params) && strpos($params, '://') === FALSE)
+	if (is_string($params) && !str_contains($params, '://'))
 	{
 		// Is the config file in the environment folder?
 		if ( !file_exists($file_path = APPPATH . 'config/' . ENVIRONMENT . '/database.php')

@@ -400,7 +400,7 @@ abstract class CI_DB_driver {
 		// ----------------------------------------------------------------
 
 		// Connect to the database and set the connection ID
-		$this->conn_id = $this->db_connect($this->pconnect);
+		$this->conn_id = $this->db_connect();
 
 		// No connection resource? Check if there is a failover else throw an error
 		if ( !$this->conn_id)
@@ -418,7 +418,7 @@ abstract class CI_DB_driver {
 					}
 
 					// Try to connect
-					$this->conn_id = $this->db_connect($this->pconnect);
+					$this->conn_id = $this->db_connect();
 
 					// If a connection is made break the foreach loop
 					if ($this->conn_id)
@@ -469,7 +469,7 @@ abstract class CI_DB_driver {
 	 */
 	public function db_pconnect()
 	{
-		return $this->db_connect(TRUE);
+		return $this->db_connect();
 	}
 
 	// --------------------------------------------------------------------
@@ -992,7 +992,7 @@ abstract class CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-		if (empty($this->bind_marker) || strpos($sql, $this->bind_marker) === FALSE)
+		if (empty($this->bind_marker) || !str_contains((string) $sql, $this->bind_marker))
 		{
 			return $sql;
 		}
@@ -1012,7 +1012,7 @@ abstract class CI_DB_driver {
 		$ml = strlen($this->bind_marker);
 
 		// Make sure not to replace a chunk inside a string that happens to match the bind marker
-		if ($c = preg_match_all("/'[^']*'|\"[^\"]*\"/i", $sql, $matches))
+		if ($c = preg_match_all("/'[^']*'|\"[^\"]*\"/i", (string) $sql, $matches))
 		{
 			$c = preg_match_all(
 			    '/' . preg_quote($this->bind_marker, '/') . '/i',
@@ -1032,7 +1032,7 @@ abstract class CI_DB_driver {
 				return $sql;
 			}
 		}
-		elseif (($c = preg_match_all('/' . preg_quote($this->bind_marker, '/') . '/i', $sql, $matches, PREG_OFFSET_CAPTURE)) !== $bind_count)
+		elseif (($c = preg_match_all('/' . preg_quote($this->bind_marker, '/') . '/i', (string) $sql, $matches, PREG_OFFSET_CAPTURE)) !== $bind_count)
 		{
 			return $sql;
 		}
@@ -1062,7 +1062,7 @@ abstract class CI_DB_driver {
 	 */
 	public function is_write_type($sql)
 	{
-		return (bool) preg_match('/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX|MERGE)\s/i', $sql);
+		return (bool) preg_match('/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX|MERGE)\s/i', (string) $sql);
 	}
 
 	// --------------------------------------------------------------------
@@ -1117,7 +1117,7 @@ abstract class CI_DB_driver {
 	{
 		if (is_array($str))
 		{
-			return array_map([&$this, 'escape'], $str);
+			return array_map($this->escape(...), $str);
 		}
 		elseif (is_string($str) || is_object($str) && method_exists($str, '__toString'))
 		{
@@ -1412,7 +1412,7 @@ abstract class CI_DB_driver {
 			return $item;
 		}
 		// Avoid breaking functions and literal values inside queries
-		elseif (ctype_digit($item) || $item[0] === "'" || $this->_escape_char !== '"' && $item[0] === '"' || strpos($item, '(') !== FALSE)
+		elseif (ctype_digit((string) $item) || $item[0] === "'" || $this->_escape_char !== '"' && $item[0] === '"' || str_contains((string) $item, '('))
 		{
 			return $item;
 		}
@@ -1424,8 +1424,8 @@ abstract class CI_DB_driver {
 			if (is_array($this->_escape_char))
 			{
 				$preg_ec = [
-					preg_quote($this->_escape_char[0], '/'),
-					preg_quote($this->_escape_char[1], '/'),
+					preg_quote((string) $this->_escape_char[0], '/'),
+					preg_quote((string) $this->_escape_char[1], '/'),
 					$this->_escape_char[0],
 					$this->_escape_char[1],
 				];
@@ -1439,13 +1439,13 @@ abstract class CI_DB_driver {
 
 		foreach ($this->_reserved_identifiers as $id)
 		{
-			if (strpos($item, '.' . $id) !== FALSE)
+			if (str_contains((string) $item, '.' . $id))
 			{
-				return preg_replace('/' . $preg_ec[0] . '?([^' . $preg_ec[1] . '\.]+)' . $preg_ec[1] . '?\./i', $preg_ec[2] . '$1' . $preg_ec[3] . '.', $item);
+				return preg_replace('/' . $preg_ec[0] . '?([^' . $preg_ec[1] . '\.]+)' . $preg_ec[1] . '?\./i', $preg_ec[2] . '$1' . $preg_ec[3] . '.', (string) $item);
 			}
 		}
 
-		return preg_replace('/' . $preg_ec[0] . '?([^' . $preg_ec[1] . '\.]+)' . $preg_ec[1] . '?(\.)?/i', $preg_ec[2] . '$1' . $preg_ec[3] . '$2', $item);
+		return preg_replace('/' . $preg_ec[0] . '?([^' . $preg_ec[1] . '\.]+)' . $preg_ec[1] . '?(\.)?/i', $preg_ec[2] . '$1' . $preg_ec[3] . '$2', (string) $item);
 	}
 
 	// --------------------------------------------------------------------
@@ -1551,7 +1551,7 @@ abstract class CI_DB_driver {
 	 */
 	protected function _has_operator($str)
 	{
-		return (bool) preg_match('/(<|>|!|=|\sIS NULL|\sIS NOT NULL|\sEXISTS|\sBETWEEN|\sLIKE|\sIN\s*\(|\s)/i', trim($str));
+		return (bool) preg_match('/(<|>|!|=|\sIS NULL|\sIS NOT NULL|\sEXISTS|\sBETWEEN|\sLIKE|\sIN\s*\(|\s)/i', trim((string) $str));
 	}
 
 	// --------------------------------------------------------------------
@@ -1589,7 +1589,7 @@ abstract class CI_DB_driver {
 
 		}
 
-		return preg_match('/' . implode('|', $_operators) . '/i', $str, $match)
+		return preg_match('/' . implode('|', $_operators) . '/i', (string) $str, $match)
 			? $match[0] : FALSE;
 	}
 
@@ -1605,7 +1605,7 @@ abstract class CI_DB_driver {
 	{
 		$driver = ($this->dbdriver === 'postgre') ? 'pg_' : $this->dbdriver . '_';
 
-		if (FALSE === strpos($driver, $function))
+		if (!str_contains($driver, $function))
 		{
 			$function = $driver . $function;
 		}
@@ -1779,7 +1779,7 @@ abstract class CI_DB_driver {
 					$call['file'] = str_replace('\\', '/', $call['file']);
 				}
 
-				if (strpos($call['file'], BASEPATH . 'database') === FALSE && strpos($call['class'], 'Loader') === FALSE)
+				if (!str_contains($call['file'], BASEPATH . 'database') && !str_contains($call['class'], 'Loader'))
 				{
 					// Found it - use a relative path for safety
 					$message[] = 'Filename: ' . str_replace([APPPATH, BASEPATH], '', $call['file']);
@@ -1847,29 +1847,29 @@ abstract class CI_DB_driver {
 		//
 		// Added exception for single quotes as well, we don't want to alter
 		// literal strings. -- Narf
-		if (strcspn($item, "()'") !== strlen($item))
+		if (strcspn((string) $item, "()'") !== strlen((string) $item))
 		{
 			return $item;
 		}
 
 		// Convert tabs or multiple spaces into single spaces
-		$item = preg_replace('/\s+/', ' ', trim($item));
+		$item = preg_replace('/\s+/', ' ', trim((string) $item));
 
 		// If the item has an alias declaration we remove it and set it aside.
 		// Note: strripos() is used in order to support spaces in table names
-		if ($offset = strripos($item, ' AS '))
+		if ($offset = strripos((string) $item, ' AS '))
 		{
 			$alias = ($protect_identifiers)
-				? substr($item, $offset, 4) . $this->escape_identifiers(substr($item, $offset + 4))
-				: substr($item, $offset);
-			$item = substr($item, 0, $offset);
+				? substr((string) $item, $offset, 4) . $this->escape_identifiers(substr((string) $item, $offset + 4))
+				: substr((string) $item, $offset);
+			$item = substr((string) $item, 0, $offset);
 		}
-		elseif ($offset = strrpos($item, ' '))
+		elseif ($offset = strrpos((string) $item, ' '))
 		{
 			$alias = ($protect_identifiers)
-				? ' ' . $this->escape_identifiers(substr($item, $offset + 1))
-				: substr($item, $offset);
-			$item = substr($item, 0, $offset);
+				? ' ' . $this->escape_identifiers(substr((string) $item, $offset + 1))
+				: substr((string) $item, $offset);
+			$item = substr((string) $item, 0, $offset);
 		}
 		else
 		{
@@ -1879,9 +1879,9 @@ abstract class CI_DB_driver {
 		// Break the string apart if it contains periods, then insert the table prefix
 		// in the correct location, assuming the period doesn't indicate that we're dealing
 		// with an alias. While we're at it, we will escape the components
-		if (strpos($item, '.') !== FALSE)
+		if (str_contains((string) $item, '.'))
 		{
-			$parts = explode('.', $item);
+			$parts = explode('.', (string) $item);
 
 			// Does the first segment of the exploded item match
 			// one of the aliases previously identified? If so,
@@ -1970,12 +1970,12 @@ abstract class CI_DB_driver {
 		if ($this->dbprefix !== '')
 		{
 			// Verify table prefix and replace if necessary
-			if ($this->swap_pre !== '' && strpos($item, $this->swap_pre) === 0)
+			if ($this->swap_pre !== '' && str_starts_with((string) $item, $this->swap_pre))
 			{
-				$item = preg_replace('/^' . $this->swap_pre . '(\S+?)/', $this->dbprefix . '\\1', $item);
+				$item = preg_replace('/^' . $this->swap_pre . '(\S+?)/', $this->dbprefix . '\\1', (string) $item);
 			}
 			// Do we prefix an item with no segments?
-			elseif ($prefix_single === TRUE && strpos($item, $this->dbprefix) !== 0)
+			elseif ($prefix_single === TRUE && !str_starts_with((string) $item, $this->dbprefix))
 			{
 				$item = $this->dbprefix . $item;
 			}

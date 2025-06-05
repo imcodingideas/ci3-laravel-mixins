@@ -112,12 +112,12 @@ class CI_DB_pdo_sqlsrv_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_type(&$attributes)
 	{
-		if (isset($attributes['CONSTRAINT']) && strpos($attributes['TYPE'], 'INT') !== FALSE)
+		if (isset($attributes['CONSTRAINT']) && str_contains((string) $attributes['TYPE'], 'INT'))
 		{
 			unset($attributes['CONSTRAINT']);
 		}
 
-		switch (strtoupper($attributes['TYPE']))
+		switch (strtoupper((string) $attributes['TYPE']))
 		{
 			case 'MEDIUMINT':
 				$attributes['TYPE'] = 'INTEGER';
@@ -141,7 +141,7 @@ class CI_DB_pdo_sqlsrv_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos($field['type'], 'int') !== FALSE)
+		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos((string) $field['type'], 'int') !== FALSE)
 		{
 			$field['auto_increment'] = ' IDENTITY(1,1)';
 		}

@@ -293,7 +293,7 @@ abstract class CI_DB_forge {
 			}
 			else
 			{
-				if (strpos($field, ' ') === FALSE)
+				if (!str_contains($field, ' '))
 				{
 					show_error('Field information is required for that operation.');
 				}
@@ -874,12 +874,12 @@ abstract class CI_DB_forge {
 		{
 			foreach (array_keys($this->_unsigned) as $key)
 			{
-				if (is_int($key) && strcasecmp($attributes['TYPE'], $this->_unsigned[$key]) === 0)
+				if (is_int($key) && strcasecmp((string) $attributes['TYPE'], (string) $this->_unsigned[$key]) === 0)
 				{
 					$field['unsigned'] = ' UNSIGNED';
 					return;
 				}
-				elseif (is_string($key) && strcasecmp($attributes['TYPE'], $key) === 0)
+				elseif (is_string($key) && strcasecmp((string) $attributes['TYPE'], $key) === 0)
 				{
 					$field['type'] = $key;
 					return;
@@ -953,7 +953,7 @@ abstract class CI_DB_forge {
 	 */
 	protected function _attr_auto_increment(&$attributes, &$field)
 	{
-		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos($field['type'], 'int') !== FALSE)
+		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos((string) $field['type'], 'int') !== FALSE)
 		{
 			$field['auto_increment'] = ' AUTO_INCREMENT';
 		}

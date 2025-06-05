@@ -176,7 +176,7 @@ class CI_User_agent {
 
 		if (isset($_SERVER['HTTP_USER_AGENT']))
 		{
-			$this->agent = trim($_SERVER['HTTP_USER_AGENT']);
+			$this->agent = trim((string) $_SERVER['HTTP_USER_AGENT']);
 			$this->_compile_data();
 		}
 
@@ -352,7 +352,7 @@ class CI_User_agent {
 		{
 			foreach ($this->mobiles as $key => $val)
 			{
-				if (FALSE !== (stripos($this->agent, $key)))
+				if (FALSE !== (stripos($this->agent, (string) $key)))
 				{
 					$this->is_mobile = TRUE;
 					$this->mobile = $val;
@@ -375,7 +375,7 @@ class CI_User_agent {
 	{
 		if ((count($this->languages) === 0) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
-			$this->languages = explode(',', preg_replace('/(;\s?q=[0-9\.]+)|\s/i', '', strtolower(trim($_SERVER['HTTP_ACCEPT_LANGUAGE']))));
+			$this->languages = explode(',', (string) preg_replace('/(;\s?q=[0-9\.]+)|\s/i', '', strtolower(trim((string) $_SERVER['HTTP_ACCEPT_LANGUAGE']))));
 		}
 
 		if (count($this->languages) === 0)
@@ -395,7 +395,7 @@ class CI_User_agent {
 	{
 		if ((count($this->charsets) === 0) && !empty($_SERVER['HTTP_ACCEPT_CHARSET']))
 		{
-			$this->charsets = explode(',', preg_replace('/(;\s?q=.+)|\s/i', '', strtolower(trim($_SERVER['HTTP_ACCEPT_CHARSET']))));
+			$this->charsets = explode(',', (string) preg_replace('/(;\s?q=.+)|\s/i', '', strtolower(trim((string) $_SERVER['HTTP_ACCEPT_CHARSET']))));
 		}
 
 		if (count($this->charsets) === 0)
@@ -496,7 +496,7 @@ class CI_User_agent {
 			}
 			else
 			{
-				$referer_host = @parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+				$referer_host = @parse_url((string) $_SERVER['HTTP_REFERER'], PHP_URL_HOST);
 				$own_host = parse_url((string) config_item('base_url'), PHP_URL_HOST);
 
 				$this->referer = ($referer_host && $referer_host !== $own_host);
@@ -586,7 +586,7 @@ class CI_User_agent {
 	 */
 	public function referrer()
 	{
-		return empty($_SERVER['HTTP_REFERER']) ? '' : trim($_SERVER['HTTP_REFERER']);
+		return empty($_SERVER['HTTP_REFERER']) ? '' : trim((string) $_SERVER['HTTP_REFERER']);
 	}
 
 	// --------------------------------------------------------------------

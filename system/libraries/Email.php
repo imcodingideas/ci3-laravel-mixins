@@ -529,7 +529,7 @@ class CI_Email {
 	 */
 	public function reply_to($replyto, $name = '')
 	{
-		if (preg_match('/\<(.*)\>/', $replyto, $match))
+		if (preg_match('/\<(.*)\>/', (string) $replyto, $match))
 		{
 			$replyto = $match[1];
 		}
@@ -542,10 +542,10 @@ class CI_Email {
 		if ($name !== '')
 		{
 			// only use Q encoding if there are characters that would require it
-			if ( !preg_match('/[\200-\377]/', $name))
+			if ( !preg_match('/[\200-\377]/', (string) $name))
 			{
 				// add slashes for non-printing characters, slashes, and double quotes, and surround it in double quotes
-				$name = '"' . addcslashes($name, "\0..\37\177'\"\\") . '"';
+				$name = '"' . addcslashes((string) $name, "\0..\37\177'\"\\") . '"';
 			}
 			else
 			{
@@ -706,7 +706,7 @@ class CI_Email {
 	{
 		if ($mime === '')
 		{
-			if (strpos($file, '://') === FALSE && !file_exists($file))
+			if (!str_contains($file, '://') && !file_exists($file))
 			{
 				$this->_set_error_message('lang:email_attachment_missing', $file);
 				return FALSE;
@@ -755,7 +755,7 @@ class CI_Email {
 			if ($this->_attachments[$i]['name'][0] === $filename)
 			{
 				$this->_attachments[$i]['multipart'] = 'related';
-				$this->_attachments[$i]['cid'] = uniqid(basename($this->_attachments[$i]['name'][0]) . '@');
+				$this->_attachments[$i]['cid'] = uniqid(basename((string) $this->_attachments[$i]['name'][0]) . '@');
 				return $this->_attachments[$i]['cid'];
 			}
 		}
@@ -790,9 +790,9 @@ class CI_Email {
 	{
 		if ( !is_array($email))
 		{
-			return (strpos($email, ',') !== FALSE)
-				? preg_split('/[\s,]/', $email, -1, PREG_SPLIT_NO_EMPTY)
-				: (array) trim($email);
+			return (str_contains((string) $email, ','))
+				? preg_split('/[\s,]/', (string) $email, -1, PREG_SPLIT_NO_EMPTY)
+				: (array) trim((string) $email);
 		}
 
 		return $email;
@@ -864,7 +864,7 @@ class CI_Email {
 	 */
 	public function set_priority($n = 3)
 	{
-		$this->priority = preg_match('/^[1-5]$/', $n) ? (int) $n : 3;
+		$this->priority = preg_match('/^[1-5]$/', (string) $n) ? (int) $n : 3;
 		return $this;
 	}
 
@@ -940,7 +940,7 @@ class CI_Email {
 
 		foreach ($this->_base_charsets as $charset)
 		{
-			if (strpos($this->charset, $charset) === 0)
+			if (str_starts_with($this->charset, $charset))
 			{
 				$this->_encoding = '7bit';
 			}
@@ -1037,9 +1037,9 @@ class CI_Email {
 	 */
 	public function valid_email($email)
 	{
-		if (function_exists('idn_to_ascii') && strpos($email, '@'))
+		if (function_exists('idn_to_ascii') && strpos((string) $email, '@'))
 		{
-			[$account, $domain] = explode('@', $email, 2);
+			[$account, $domain] = explode('@', (string) $email, 2);
 			$domain = defined('INTL_IDNA_VARIANT_UTS46')
 				? idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46)
 				: idn_to_ascii($domain);
@@ -1065,14 +1065,14 @@ class CI_Email {
 	{
 		if ( !is_array($email))
 		{
-			return preg_match('/\<(.*)\>/', $email, $match) ? $match[1] : $email;
+			return preg_match('/\<(.*)\>/', (string) $email, $match) ? $match[1] : $email;
 		}
 
 		$clean_email = [];
 
 		foreach ($email as $addy)
 		{
-			$clean_email[] = preg_match('/\<(.*)\>/', $addy, $match) ? $match[1] : $addy;
+			$clean_email[] = preg_match('/\<(.*)\>/', (string) $addy, $match) ? $match[1] : $addy;
 		}
 
 		return $clean_email;
@@ -1133,13 +1133,13 @@ class CI_Email {
 		}
 
 		// Standardize newlines
-		if (strpos($str, "\r") !== FALSE)
+		if (str_contains((string) $str, "\r"))
 		{
 			$str = str_replace(["\r\n", "\r"], "\n", $str);
 		}
 
 		// Reduce multiple spaces at end of line
-		$str = preg_replace('| +\n|', "\n", $str);
+		$str = preg_replace('| +\n|', "\n", (string) $str);
 
 		// If the current word is surrounded by {unwrap} tags we'll
 		// strip the entire chunk and replace it with a marker.
@@ -1465,7 +1465,7 @@ class CI_Email {
 			}
 
 			$name = $this->_attachments[$i]['name'][1]
-				?? basename($this->_attachments[$i]['name'][0]);
+				?? basename((string) $this->_attachments[$i]['name'][0]);
 
 			$body .= '--' . $boundary . $this->newline
 				. 'Content-Type: ' . $this->_attachments[$i]['type'] . '; name="' . $name . '"' . $this->newline
@@ -1527,7 +1527,7 @@ class CI_Email {
 		$str = preg_replace(['| +|', '/\x00+/'], [' ', ''], $str);
 
 		// Standardize newlines
-		if (strpos($str, "\r") !== FALSE)
+		if (str_contains($str, "\r"))
 		{
 			$str = str_replace(["\r\n", "\r"], "\n", $str);
 		}
@@ -1811,7 +1811,7 @@ class CI_Email {
 	 */
 	protected function _remove_nl_callback($matches)
 	{
-		if (strpos($matches[1], "\r") !== FALSE || strpos($matches[1], "\n") !== FALSE)
+		if (str_contains($matches[1], "\r") || str_contains($matches[1], "\n"))
 		{
 			$matches[1] = str_replace(["\r\n", "\r", "\n"], '', $matches[1]);
 		}
@@ -2012,7 +2012,7 @@ class CI_Email {
 
 		$this->_smtp_end();
 
-		if (strpos($reply, '250') !== 0)
+		if (!str_starts_with($reply, '250'))
 		{
 			$this->_set_error_message('lang:email_smtp_error', $reply);
 			return FALSE;
@@ -2207,11 +2207,11 @@ class CI_Email {
 
 		$reply = $this->_get_smtp_data();
 
-		if (strpos($reply, '503') === 0)	// Already authenticated
+		if (str_starts_with($reply, '503'))	// Already authenticated
 		{
 			return TRUE;
 		}
-		elseif (strpos($reply, '334') !== 0)
+		elseif (!str_starts_with($reply, '334'))
 		{
 			$this->_set_error_message('lang:email_failed_smtp_login', $reply);
 			return FALSE;
@@ -2221,7 +2221,7 @@ class CI_Email {
 
 		$reply = $this->_get_smtp_data();
 
-		if (strpos($reply, '334') !== 0)
+		if (!str_starts_with($reply, '334'))
 		{
 			$this->_set_error_message('lang:email_smtp_auth_un', $reply);
 			return FALSE;
@@ -2231,7 +2231,7 @@ class CI_Email {
 
 		$reply = $this->_get_smtp_data();
 
-		if (strpos($reply, '235') !== 0)
+		if (!str_starts_with($reply, '235'))
 		{
 			$this->_set_error_message('lang:email_smtp_auth_pw', $reply);
 			return FALSE;
@@ -2330,12 +2330,7 @@ class CI_Email {
 	 */
 	protected function _get_hostname()
 	{
-		if (isset($_SERVER['SERVER_NAME']))
-		{
-			return $_SERVER['SERVER_NAME'];
-		}
-
-		return isset($_SERVER['SERVER_ADDR']) ? '[' . $_SERVER['SERVER_ADDR'] . ']' : '[127.0.0.1]';
+		return $_SERVER['SERVER_NAME'] ?? isset($_SERVER['SERVER_ADDR']) ? '[' . $_SERVER['SERVER_ADDR'] . ']' : '[127.0.0.1]';
 	}
 
 	// --------------------------------------------------------------------
@@ -2417,7 +2412,7 @@ class CI_Email {
 	 */
 	protected function _mime_types($ext = '')
 	{
-		$ext = strtolower($ext);
+		$ext = strtolower((string) $ext);
 
 		$mimes = &get_mimes();
 

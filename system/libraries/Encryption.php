@@ -233,7 +233,7 @@ class CI_Encryption {
 	{
 		if ( !empty($params['cipher']))
 		{
-			$params['cipher'] = strtolower($params['cipher']);
+			$params['cipher'] = strtolower((string) $params['cipher']);
 			$this->_cipher_alias($params['cipher']);
 
 			if ( !in_array($params['cipher'], mcrypt_list_algorithms(), TRUE))
@@ -248,7 +248,7 @@ class CI_Encryption {
 
 		if ( !empty($params['mode']))
 		{
-			$params['mode'] = strtolower($params['mode']);
+			$params['mode'] = strtolower((string) $params['mode']);
 			if ( !isset($this->_modes['mcrypt'][$params['mode']]))
 			{
 				log_message('error', 'Encryption: MCrypt mode ' . strtoupper($params['mode']) . ' is not available.');
@@ -291,14 +291,14 @@ class CI_Encryption {
 	{
 		if ( !empty($params['cipher']))
 		{
-			$params['cipher'] = strtolower($params['cipher']);
+			$params['cipher'] = strtolower((string) $params['cipher']);
 			$this->_cipher_alias($params['cipher']);
 			$this->_cipher = $params['cipher'];
 		}
 
 		if ( !empty($params['mode']))
 		{
-			$params['mode'] = strtolower($params['mode']);
+			$params['mode'] = strtolower((string) $params['mode']);
 			if ( !isset($this->_modes['openssl'][$params['mode']]))
 			{
 				log_message('error', 'Encryption: OpenSSL mode ' . strtoupper($params['mode']) . ' is not available.');
@@ -388,13 +388,13 @@ class CI_Encryption {
 			return FALSE;
 		}
 
-		$params['base64'] && $data = base64_encode($data);
+		$params['base64'] && $data = base64_encode((string) $data);
 
 		if (isset($params['hmac_digest'])) {
             if (!isset($params['hmac_key'])) {
                 $params['hmac_key'] = $this->hkdf($this->_key, 'sha512', NULL, NULL, 'authentication');
             }
-            return hash_hmac($params['hmac_digest'], $data, $params['hmac_key'], !$params['base64']) . $data;
+            return hash_hmac($params['hmac_digest'], (string) $data, $params['hmac_key'], !$params['base64']) . $data;
         }
 
 		return $data;
@@ -868,11 +868,11 @@ class CI_Encryption {
 
 		self::strlen($salt) || $salt = str_repeat("\0", $this->_digests[$digest]);
 
-		$prk = hash_hmac($digest, $key, $salt, TRUE);
+		$prk = hash_hmac((string) $digest, (string) $key, (string) $salt, TRUE);
 		$key = '';
 		for ($key_block = '', $block_index = 1; self::strlen($key) < $length; $block_index++)
 		{
-			$key_block = hash_hmac($digest, $key_block . $info . chr($block_index), $prk, TRUE);
+			$key_block = hash_hmac((string) $digest, $key_block . $info . chr($block_index), $prk, TRUE);
 			$key .= $key_block;
 		}
 

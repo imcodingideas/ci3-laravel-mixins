@@ -156,7 +156,7 @@ class CI_DB_pdo_ibm_driver extends CI_DB_pdo_driver {
 	protected function _list_tables($prefix_limit = FALSE)
 	{
 		$sql = 'SELECT "tabname" FROM "syscat"."tables"
-			WHERE "type" = \'T\' AND LOWER("tabschema") = ' . $this->escape(strtolower($this->database));
+			WHERE "type" = \'T\' AND LOWER("tabschema") = ' . $this->escape(strtolower((string) $this->database));
 
 		if ($prefix_limit === TRUE && $this->dbprefix !== '')
 		{
@@ -180,7 +180,7 @@ class CI_DB_pdo_ibm_driver extends CI_DB_pdo_driver {
 	protected function _list_columns($table = '')
 	{
 		return 'SELECT "colname" FROM "syscat"."columns"
-			WHERE LOWER("tabschema") = ' . $this->escape(strtolower($this->database)) . '
+			WHERE LOWER("tabschema") = ' . $this->escape(strtolower((string) $this->database)) . '
 				AND LOWER("tabname") = ' . $this->escape(strtolower($table));
 	}
 
@@ -197,7 +197,7 @@ class CI_DB_pdo_ibm_driver extends CI_DB_pdo_driver {
 		$sql = 'SELECT "colname" AS "name", "typename" AS "type", "default" AS "default", "length" AS "max_length",
 				CASE "keyseq" WHEN NULL THEN 0 ELSE 1 END AS "primary_key"
 			FROM "syscat"."columns"
-			WHERE LOWER("tabschema") = ' . $this->escape(strtolower($this->database)) . '
+			WHERE LOWER("tabschema") = ' . $this->escape(strtolower((string) $this->database)) . '
 				AND LOWER("tabname") = ' . $this->escape(strtolower($table)) . '
 			ORDER BY "colno"';
 

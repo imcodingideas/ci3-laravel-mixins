@@ -731,7 +731,7 @@ class CI_Jquery extends CI_Javascript {
 	protected function _updater($container = 'this', $controller = '', $options = '')
 	{
 		$container = $this->_prep_element($container);
-		$controller = (strpos('://', $controller) === FALSE) ? $controller : $this->CI->config->site_url($controller);
+		$controller = (str_contains('://', (string) $controller)) ? $this->CI->config->site_url($controller) : $controller;
 
 		// ajaxStart and ajaxStop are better choices here... but this is a stop gap
 		if ($this->CI->config->item('javascript_ajax_img') === '')
@@ -894,7 +894,7 @@ class CI_Jquery extends CI_Javascript {
 		}
 		else
 		{
-			$sort_options = '';
+			$sort_options = [];
 		}
 
 		return '$(' . $this->_prep_element($element) . ').sortable({' . $sort_options . "\n\t});";
@@ -1066,7 +1066,7 @@ class CI_Jquery extends CI_Javascript {
 		{
 			return '"' . $speed . '"';
 		}
-		elseif (preg_match('/[^0-9]/', $speed))
+		elseif (preg_match('/[^0-9]/', (string) $speed))
 		{
 			return '';
 		}

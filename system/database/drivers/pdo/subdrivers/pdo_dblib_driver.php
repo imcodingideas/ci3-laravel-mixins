@@ -131,7 +131,7 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 		}
 		else
 		{
-			if ( !empty($this->char_set) && strpos($this->dsn, 'charset=', 6) === FALSE)
+			if ( !empty($this->char_set) && !str_contains(substr((string) $this->dsn, 6), 'charset='))
 			{
 				$this->dsn .= ';charset=' . $this->char_set;
 			}
@@ -305,10 +305,10 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 			$orderby = $this->_compile_order_by();
 
 			// We have to strip the ORDER BY clause
-			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
+			$sql = trim(substr($sql, 0, strrpos($sql, (string) $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0 || strpos(implode(',', $this->qb_select), '*') !== FALSE)
+			if (count($this->qb_select) === 0 || str_contains(implode(',', $this->qb_select), '*'))
 			{
 				$select = '*'; // Inevitable
 			}
@@ -320,7 +320,7 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 					? '("[^\"]+")' : '(\[[^\]]+\])';
 				for ($i = 0, $c = count($this->qb_select); $i < $c; $i++)
 				{
-					$select[] = preg_match('/(?:\s|\.)' . $field_regexp . '$/i', $this->qb_select[$i], $m)
+					$select[] = preg_match('/(?:\s|\.)' . $field_regexp . '$/i', (string) $this->qb_select[$i], $m)
 						? $m[1] : $this->qb_select[$i];
 				}
 				$select = implode(', ', $select);
@@ -367,11 +367,6 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 	 */
 	public function version()
 	{
-		if (isset($this->data_cache['version']))
-		{
-			return $this->data_cache['version'];
-		}
-
-		return $this->data_cache['version'] = $this->conn_id->query("SELECT SERVERPROPERTY('ProductVersion') AS ver")->fetchColumn(0);
+		return $this->data_cache['version'] ?? $this->data_cache['version'] = $this->conn_id->query("SELECT SERVERPROPERTY('ProductVersion') AS ver")->fetchColumn(0);
 	}
 }

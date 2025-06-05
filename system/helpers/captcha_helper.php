@@ -85,7 +85,7 @@ if ( !function_exists('create_captcha'))
 
 		foreach ($defaults as $key => $val)
 		{
-			$$key = !is_array($data) && empty($$key) ? $val : $data[$key] ?? $val;
+			${$key} = !is_array($data) && empty(${$key}) ? $val : $data[$key] ?? $val;
 		}
 
 		if ( !extension_loaded('gd'))
@@ -144,7 +144,7 @@ if ( !function_exists('create_captcha'))
 						$word .= $pool[random_int(0, $rand_max)];
 					}
 				}
-				catch (Exception $e)
+				catch (Exception)
 				{
 					// This means fallback to the next possible
 					// alternative to random_int()
@@ -204,7 +204,7 @@ if ( !function_exists('create_captcha'))
 						}
 					}
 
-					[, $rand_index] = unpack('C', $bytes[$byte_index++]);
+					[, $rand_index] = unpack('C', (string) $bytes[$byte_index++]);
 					if ($rand_index > $rand_max)
 					{
 						continue;

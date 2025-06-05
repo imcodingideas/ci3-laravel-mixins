@@ -208,7 +208,7 @@ class CI_Parser {
 		$replace = [];
 		preg_match_all(
 		    '#' . preg_quote($this->l_delim . $variable . $this->r_delim) . '(.+?)' . preg_quote($this->l_delim . '/' . $variable . $this->r_delim) . '#s',
-		    $string,
+		    (string) $string,
 		    $matches,
 		    PREG_SET_ORDER
 		);

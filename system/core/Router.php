@@ -193,7 +193,7 @@ class CI_Router {
 			if ( $this->directory === null)
 			{
 				$_d = $this->config->item('directory_trigger');
-				$_d = isset($_GET[$_d]) ? trim($_GET[$_d], " \t\n\r\0\x0B/") : '';
+				$_d = isset($_GET[$_d]) ? trim((string) $_GET[$_d], " \t\n\r\0\x0B/") : '';
 
 				if ($_d !== '')
 				{
@@ -202,13 +202,13 @@ class CI_Router {
 				}
 			}
 
-			$_c = trim($this->config->item('controller_trigger'));
+			$_c = trim((string) $this->config->item('controller_trigger'));
 			if ( !empty($_GET[$_c]))
 			{
 				$this->uri->filter_uri($_GET[$_c]);
 				$this->set_class($_GET[$_c]);
 
-				$_f = trim($this->config->item('function_trigger'));
+				$_f = trim((string) $this->config->item('function_trigger'));
 				if ( !empty($_GET[$_f]))
 				{
 					$this->uri->filter_uri($_GET[$_f]);
@@ -347,7 +347,7 @@ class CI_Router {
 		while ($c-- > 0)
 		{
 			$test = $this->directory
-				. ucfirst($this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0]);
+				. ucfirst((string) $this->translate_uri_dashes === TRUE ? str_replace('-', '_', $segments[0]) : $segments[0]);
 
 			if ( !file_exists(APPPATH . 'controllers/' . $test . '.php')
 				&& $directory_override === FALSE
@@ -381,7 +381,7 @@ class CI_Router {
 		$uri = implode('/', $this->uri->segments);
 
 		// Get HTTP verb
-		$http_verb = isset($_SERVER['REQUEST_METHOD']) ? strtolower($_SERVER['REQUEST_METHOD']) : 'cli';
+		$http_verb = isset($_SERVER['REQUEST_METHOD']) ? strtolower((string) $_SERVER['REQUEST_METHOD']) : 'cli';
 
 		// Loop through the route array looking for wildcards
 		foreach ($this->routes as $key => $val)
@@ -416,12 +416,12 @@ class CI_Router {
 					$val = call_user_func_array($val, $matches);
 				}
 				// Are we using the default routing method for back-references?
-				elseif (strpos($val, '$') !== FALSE && strpos($key, '(') !== FALSE)
+				elseif (str_contains((string) $val, '$') && str_contains($key, '('))
 				{
-					$val = preg_replace('#^' . $key . '$#', $val, $uri);
+					$val = preg_replace('#^' . $key . '$#', (string) $val, $uri);
 				}
 
-				$this->_set_request(explode('/', $val));
+				$this->_set_request(explode('/', (string) $val));
 				return;
 			}
 		}

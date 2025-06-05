@@ -110,12 +110,12 @@ class CI_Session {
 		else
 		{
 			session_set_save_handler(
-			    [$wrapper, 'open'],
-			    [$wrapper, 'close'],
-			    [$wrapper, 'read'],
-			    [$wrapper, 'write'],
-			    [$wrapper, 'destroy'],
-			    [$wrapper, 'gc']
+			    $wrapper->open(...),
+			    $wrapper->close(...),
+			    $wrapper->read(...),
+			    $wrapper->write(...),
+			    $wrapper->destroy(...),
+			    $wrapper->gc(...)
 			);
 
 			register_shutdown_function('session_write_close');
@@ -134,7 +134,7 @@ class CI_Session {
 		session_start();
 
 		// Is session ID auto-regeneration configured? (ignoring ajax requests)
-		if ((empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest')
+		if ((empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower((string) $_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest')
 			&& ($regenerate_time = config_item('sess_time_to_update')) > 0
 		)
 		{
@@ -402,44 +402,6 @@ class CI_Session {
 	 */
 	protected function _configure_sid_length()
 	{
-		if (PHP_VERSION_ID < 70100)
-		{
-			$hash_function = ini_get('session.hash_function');
-			if (ctype_digit($hash_function))
-			{
-				if ($hash_function !== '1')
-				{
-					ini_set('session.hash_function', 1);
-				}
-
-				$bits = 160;
-			}
-			elseif ( !in_array($hash_function, hash_algos(), TRUE))
-			{
-				ini_set('session.hash_function', 1);
-				$bits = 160;
-			}
-			elseif (($bits = strlen(hash($hash_function, 'dummy', false)) * 4) < 160)
-			{
-				ini_set('session.hash_function', 1);
-				$bits = 160;
-			}
-
-			$bits_per_character = (int) ini_get('session.hash_bits_per_character');
-			$sid_length = (int) ceil($bits / $bits_per_character);
-		}
-		else
-		{
-			$bits_per_character = (int) ini_get('session.sid_bits_per_character');
-			$sid_length = (int) ini_get('session.sid_length');
-			if (($bits = $sid_length * $bits_per_character) < 160)
-			{
-				// Add as many more characters as necessary to reach at least 160 bits
-				$sid_length += (int) ceil((160 % $bits) / $bits_per_character);
-				ini_set('session.sid_length', $sid_length);
-			}
-		}
-
 		// Yes, 4,5,6 are the only known possible values as of 2016-10-27
 		switch ($bits_per_character)
 		{

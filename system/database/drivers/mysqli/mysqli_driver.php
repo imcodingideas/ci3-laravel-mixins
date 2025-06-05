@@ -303,12 +303,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	public function version()
 	{
-		if (isset($this->data_cache['version']))
-		{
-			return $this->data_cache['version'];
-		}
-
-		return $this->data_cache['version'] = $this->conn_id->server_info;
+		return $this->data_cache['version'] ?? $this->data_cache['version'] = $this->conn_id->server_info;
 	}
 
 	// --------------------------------------------------------------------

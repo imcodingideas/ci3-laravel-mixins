@@ -412,31 +412,15 @@ class CI_Upload {
 		{
 			$error = $_file['error'] ?? 4;
 
-			switch ($error)
-			{
-				case UPLOAD_ERR_INI_SIZE:
-					$this->set_error('upload_file_exceeds_limit', 'info');
-					break;
-				case UPLOAD_ERR_FORM_SIZE:
-					$this->set_error('upload_file_exceeds_form_limit', 'info');
-					break;
-				case UPLOAD_ERR_PARTIAL:
-					$this->set_error('upload_file_partial', 'debug');
-					break;
-				case UPLOAD_ERR_NO_FILE:
-                default:
-					$this->set_error('upload_no_file_selected', 'debug');
-					break;
-				case UPLOAD_ERR_NO_TMP_DIR:
-					$this->set_error('upload_no_temp_directory', 'error');
-					break;
-				case UPLOAD_ERR_CANT_WRITE:
-					$this->set_error('upload_unable_to_write_file', 'error');
-					break;
-				case UPLOAD_ERR_EXTENSION:
-					$this->set_error('upload_stopped_by_extension', 'debug');
-					break;
-			}
+			match ($error) {
+                UPLOAD_ERR_INI_SIZE => $this->set_error('upload_file_exceeds_limit', 'info'),
+                UPLOAD_ERR_FORM_SIZE => $this->set_error('upload_file_exceeds_form_limit', 'info'),
+                UPLOAD_ERR_PARTIAL => $this->set_error('upload_file_partial', 'debug'),
+                UPLOAD_ERR_NO_TMP_DIR => $this->set_error('upload_no_temp_directory', 'error'),
+                UPLOAD_ERR_CANT_WRITE => $this->set_error('upload_unable_to_write_file', 'error'),
+                UPLOAD_ERR_EXTENSION => $this->set_error('upload_stopped_by_extension', 'debug'),
+                default => $this->set_error('upload_no_file_selected', 'debug'),
+            };
 
 			return FALSE;
 		}
@@ -452,7 +436,7 @@ class CI_Upload {
 		}
 
 		$this->file_type = preg_replace('/^(.+?);.*$/', '\\1', $this->file_type);
-		$this->file_type = strtolower(trim(stripslashes($this->file_type), '"'));
+		$this->file_type = strtolower(trim(stripslashes((string) $this->file_type), '"'));
 		$this->file_name = $this->_prep_filename($_file['name']);
 		$this->file_ext = $this->get_extension($this->file_name);
 		$this->client_name = $this->file_name;
@@ -470,7 +454,7 @@ class CI_Upload {
 			$this->file_name = $this->_prep_filename($this->_file_name_override);
 
 			// If no extension was provided in the file_name config item, use the uploaded one
-			if (strpos($this->_file_name_override, '.') === FALSE)
+			if (!str_contains($this->_file_name_override, '.'))
 			{
 				$this->file_name .= $this->file_ext;
 			}
@@ -520,13 +504,13 @@ class CI_Upload {
 		// Remove white spaces in the name
 		if ($this->remove_spaces === TRUE)
 		{
-			$this->file_name = preg_replace('/\s+/', '_', $this->file_name);
+			$this->file_name = preg_replace('/\s+/', '_', (string) $this->file_name);
 		}
 
 		if ($this->file_ext_tolower && ($ext_length = strlen($this->file_ext)))
 		{
 			// file_ext was previously lower-cased by a get_extension() call
-			$this->file_name = substr($this->file_name, 0, -$ext_length) . $this->file_ext;
+			$this->file_name = substr((string) $this->file_name, 0, -$ext_length) . $this->file_ext;
 		}
 
 		/*
@@ -787,7 +771,7 @@ class CI_Upload {
 	{
 		$this->allowed_types = (is_array($types) || $types === '*')
 			? $types
-			: explode('|', $types);
+			: explode('|', (string) $types);
 		return $this;
 	}
 
@@ -1040,7 +1024,7 @@ class CI_Upload {
 		}
 
 		$ext = '';
-		if (strpos($filename, '.') !== FALSE)
+		if (str_contains($filename, '.'))
 		{
 			$parts = explode('.', $filename);
 			$ext = '.' . array_pop($parts);
@@ -1249,7 +1233,7 @@ class CI_Upload {
 		if (DIRECTORY_SEPARATOR !== '\\')
 		{
 			$cmd = function_exists('escapeshellarg')
-				? 'file --brief --mime ' . escapeshellarg($file['tmp_name']) . ' 2>&1'
+				? 'file --brief --mime ' . escapeshellarg((string) $file['tmp_name']) . ' 2>&1'
 				: 'file --brief --mime ' . $file['tmp_name'] . ' 2>&1';
 
 			if (function_usable('exec'))

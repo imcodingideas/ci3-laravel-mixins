@@ -246,7 +246,7 @@ class CI_Exceptions {
 		if ( !is_cli())
 		{
 			$filepath = str_replace('\\', '/', $filepath);
-			if (FALSE !== strpos($filepath, '/'))
+			if (str_contains($filepath, '/'))
 			{
 				$x = explode('/', $filepath);
 				$filepath = $x[count($x) - 2] . '/' . end($x);

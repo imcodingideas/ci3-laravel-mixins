@@ -118,21 +118,12 @@ class CI_URI {
                     $protocol = 'REQUEST_URI';
                 }
 
-				switch ($protocol)
-				{
-					case 'AUTO': // For BC purposes only
-					case 'REQUEST_URI':
-						$uri = $this->_parse_request_uri();
-						break;
-					case 'QUERY_STRING':
-						$uri = $this->_parse_query_string();
-						break;
-					case 'PATH_INFO':
-					default:
-						$uri = $_SERVER[$protocol]
-							?? $this->_parse_request_uri();
-						break;
-				}
+				$uri = match ($protocol) {
+                    'AUTO', 'REQUEST_URI' => $this->_parse_request_uri(),
+                    'QUERY_STRING' => $this->_parse_query_string(),
+                    default => $_SERVER[$protocol]
+							?? $this->_parse_request_uri(),
+                };
 			}
 
 			$this->_set_uri_string($uri);
@@ -210,11 +201,11 @@ class CI_URI {
 
 		if (isset($_SERVER['SCRIPT_NAME'][0]))
 		{
-			if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
+			if (str_starts_with($uri, $_SERVER['SCRIPT_NAME']))
 			{
 				$uri = substr($uri, strlen($_SERVER['SCRIPT_NAME']));
 			}
-			elseif (strpos($uri, dirname($_SERVER['SCRIPT_NAME'])) === 0)
+			elseif (str_starts_with($uri, dirname($_SERVER['SCRIPT_NAME'])))
 			{
 				$uri = substr($uri, strlen(dirname($_SERVER['SCRIPT_NAME'])));
 			}
@@ -222,7 +213,7 @@ class CI_URI {
 
 		// This section ensures that even on servers that require the URI to be in the query string (Nginx) a correct
 		// URI is found, and also fixes the QUERY_STRING server var and $_GET array.
-		if (trim($uri, '/') === '' && strncmp($query, '/', 1) === 0)
+		if (trim($uri, '/') === '' && str_starts_with($query, '/'))
 		{
 			$query = explode('?', $query, 2);
 			$uri = $query[0];
@@ -257,18 +248,18 @@ class CI_URI {
 	{
 		$uri = $_SERVER['QUERY_STRING'] ?? @getenv('QUERY_STRING');
 
-		if (trim($uri, '/') === '')
+		if (trim((string) $uri, '/') === '')
 		{
 			return '';
 		}
-		elseif (strncmp($uri, '/', 1) === 0)
+		elseif (str_starts_with((string) $uri, '/'))
 		{
-			$uri = explode('?', $uri, 2);
+			$uri = explode('?', (string) $uri, 2);
 			$_SERVER['QUERY_STRING'] = $uri[1] ?? '';
 			$uri = $uri[0];
 		}
 
-		parse_str($_SERVER['QUERY_STRING'], $_GET);
+		parse_str((string) $_SERVER['QUERY_STRING'], $_GET);
 
 		return $this->_remove_relative_directory($uri);
 	}
@@ -640,7 +631,7 @@ class CI_URI {
 	 */
 	public function ruri_string()
 	{
-		return ltrim(load_class('Router', 'core')->directory, '/') . implode('/', $this->rsegments);
+		return ltrim((string) load_class('Router', 'core')->directory, '/') . implode('/', $this->rsegments);
 	}
 
 }

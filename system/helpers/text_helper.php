@@ -64,14 +64,14 @@ if ( !function_exists('word_limiter'))
 	 */
 	function word_limiter($str, $limit = 100, $end_char = '&#8230;')
 	{
-		if (trim($str) === '')
+		if (trim((string) $str) === '')
 		{
 			return $str;
 		}
 
-		preg_match('/^\s*+(?:\S++\s*+){1,' . (int) $limit . '}/', $str, $matches);
+		preg_match('/^\s*+(?:\S++\s*+){1,' . (int) $limit . '}/', (string) $str, $matches);
 
-		if (strlen($str) === strlen($matches[0]))
+		if (strlen((string) $str) === strlen($matches[0]))
 		{
 			$end_char = '';
 		}
@@ -97,7 +97,7 @@ if ( !function_exists('character_limiter'))
 	 */
 	function character_limiter($str, $n = 500, $end_char = '&#8230;')
 	{
-		if (mb_strlen($str) < $n)
+		if (mb_strlen((string) $str) < $n)
 		{
 			return $str;
 		}
@@ -207,7 +207,7 @@ if ( !function_exists('entities_to_ascii'))
 	 */
 	function entities_to_ascii($str, $all = TRUE)
 	{
-		if (preg_match_all('/\&#(\d+)\;/', $str, $matches))
+		if (preg_match_all('/\&#(\d+)\;/', (string) $str, $matches))
 		{
 			for ($i = 0, $s = count($matches[0]); $i < $s; $i++)
 			{
@@ -280,16 +280,16 @@ if ( !function_exists('word_censor'))
 
 		foreach ($censored as $badword)
 		{
-			$badword = str_replace('\*', '\w*?', preg_quote($badword, '/'));
+			$badword = str_replace('\*', '\w*?', preg_quote((string) $badword, '/'));
 			if ($replacement !== '')
 			{
 				$str = preg_replace(
 				    "/({$delim})(" . $badword . ")({$delim})/i",
 				    "\\1{$replacement}\\3",
-				    $str
+				    (string) $str
 				);
 			}
-			elseif (preg_match_all("/{$delim}(" . $badword . "){$delim}/i", $str, $matches, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE))
+			elseif (preg_match_all("/{$delim}(" . $badword . "){$delim}/i", (string) $str, $matches, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE))
 			{
 				$matches = $matches[1];
 				for ($i = count($matches) - 1; $i >= 0; $i--)
@@ -305,7 +305,7 @@ if ( !function_exists('word_censor'))
 			}
 		}
 
-		return trim($str);
+		return trim((string) $str);
 	}
 }
 
@@ -425,7 +425,7 @@ if ( !function_exists('convert_accented_characters'))
 			$array_to = array_values($foreign_characters);
 		}
 
-		return preg_replace($array_from, $array_to, $str);
+		return preg_replace($array_from, (string) $array_to, $str);
 	}
 }
 
@@ -455,7 +455,7 @@ if ( !function_exists('word_wrap'))
 		$str = preg_replace('| +|', ' ', $str);
 
 		// Standardize newlines
-		if (strpos($str, "\r") !== FALSE)
+		if (str_contains((string) $str, "\r"))
 		{
 			$str = str_replace(["\r\n", "\r"], "\n", $str);
 		}
@@ -463,7 +463,7 @@ if ( !function_exists('word_wrap'))
 		// If the current word is surrounded by {unwrap} tags we'll
 		// strip the entire chunk and replace it with a marker.
 		$unwrap = [];
-		if (preg_match_all('|\{unwrap\}(.+?)\{/unwrap\}|s', $str, $matches))
+		if (preg_match_all('|\{unwrap\}(.+?)\{/unwrap\}|s', (string) $str, $matches))
 		{
 			for ($i = 0, $c = count($matches[0]); $i < $c; $i++)
 			{
@@ -475,7 +475,7 @@ if ( !function_exists('word_wrap'))
 		// Use PHP's native function to do the initial wordwrap.
 		// We set the cut flag to FALSE so that any individual words that are
 		// too long get left alone. In the next step we'll deal with them.
-		$str = wordwrap($str, $charlim, "\n", FALSE);
+		$str = wordwrap((string) $str, $charlim, "\n", FALSE);
 
 		// Split the string into individual lines of text and cycle through them
 		$output = '';
@@ -543,7 +543,7 @@ if ( !function_exists('ellipsize'))
 	function ellipsize($str, $max_length, $position = 1, $ellipsis = '&hellip;')
 	{
 		// Strip tags
-		$str = trim(strip_tags($str));
+		$str = trim(strip_tags((string) $str));
 
 		// Is the string long enough to ellipsize?
 		if (mb_strlen($str) <= $max_length)

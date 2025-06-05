@@ -177,7 +177,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
                 $this->dsn .= ';WSID=' . $this->WSID;
             }
 		}
-		elseif (preg_match('/QuotedId=(0|1)/', $this->dsn, $match))
+		elseif (preg_match('/QuotedId=(0|1)/', (string) $this->dsn, $match))
 		{
 			$this->_quoted_identifier = (bool) $match[1];
 		}
@@ -193,7 +193,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	 */
 	public function db_connect($persistent = FALSE)
 	{
-		if ( !empty($this->char_set) && preg_match('/utf[^8]*8/i', $this->char_set))
+		if ( !empty($this->char_set) && preg_match('/utf[^8]*8/i', (string) $this->char_set))
 		{
 			$this->options[PDO::SQLSRV_ENCODING_UTF8] = 1;
 		}
@@ -356,10 +356,10 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 			$orderby = $this->_compile_order_by();
 
 			// We have to strip the ORDER BY clause
-			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
+			$sql = trim(substr($sql, 0, strrpos($sql, (string) $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0 || strpos(implode(',', $this->qb_select), '*') !== FALSE)
+			if (count($this->qb_select) === 0 || str_contains(implode(',', $this->qb_select), '*'))
 			{
 				$select = '*'; // Inevitable
 			}
@@ -371,7 +371,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 					? '("[^\"]+")' : '(\[[^\]]+\])';
 				for ($i = 0, $c = count($this->qb_select); $i < $c; $i++)
 				{
-					$select[] = preg_match('/(?:\s|\.)' . $field_regexp . '$/i', $this->qb_select[$i], $m)
+					$select[] = preg_match('/(?:\s|\.)' . $field_regexp . '$/i', (string) $this->qb_select[$i], $m)
 						? $m[1] : $this->qb_select[$i];
 				}
 				$select = implode(', ', $select);
