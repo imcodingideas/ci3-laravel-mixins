@@ -174,7 +174,7 @@ function &DB($params = '', $query_builder_override = NULL)
 		if ( !class_exists('CI_DB', FALSE))
 		{
 			/**
-			 * CI_DB
+			 * CI_DB.
 			 *
 			 * Acts as an alias for both CI_DB_driver and CI_DB_query_builder.
 			 *
@@ -189,7 +189,7 @@ function &DB($params = '', $query_builder_override = NULL)
 	elseif ( !class_exists('CI_DB', FALSE))
 	{
 		/**
-		 * CI_DB
+		 * CI_DB.
 		 *
 		 * Acts as an alias for CI_DB_driver when query builder is disabled.
 		 *
