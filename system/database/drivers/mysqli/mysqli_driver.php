@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * MySQLi Database Adapter Class
@@ -144,7 +144,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 
 		$this->_mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
 
-		if (isset($this->stricton))
+		if ($this->stricton !== null)
 		{
 			if ($this->stricton)
 			{
@@ -169,11 +169,21 @@ class CI_DB_mysqli_driver extends CI_DB {
 		if (is_array($this->encrypt))
 		{
 			$ssl = array();
-			empty($this->encrypt['ssl_key'])    OR $ssl['key']    = $this->encrypt['ssl_key'];
-			empty($this->encrypt['ssl_cert'])   OR $ssl['cert']   = $this->encrypt['ssl_cert'];
-			empty($this->encrypt['ssl_ca'])     OR $ssl['ca']     = $this->encrypt['ssl_ca'];
-			empty($this->encrypt['ssl_capath']) OR $ssl['capath'] = $this->encrypt['ssl_capath'];
-			empty($this->encrypt['ssl_cipher']) OR $ssl['cipher'] = $this->encrypt['ssl_cipher'];
+			if (!empty($this->encrypt['ssl_key'])) {
+                $ssl['key']    = $this->encrypt['ssl_key'];
+            }
+			if (!empty($this->encrypt['ssl_cert'])) {
+                $ssl['cert']   = $this->encrypt['ssl_cert'];
+            }
+			if (!empty($this->encrypt['ssl_ca'])) {
+                $ssl['ca']     = $this->encrypt['ssl_ca'];
+            }
+			if (!empty($this->encrypt['ssl_capath'])) {
+                $ssl['capath'] = $this->encrypt['ssl_capath'];
+            }
+			if (!empty($this->encrypt['ssl_cipher'])) {
+                $ssl['cipher'] = $this->encrypt['ssl_cipher'];
+            }
 
 			if (isset($this->encrypt['ssl_verify']))
 			{
@@ -195,7 +205,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 				}
 			}
 
-			if ( ! empty($ssl))
+			if ( $ssl !== [])
 			{
 				$client_flags |= MYSQLI_CLIENT_SSL;
 				$this->_mysqli->ssl_set(

@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Cookie Helpers
@@ -88,7 +88,9 @@ if ( ! function_exists('get_cookie'))
 	 */
 	function get_cookie($index, $xss_clean = NULL)
 	{
-		is_bool($xss_clean) OR $xss_clean = (config_item('global_xss_filtering') === TRUE);
+		if (!is_bool($xss_clean)) {
+            $xss_clean = (config_item('global_xss_filtering') === TRUE);
+        }
 		$prefix = isset($_COOKIE[$index]) ? '' : config_item('cookie_prefix');
 		return get_instance()->input->cookie($prefix.$index, $xss_clean);
 	}

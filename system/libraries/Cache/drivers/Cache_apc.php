@@ -36,7 +36,7 @@
  * @since	Version 2.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter APC Caching Class
@@ -177,7 +177,7 @@ class CI_Cache_apc extends CI_Driver {
 	public function get_metadata($id)
 	{
 		$cache_info = apc_cache_info('user', FALSE);
-		if (empty($cache_info) OR empty($cache_info['cache_list']))
+		if ($cache_info === [] || empty($cache_info['cache_list']))
 		{
 			return FALSE;
 		}

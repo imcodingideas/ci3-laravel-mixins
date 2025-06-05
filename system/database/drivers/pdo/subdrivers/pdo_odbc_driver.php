@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO ODBC Database Adapter Class
@@ -53,7 +53,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $hostname;
+    public $HOSTNAME;
+    public $port;
+    public $PORT;
+    public $DSN;
+    public $database;
+    public $DRIVER;
+    public $DATABASE;
+    public $PROTOCOL;
+    public $dbprefix;
+    public $_like_escape_chr;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -113,7 +125,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 			// Pre-defined DSN
 			if (empty($this->hostname) && empty($this->HOSTNAME) && empty($this->port) && empty($this->PORT))
 			{
-				if (isset($this->DSN))
+				if (property_exists($this, 'DSN') && $this->DSN !== null)
 				{
 					$this->dsn .= 'DSN='.$this->DSN;
 				}
@@ -126,9 +138,9 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 			}
 
 			// If the DSN is not pre-configured - try to build an IBM DB2 connection string
-			$this->dsn .= 'DRIVER='.(isset($this->DRIVER) ? '{'.$this->DRIVER.'}' : '{IBM DB2 ODBC DRIVER}').';';
+			$this->dsn .= 'DRIVER='.(property_exists($this, 'DRIVER') && $this->DRIVER !== null ? '{'.$this->DRIVER.'}' : '{IBM DB2 ODBC DRIVER}').';';
 
-			if (isset($this->DATABASE))
+			if (property_exists($this, 'DATABASE') && $this->DATABASE !== null)
 			{
 				$this->dsn .= 'DATABASE='.$this->DATABASE.';';
 			}
@@ -137,7 +149,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 				$this->dsn .= 'DATABASE='.$this->database.';';
 			}
 
-			if (isset($this->HOSTNAME))
+			if (property_exists($this, 'HOSTNAME') && $this->HOSTNAME !== null)
 			{
 				$this->dsn .= 'HOSTNAME='.$this->HOSTNAME.';';
 			}
@@ -146,7 +158,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 				$this->dsn .= 'HOSTNAME='.(empty($this->hostname) ? '127.0.0.1;' : $this->hostname.';');
 			}
 
-			if (isset($this->PORT))
+			if (property_exists($this, 'PORT') && $this->PORT !== null)
 			{
 				$this->dsn .= 'PORT='.$this->port.';';
 			}
@@ -155,7 +167,7 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 				$this->dsn .= ';PORT='.$this->port.';';
 			}
 
-			$this->dsn .= 'PROTOCOL='.(isset($this->PROTOCOL) ? $this->PROTOCOL.';' : 'TCPIP;');
+			$this->dsn .= 'PROTOCOL='.(property_exists($this, 'PROTOCOL') && $this->PROTOCOL !== null ? $this->PROTOCOL.';' : 'TCPIP;');
 		}
 	}
 

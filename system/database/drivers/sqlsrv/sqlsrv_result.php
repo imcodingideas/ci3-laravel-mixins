@@ -36,7 +36,7 @@
  * @since	Version 2.0.3
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * SQLSRV Result Class
@@ -115,7 +115,7 @@ class CI_DB_sqlsrv_result extends CI_DB_result {
 	public function list_fields()
 	{
 		$field_names = array();
-		foreach (sqlsrv_field_metadata($this->result_id) as $offset => $field)
+		foreach (sqlsrv_field_metadata($this->result_id) as $field)
 		{
 			$field_names[] = $field['Name'];
 		}

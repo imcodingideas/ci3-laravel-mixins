@@ -36,7 +36,7 @@
  * @since	Version 1.4.1
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * oci8 Result Class
@@ -193,7 +193,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 	 */
 	protected function _fetch_assoc()
 	{
-		$id = ($this->curs_id) ? $this->curs_id : $this->stmt_id;
+		$id = $this->curs_id ?: $this->stmt_id;
 		return oci_fetch_assoc($id);
 	}
 
@@ -213,7 +213,7 @@ class CI_DB_oci8_result extends CI_DB_result {
 			? oci_fetch_object($this->curs_id)
 			: oci_fetch_object($this->stmt_id);
 
-		if ($class_name === 'stdClass' OR ! $row)
+		if ($class_name === 'stdClass' || ! $row)
 		{
 			return $row;
 		}

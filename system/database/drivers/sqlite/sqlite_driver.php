@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * SQLite Database Adapter Class
@@ -84,7 +84,9 @@ class CI_DB_sqlite_driver extends CI_DB {
 			? sqlite_popen($this->database, 0666, $error)
 			: sqlite_open($this->database, 0666, $error);
 
-		isset($error) && log_message('error', $error);
+		if (isset($error)) {
+            log_message('error', $error);
+        }
 
 		return $conn_id;
 	}

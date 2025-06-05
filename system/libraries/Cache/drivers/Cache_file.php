@@ -36,7 +36,7 @@
  * @since	Version 2.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter File Caching Class
@@ -121,7 +121,7 @@ class CI_Cache_file extends CI_Driver {
 	 */
 	public function delete($id)
 	{
-		return is_file($this->_cache_path.$id) ? unlink($this->_cache_path.$id) : FALSE;
+		return is_file($this->_cache_path.$id) && unlink($this->_cache_path.$id);
 	}
 
 	// ------------------------------------------------------------------------
@@ -275,11 +275,12 @@ class CI_Cache_file extends CI_Driver {
 
 		$data = unserialize(file_get_contents($this->_cache_path.$id));
 
-		if ($data['ttl'] > 0 && time() > $data['time'] + $data['ttl'])
-		{
-			file_exists($this->_cache_path.$id) && unlink($this->_cache_path.$id);
-			return FALSE;
-		}
+		if ($data['ttl'] > 0 && time() > $data['time'] + $data['ttl']) {
+            if (file_exists($this->_cache_path.$id)) {
+                unlink($this->_cache_path.$id);
+            }
+            return FALSE;
+        }
 
 		return $data;
 	}

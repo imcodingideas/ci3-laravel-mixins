@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO PostgreSQL Forge Class
@@ -48,6 +48,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_pdo_pgsql_forge extends CI_DB_pdo_forge {
 
 	/**
+     * @var string
+     */
+    public $create_table_if;
+    /**
 	 * DROP TABLE IF statement
 	 *
 	 * @var	string

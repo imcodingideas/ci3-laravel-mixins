@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Security Class
@@ -246,7 +246,7 @@ class CI_Security {
 		$this->_csrf_set_hash();
 		$this->csrf_set_cookie();
 
-		if ($valid !== TRUE)
+		if (!$valid)
 		{
 			$this->csrf_show_error();
 		}
@@ -457,7 +457,7 @@ class CI_Security {
 		}
 		else
 		{
-			$str = str_replace(array('<?', '?'.'>'), array('&lt;?', '?&gt;'), $str);
+			$str = str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $str);
 		}
 
 		/*
@@ -629,7 +629,7 @@ class CI_Security {
 	 */
 	public function get_random_bytes($length)
 	{
-		if (empty($length) OR ! ctype_digit((string) $length))
+		if (empty($length) || ! ctype_digit((string) $length))
 		{
 			return FALSE;
 		}
@@ -656,17 +656,18 @@ class CI_Security {
 			return $output;
 		}
 
-		if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== FALSE)
-		{
-			// Try not to waste entropy ...
-			is_php('5.4') && stream_set_chunk_size($fp, $length);
-			$output = fread($fp, $length);
-			fclose($fp);
-			if ($output !== FALSE)
+		if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== FALSE) {
+            // Try not to waste entropy ...
+            if (is_php('5.4')) {
+                stream_set_chunk_size($fp, $length);
+            }
+            $output = fread($fp, $length);
+            fclose($fp);
+            if ($output !== FALSE)
 			{
 				return $output;
 			}
-		}
+        }
 
 		if (function_exists('openssl_random_pseudo_bytes'))
 		{
@@ -704,7 +705,9 @@ class CI_Security {
 
 		static $_entities;
 
-		isset($charset) OR $charset = $this->charset;
+		if (!isset($charset)) {
+            $charset = $this->charset;
+        }
 		$flag = is_php('5.4')
 			? ENT_COMPAT | ENT_HTML5
 			: ENT_COMPAT;
@@ -913,9 +916,7 @@ class CI_Security {
 
 				if (
 					// Is it indeed an "evil" attribute?
-					preg_match($is_evil_pattern, $attribute['name'][0])
-					// Or does it have an equals sign, but no value and not quoted? Strip that too!
-					OR (trim($attribute['value'][0]) === '')
+					preg_match($is_evil_pattern, $attribute['name'][0]) || trim($attribute['value'][0]) === ''
 				)
 				{
 					$attributes[] = 'xss=removed';
@@ -929,7 +930,7 @@ class CI_Security {
 			}
 			while ($matches['attributes'] !== '');
 
-			$attributes = empty($attributes)
+			$attributes = $attributes === []
 				? ''
 				: ' '.implode(' ', $attributes);
 			return '<'.$matches['slash'].$matches['tagName'].$attributes.'>';

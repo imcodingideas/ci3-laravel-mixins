@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter URL Helpers
@@ -363,14 +363,7 @@ if ( ! function_exists('safe_mailto'))
 			$output .= "\tl[".$i."] = '".$x[$i]."';\n";
 		}
 
-		$output .= "\n\tfor (var i = l.length-1; i >= 0; i=i-1) {\n"
-			."\t\tif (l[i].substring(0, 1) === '|') document.write(\"&#\"+unescape(l[i].substring(1))+\";\");\n"
-			."\t\telse document.write(unescape(l[i]));\n"
-			."\t}\n"
-			."\t//]]>\n"
-			.'</script>';
-
-		return $output;
+		return $output . ("\n\tfor (var i = l.length-1; i >= 0; i=i-1) {\n" . "\t\tif (l[i].substring(0, 1) === '|') document.write(\"&#\"+unescape(l[i].substring(1))+\";\");\n" . "\t\telse document.write(unescape(l[i]));\n" . "\t}\n" . "\t//]]>\n" . '</script>');
 	}
 }
 
@@ -444,14 +437,14 @@ if ( ! function_exists('prep_url'))
 	 */
 	function prep_url($str = '')
 	{
-		if ($str === 'http://' OR $str === '')
+		if ($str === 'http://' || $str === '')
 		{
 			return '';
 		}
 
 		$url = parse_url($str);
 
-		if ( ! $url OR ! isset($url['scheme']))
+		if ( ! $url || ! isset($url['scheme']))
 		{
 			return 'http://'.$str;
 		}
@@ -542,7 +535,7 @@ if ( ! function_exists('redirect'))
 		{
 			$method = 'refresh';
 		}
-		elseif ($method !== 'refresh' && (empty($code) OR ! is_numeric($code)))
+		elseif ($method !== 'refresh' && (empty($code) || ! is_numeric($code)))
 		{
 			if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1')
 			{

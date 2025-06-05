@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Session Redis Driver
@@ -134,19 +134,20 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 		{
 			log_message('error', 'Session: No Redis save path configured.');
 		}
-		elseif (preg_match('#(?:tcp://)?([^:?]+)(?:\:(\d+))?(\?.+)?#', $this->_config['save_path'], $matches))
-		{
-			isset($matches[3]) OR $matches[3] = ''; // Just to avoid undefined index notices below
-			$this->_config['save_path'] = array(
+		elseif (preg_match('#(?:tcp://)?([^:?]+)(?:\:(\d+))?(\?.+)?#', $this->_config['save_path'], $matches)) {
+            if (!isset($matches[3])) {
+                $matches[3] = '';
+            }
+            // Just to avoid undefined index notices below
+            $this->_config['save_path'] = array(
 				'host' => $matches[1],
 				'port' => empty($matches[2]) ? NULL : $matches[2],
 				'password' => preg_match('#auth=([^\s&]+)#', $matches[3], $match) ? $match[1] : NULL,
 				'database' => preg_match('#database=(\d+)#', $matches[3], $match) ? (int) $match[1] : NULL,
 				'timeout' => preg_match('#timeout=(\d+\.\d+)#', $matches[3], $match) ? (float) $match[1] : NULL
 			);
-
-			preg_match('#prefix=([^\s&]+)#', $matches[3], $match) && $this->_key_prefix = $match[1];
-		}
+            preg_match('#prefix=([^\s&]+)#', $matches[3], $match) && $this->_key_prefix = $match[1];
+        }
 		else
 		{
 			log_message('error', 'Session: Invalid Redis save path format: '.$this->_config['save_path']);
@@ -211,7 +212,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 	 */
 	public function read($session_id)
 	{
-		if (isset($this->_redis) && $this->_get_lock($session_id))
+		if ($this->_redis !== null && $this->_get_lock($session_id))
 		{
 			// Needed by write() to detect session_regenerate_id() calls
 			$this->_session_id = $session_id;
@@ -242,14 +243,14 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 	 */
 	public function write($session_id, $session_data)
 	{
-		if ( ! isset($this->_redis, $this->_lock_key))
+		if ( $this->_redis === null && $this->_lock_key === null)
 		{
 			return $this->_failure;
 		}
 		// Was the ID regenerated?
 		elseif ($session_id !== $this->_session_id)
 		{
-			if ( ! $this->_release_lock() OR ! $this->_get_lock($session_id))
+			if ( ! $this->_release_lock() || ! $this->_get_lock($session_id))
 			{
 				return $this->_failure;
 			}
@@ -259,7 +260,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 		}
 
 		$this->_redis->{$this->_setTimeout_name}($this->_lock_key, 300);
-		if ($this->_fingerprint !== ($fingerprint = md5($session_data)) OR $this->_key_exists === FALSE)
+		if ($this->_fingerprint !== $fingerprint = md5($session_data) || $this->_key_exists === FALSE)
 		{
 			if ($this->_redis->set($this->_key_prefix.$session_id, $session_data, $this->_config['expiration']))
 			{
@@ -287,7 +288,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 	 */
 	public function close()
 	{
-		if (isset($this->_redis))
+		if ($this->_redis !== null)
 		{
 			try {
 				if ($this->_redis->ping() === $this->_ping_success)
@@ -323,7 +324,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 	 */
 	public function destroy($session_id)
 	{
-		if (isset($this->_redis, $this->_lock_key))
+		if ($this->_redis !== null && $this->_lock_key !== null)
 		{
 			if (($result = $this->_redis->{$this->_delete_name}($this->_key_prefix.$session_id)) !== 1)
 			{
@@ -458,7 +459,7 @@ class CI_Session_redis_driver extends CI_Session_driver implements CI_Session_dr
 	 */
 	protected function _release_lock()
 	{
-		if (isset($this->_redis, $this->_lock_key) && $this->_lock)
+		if ($this->_redis !== null && $this->_lock_key !== null && $this->_lock)
 		{
 			if ( ! $this->_redis->{$this->_delete_name}($this->_lock_key))
 			{

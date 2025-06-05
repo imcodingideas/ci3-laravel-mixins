@@ -1,8 +1,13 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 class Posts extends CI_Controller {
 
+    public $form_validation;
+    public $input;
+    public $Post_model;
+    public $output;
+	
     public function __construct()
     {
         parent::__construct();

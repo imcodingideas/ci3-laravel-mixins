@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Common Functions
@@ -92,7 +92,7 @@ if ( ! function_exists('is_really_writable'))
 	function is_really_writable($file)
 	{
 		// If we're on a Unix server with safe_mode off we call is_writable
-		if (DIRECTORY_SEPARATOR === '/' && (is_php('5.4') OR ! ini_get('safe_mode')))
+		if (DIRECTORY_SEPARATOR === '/' && (is_php('5.4') || ! ini_get('safe_mode')))
 		{
 			return is_writable($file);
 		}
@@ -113,7 +113,7 @@ if ( ! function_exists('is_really_writable'))
 			@unlink($file);
 			return TRUE;
 		}
-		elseif ( ! is_file($file) OR ($fp = @fopen($file, 'ab')) === FALSE)
+		elseif ( ! is_file($file) || $fp = @fopen($file, 'ab') === FALSE)
 		{
 			return FALSE;
 		}
@@ -263,7 +263,7 @@ if ( ! function_exists('get_config'))
 			}
 
 			// Does the $config array exist in the file?
-			if ( ! isset($config) OR ! is_array($config))
+			if ( ! isset($config) || ! is_array($config))
 			{
 				set_status_header(503);
 				echo 'Your config file does not appear to be formatted correctly.';
@@ -379,7 +379,7 @@ if ( ! function_exists('is_cli'))
 	 */
 	function is_cli()
 	{
-		return (PHP_SAPI === 'cli' OR defined('STDIN'));
+		return (PHP_SAPI === 'cli' || defined('STDIN'));
 	}
 }
 
@@ -489,15 +489,16 @@ if ( ! function_exists('set_status_header'))
 			return;
 		}
 
-		if (empty($code) OR ! is_numeric($code))
+		if (empty($code) || ! is_numeric($code))
 		{
 			show_error('Status codes must be numeric', 500);
 		}
 
-		if (empty($text))
-		{
-			is_int($code) OR $code = (int) $code;
-			$stati = array(
+		if (empty($text)) {
+            if (!is_int($code)) {
+                $code = (int) $code;
+            }
+            $stati = array(
 				100	=> 'Continue',
 				101	=> 'Switching Protocols',
 
@@ -549,8 +550,7 @@ if ( ! function_exists('set_status_header'))
 				505	=> 'HTTP Version Not Supported',
 				511	=> 'Network Authentication Required',
 			);
-
-			if (isset($stati[$code]))
+            if (isset($stati[$code]))
 			{
 				$text = $stati[$code];
 			}
@@ -558,7 +558,7 @@ if ( ! function_exists('set_status_header'))
 			{
 				show_error('No status text available. Please check your status code number or supply your own message text.', 500);
 			}
-		}
+        }
 
 		if (strpos(PHP_SAPI, 'cgi') === 0)
 		{
@@ -619,7 +619,7 @@ if ( ! function_exists('_error_handler'))
 		$_error->log_exception($severity, $message, $filepath, $line);
 
 		// Should we display the error?
-		if (str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')))
+		if (str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')) !== '' && str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')) !== '0')
 		{
 			$_error->show_php_error($severity, $message, $filepath, $line);
 		}
@@ -653,9 +653,11 @@ if ( ! function_exists('_exception_handler'))
 		$_error =& load_class('Exceptions', 'core');
 		$_error->log_exception('error', 'Exception: '.$exception->getMessage(), $exception->getFile(), $exception->getLine());
 
-		is_cli() OR set_status_header(500);
+		if (!is_cli()) {
+            set_status_header(500);
+        }
 		// Should we display the error?
-		if (str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')))
+		if (str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')) !== '' && str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')) !== '0')
 		{
 			$_error->show_exception($exception);
 		}

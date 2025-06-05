@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter CAPTCHA Helper
@@ -101,13 +101,13 @@ if ( ! function_exists('create_captcha'))
 			return FALSE;
 		}
 
-		if ($img_path === '' OR $img_url === '')
+		if ($img_path === '' || $img_url === '')
 		{
 			log_message('error', 'create_captcha(): $img_path and $img_url are required.');
 			return FALSE;
 		}
 
-		if ( ! is_dir($img_path) OR ! is_really_writable($img_path))
+		if ( ! is_dir($img_path) || ! is_really_writable($img_path))
 		{
 			log_message('error', "create_captcha(): '{$img_path}' is not a dir, nor is it writable.");
 			return FALSE;
@@ -160,7 +160,7 @@ if ( ! function_exists('create_captcha'))
 			}
 		}
 
-		if (empty($word))
+		if ($word === '' || $word === '0')
 		{
 			// Nobody will have a larger character pool than
 			// 256 characters, but let's handle it just in case ...
@@ -223,7 +223,7 @@ if ( ! function_exists('create_captcha'))
 			}
 		}
 
-		if (empty($word))
+		if ($word === '' || $word === '0')
 		{
 			for ($i = 0; $i < $word_length; $i++)
 			{
@@ -253,12 +253,16 @@ if ( ! function_exists('create_captcha'))
 		//  Assign colors
 		// ----------------------------------
 
-		is_array($colors) OR $colors = $defaults['colors'];
+		if (!is_array($colors)) {
+            $colors = $defaults['colors'];
+        }
 
 		foreach (array_keys($defaults['colors']) as $key)
 		{
 			// Check for a possible missing value
-			is_array($colors[$key]) OR $colors[$key] = $defaults['colors'][$key];
+			if (!is_array($colors[$key])) {
+                $colors[$key] = $defaults['colors'][$key];
+            }
 			$colors[$key] = imagecolorallocate($im, $colors[$key][0], $colors[$key][1], $colors[$key][2]);
 		}
 
@@ -293,18 +297,19 @@ if ( ! function_exists('create_captcha'))
 		// -----------------------------------
 
 		$use_font = ($font_path !== '' && file_exists($font_path) && function_exists('imagettftext'));
-		if ($use_font === FALSE)
-		{
-			($font_size > 5) && $font_size = 5;
-			$x = mt_rand(0, $img_width / ($length / 3));
-			$y = 0;
-		}
-		else
-		{
-			($font_size > 30) && $font_size = 30;
-			$x = mt_rand(0, $img_width / ($length / 1.5));
-			$y = $font_size + 2;
-		}
+		if ($use_font === FALSE) {
+            if ($font_size > 5) {
+                $font_size = 5;
+            }
+            $x = mt_rand(0, $img_width / ($length / 3));
+            $y = 0;
+        } else {
+            if ($font_size > 30) {
+                $font_size = 30;
+            }
+            $x = mt_rand(0, $img_width / ($length / 1.5));
+            $y = $font_size + 2;
+        }
 
 		for ($i = 0; $i < $length; $i++)
 		{

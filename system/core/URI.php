@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * URI Class
@@ -51,7 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_URI {
 
-	/**
+	public $config;
+    /**
 	 * List of cached URI segments
 	 *
 	 * @var	array
@@ -103,7 +104,7 @@ class CI_URI {
 
 		// If query strings are enabled, we don't need to parse any segments.
 		// However, they don't make sense under CLI.
-		if (is_cli() OR $this->config->item('enable_query_strings') !== TRUE)
+		if (is_cli() || $this->config->item('enable_query_strings') !== TRUE)
 		{
 			$this->_permitted_uri_chars = $this->config->item('permitted_uri_chars');
 
@@ -115,7 +116,9 @@ class CI_URI {
 			else
 			{
 				$protocol = $this->config->item('uri_protocol');
-				empty($protocol) && $protocol = 'REQUEST_URI';
+				if (empty($protocol)) {
+                    $protocol = 'REQUEST_URI';
+                }
 
 				switch ($protocol)
 				{
@@ -212,11 +215,11 @@ class CI_URI {
 		{
 			if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
 			{
-				$uri = (string) substr($uri, strlen($_SERVER['SCRIPT_NAME']));
+				$uri = substr($uri, strlen($_SERVER['SCRIPT_NAME']));
 			}
 			elseif (strpos($uri, dirname($_SERVER['SCRIPT_NAME'])) === 0)
 			{
-				$uri = (string) substr($uri, strlen(dirname($_SERVER['SCRIPT_NAME'])));
+				$uri = substr($uri, strlen(dirname($_SERVER['SCRIPT_NAME'])));
 			}
 		}
 
@@ -235,7 +238,7 @@ class CI_URI {
 
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 
-		if ($uri === '/' OR $uri === '')
+		if ($uri === '/' || $uri === '')
 		{
 			return '/';
 		}
@@ -285,7 +288,7 @@ class CI_URI {
 	protected function _parse_argv()
 	{
 		$args = array_slice($_SERVER['argv'], 1);
-		return $args ? implode('/', $args) : '';
+		return $args !== [] ? implode('/', $args) : '';
 	}
 
 	// --------------------------------------------------------------------
@@ -304,7 +307,7 @@ class CI_URI {
 		$tok = strtok($uri, '/');
 		while ($tok !== FALSE)
 		{
-			if (( ! empty($tok) OR $tok === '0') && $tok !== '..')
+			if ($tok !== '..')
 			{
 				$uris[] = $tok;
 			}
@@ -454,7 +457,7 @@ class CI_URI {
 		$retval = array();
 		foreach ($segments as $seg)
 		{
-			if ($i % 2)
+			if ($i % 2 !== 0)
 			{
 				$retval[$lastval] = $seg;
 			}
@@ -479,7 +482,9 @@ class CI_URI {
 		}
 
 		// Cache the array for reuse
-		isset($this->keyval[$which]) OR $this->keyval[$which] = array();
+		if (!isset($this->keyval[$which])) {
+            $this->keyval[$which] = array();
+        }
 		$this->keyval[$which][$n] = $retval;
 		return $retval;
 	}

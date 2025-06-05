@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Router Class
@@ -51,7 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_Router {
 
-	/**
+	public $uri;
+    /**
 	 * CI_Config class object
 	 *
 	 * @var	object
@@ -130,15 +131,20 @@ class CI_Router {
 		$this->enable_query_strings = ( ! is_cli() && $this->config->item('enable_query_strings') === TRUE);
 
 		// If a directory override is configured, it has to be set before any dynamic routing logic
-		is_array($routing) && isset($routing['directory']) && $this->set_directory($routing['directory']);
+		if (is_array($routing) && isset($routing['directory'])) {
+            $this->set_directory($routing['directory']);
+        }
 		$this->_set_routing();
 
 		// Set any routing overrides that may exist in the main index file
-		if (is_array($routing))
-		{
-			empty($routing['controller']) OR $this->set_class($routing['controller']);
-			empty($routing['function'])   OR $this->set_method($routing['function']);
-		}
+		if (is_array($routing)) {
+            if (!empty($routing['controller'])) {
+                $this->set_class($routing['controller']);
+            }
+            if (!empty($routing['function'])) {
+                $this->set_method($routing['function']);
+            }
+        }
 
 		log_message('info', 'Router Class Initialized');
 	}
@@ -169,13 +175,16 @@ class CI_Router {
 		}
 
 		// Validate & get reserved routes
-		if (isset($route) && is_array($route))
-		{
-			isset($route['default_controller']) && $this->default_controller = $route['default_controller'];
-			isset($route['translate_uri_dashes']) && $this->translate_uri_dashes = $route['translate_uri_dashes'];
-			unset($route['default_controller'], $route['translate_uri_dashes']);
-			$this->routes = $route;
-		}
+		if (isset($route) && is_array($route)) {
+            if (isset($route['default_controller'])) {
+                $this->default_controller = $route['default_controller'];
+            }
+            if (isset($route['translate_uri_dashes'])) {
+                $this->translate_uri_dashes = $route['translate_uri_dashes'];
+            }
+            unset($route['default_controller'], $route['translate_uri_dashes']);
+            $this->routes = $route;
+        }
 
 		// Are query strings enabled in the config file? Normally CI doesn't utilize query strings
 		// since URI segments are more search-engine friendly, but they can optionally be used.
@@ -183,7 +192,7 @@ class CI_Router {
 		if ($this->enable_query_strings)
 		{
 			// If the directory is set at this time, it means an override exists, so skip the checks
-			if ( ! isset($this->directory))
+			if ( $this->directory === null)
 			{
 				$_d = $this->config->item('directory_trigger');
 				$_d = isset($_GET[$_d]) ? trim($_GET[$_d], " \t\n\r\0\x0B/") : '';
@@ -333,7 +342,7 @@ class CI_Router {
 	protected function _validate_request($segments)
 	{
 		$c = count($segments);
-		$directory_override = isset($this->directory);
+		$directory_override = $this->directory !== null;
 
 		// Loop through our segments and return as soon as a controller
 		// is found or when such a directory doesn't exist
@@ -487,7 +496,7 @@ class CI_Router {
 	 */
 	public function set_directory($dir, $append = FALSE)
 	{
-		if ($append !== TRUE OR empty($this->directory))
+		if ($append !== TRUE || empty($this->directory))
 		{
 			$this->directory = str_replace('.', '', trim($dir, '/')).'/';
 		}

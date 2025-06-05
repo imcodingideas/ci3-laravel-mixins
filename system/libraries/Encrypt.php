@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Encryption Class
@@ -181,7 +181,7 @@ class CI_Encrypt {
 	 */
 	public function decode($string, $key = '')
 	{
-		if (preg_match('/[^a-zA-Z0-9\/\+=]/', $string) OR base64_encode(base64_decode($string)) !== $string)
+		if (preg_match('/[^a-zA-Z0-9\/\+=]/', $string) || base64_encode(base64_decode($string)) !== $string)
 		{
 			return FALSE;
 		}
@@ -507,13 +507,14 @@ class CI_Encrypt {
 	 */
 	protected static function substr($str, $start, $length = NULL)
 	{
-		if (defined('MB_OVERLOAD_STRING'))
-		{
-			// mb_substr($str, $start, null, '8bit') returns an empty
-			// string on PHP 5.3
-			isset($length) OR $length = ($start >= 0 ? self::strlen($str) - $start : -$start);
-			return mb_substr($str, $start, $length, '8bit');
-		}
+		if (defined('MB_OVERLOAD_STRING')) {
+            // mb_substr($str, $start, null, '8bit') returns an empty
+            // string on PHP 5.3
+            if (!isset($length)) {
+                $length = ($start >= 0 ? self::strlen($str) - $start : -$start);
+            }
+            return mb_substr($str, $start, $length, '8bit');
+        }
 
 		return isset($length)
 			? substr($str, $start, $length)

@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Postgre Forge Class
@@ -50,6 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_DB_postgre_forge extends CI_DB_forge {
 
 	/**
+     * @var string
+     */
+    public $create_table_if;
+    /**
 	 * UNSIGNED support
 	 *
 	 * @var	array

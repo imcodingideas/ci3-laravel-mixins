@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Interbase/Firebird Result Class
@@ -145,7 +145,7 @@ class CI_DB_ibase_result extends CI_DB_result {
 	{
 		$row = ibase_fetch_object($this->result_id, IBASE_FETCH_BLOBS);
 
-		if ($class_name === 'stdClass' OR ! $row)
+		if ($class_name === 'stdClass' || ! $row)
 		{
 			return $row;
 		}

@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * User Agent Class
@@ -56,7 +56,7 @@ class CI_User_agent {
 	 *
 	 * @var string
 	 */
-	public $agent = NULL;
+	public $agent;
 
 	/**
 	 * Flag for if the user-agent belongs to a browser
@@ -205,7 +205,7 @@ class CI_User_agent {
 			$found = TRUE;
 		}
 
-		if ($found !== TRUE)
+		if (!$found)
 		{
 			return FALSE;
 		}
@@ -490,7 +490,7 @@ class CI_User_agent {
 	 */
 	public function is_referral()
 	{
-		if ( ! isset($this->referer))
+		if ( $this->referer === null)
 		{
 			if (empty($_SERVER['HTTP_REFERER']))
 			{

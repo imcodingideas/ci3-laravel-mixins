@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Zip Compression Class
@@ -120,7 +120,9 @@ class CI_Zip {
 	 */
 	public function __construct()
 	{
-		isset(self::$func_overload) OR self::$func_overload = ( ! is_php('8.0') && extension_loaded('mbstring') && @ini_get('mbstring.func_overload'));
+		if (!isset(self::$func_overload)) {
+            self::$func_overload = ( ! is_php('8.0') && extension_loaded('mbstring') && @ini_get('mbstring.func_overload'));
+        }
 
 		$this->now = time();
 		log_message('info', 'Zip Compression Class Initialized');
@@ -519,13 +521,14 @@ class CI_Zip {
 	 */
 	protected static function substr($str, $start, $length = NULL)
 	{
-		if (self::$func_overload)
-		{
-			// mb_substr($str, $start, null, '8bit') returns an empty
-			// string on PHP 5.3
-			isset($length) OR $length = ($start >= 0 ? self::strlen($str) - $start : -$start);
-			return mb_substr($str, $start, $length, '8bit');
-		}
+		if (self::$func_overload) {
+            // mb_substr($str, $start, null, '8bit') returns an empty
+            // string on PHP 5.3
+            if (!isset($length)) {
+                $length = ($start >= 0 ? self::strlen($str) - $start : -$start);
+            }
+            return mb_substr($str, $start, $length, '8bit');
+        }
 
 		return isset($length)
 			? substr($str, $start, $length)

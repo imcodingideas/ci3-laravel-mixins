@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PHP ext/standard compatibility package
@@ -60,15 +60,14 @@ if (is_php('5.5'))
 if ( ! function_exists('array_column'))
 {
 	/**
-	 * array_column()
-	 *
-	 * @link	http://php.net/array_column
-	 * @param	array	$array
-	 * @param	mixed	$column_key
-	 * @param	mixed	$index_key
-	 * @return	array
-	 */
-	function array_column(array $array, $column_key, $index_key = NULL)
+     * array_column()
+     *
+     * @link	http://php.net/array_column
+     * @param	mixed	$column_key
+     * @param	mixed	$index_key
+     * @return	array
+     */
+    function array_column(array $array, $column_key, $index_key = NULL)
 	{
 		if ( ! in_array($type = gettype($column_key), array('integer', 'string', 'NULL'), TRUE))
 		{
@@ -120,7 +119,7 @@ if ( ! function_exists('array_column'))
 				continue;
 			}
 
-			if ($index_key === NULL OR ! array_key_exists($index_key, $a))
+			if ($index_key === NULL || ! array_key_exists($index_key, $a))
 			{
 				$result[] = $value;
 			}

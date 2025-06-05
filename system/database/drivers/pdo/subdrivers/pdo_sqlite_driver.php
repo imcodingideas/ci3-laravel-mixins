@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO SQLite Database Adapter Class
@@ -53,7 +53,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $database;
+    public $hostname;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string

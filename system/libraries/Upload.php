@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * File Uploading Class
@@ -138,7 +138,7 @@ class CI_Upload {
 	 *
 	 * @var	int
 	 */
-	public $file_size = NULL;
+	public $file_size;
 
 	/**
 	 * Filename extension
@@ -187,14 +187,14 @@ class CI_Upload {
 	 *
 	 * @var	int
 	 */
-	public $image_width = NULL;
+	public $image_width;
 
 	/**
 	 * Image height
 	 *
 	 * @var	int
 	 */
-	public $image_height = NULL;
+	public $image_height;
 
 	/**
 	 * Image type
@@ -292,7 +292,9 @@ class CI_Upload {
 	 */
 	public function __construct($config = array())
 	{
-		empty($config) OR $this->initialize($config, FALSE);
+		if (!empty($config)) {
+            $this->initialize($config, FALSE);
+        }
 
 		$this->_mimes =& get_mimes();
 		$this->_CI =& get_instance();
@@ -301,15 +303,13 @@ class CI_Upload {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Initialize preferences
-	 *
-	 * @param	array	$config
-	 * @param	bool	$reset
-	 * @return	CI_Upload
-	 */
-	public function initialize(array $config = array(), $reset = TRUE)
+    /**
+     * Initialize preferences
+     *
+     * @param	bool	$reset
+     * @return	CI_Upload
+     */
+    public function initialize(array $config = array(), $reset = TRUE)
 	{
 		$reflection = new ReflectionClass($this);
 
@@ -386,7 +386,7 @@ class CI_Upload {
 			for ($i = 0; $i < $c; $i++)
 			{
 				// We can't track numeric iterations, only full field names are accepted
-				if (($field = trim($matches[0][$i], '[]')) === '' OR ! isset($_file[$field]))
+				if ($field = trim($matches[0][$i], '[]') === '' || ! isset($_file[$field]))
 				{
 					$_file = NULL;
 					break;
@@ -426,6 +426,7 @@ class CI_Upload {
 					$this->set_error('upload_file_partial', 'debug');
 					break;
 				case UPLOAD_ERR_NO_FILE:
+                default:
 					$this->set_error('upload_no_file_selected', 'debug');
 					break;
 				case UPLOAD_ERR_NO_TMP_DIR:
@@ -436,9 +437,6 @@ class CI_Upload {
 					break;
 				case UPLOAD_ERR_EXTENSION:
 					$this->set_error('upload_stopped_by_extension', 'debug');
-					break;
-				default:
-					$this->set_error('upload_no_file_selected', 'debug');
 					break;
 			}
 
@@ -564,14 +562,10 @@ class CI_Upload {
 		 * we'll use move_uploaded_file(). One of the two should
 		 * reliably work in most environments
 		 */
-		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
-		{
-			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
-			{
-				$this->set_error('upload_destination_error', 'error');
-				return FALSE;
-			}
-		}
+		if (!@copy($this->file_temp, $this->upload_path.$this->file_name) && ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name)) {
+            $this->set_error('upload_destination_error', 'error');
+            return FALSE;
+        }
 
 		/*
 		 * Set the finalized image dimensions
@@ -657,7 +651,7 @@ class CI_Upload {
 			$filename = md5(uniqid(mt_rand())).$this->file_ext;
 		}
 
-		if ($this->overwrite === TRUE OR ! file_exists($path.$filename))
+		if ($this->overwrite === TRUE || ! file_exists($path.$filename))
 		{
 			return $filename;
 		}
@@ -793,7 +787,7 @@ class CI_Upload {
 	 */
 	public function set_allowed_types($types)
 	{
-		$this->allowed_types = (is_array($types) OR $types === '*')
+		$this->allowed_types = (is_array($types) || $types === '*')
 			? $types
 			: explode('|', $types);
 		return $this;
@@ -811,18 +805,14 @@ class CI_Upload {
 	 */
 	public function set_image_properties($path = '')
 	{
-		if ($this->is_image() && function_exists('getimagesize'))
-		{
-			if (FALSE !== ($D = @getimagesize($path)))
-			{
-				$types = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
-
-				$this->image_width	= $D[0];
-				$this->image_height	= $D[1];
-				$this->image_type	= isset($types[$D[2]]) ? $types[$D[2]] : 'unknown';
-				$this->image_size_str	= $D[3]; // string containing height and width
-			}
-		}
+		if ($this->is_image() && function_exists('getimagesize') && FALSE !== $D = @getimagesize($path)) {
+            $types = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
+            $this->image_width	= $D[0];
+            $this->image_height	= $D[1];
+            $this->image_type	= isset($types[$D[2]]) ? $types[$D[2]] : 'unknown';
+            $this->image_size_str	= $D[3];
+            // string containing height and width
+        }
 
 		return $this;
 	}
@@ -888,7 +878,7 @@ class CI_Upload {
 			return TRUE;
 		}
 
-		if (empty($this->allowed_types) OR ! is_array($this->allowed_types))
+		if (empty($this->allowed_types) || ! is_array($this->allowed_types))
 		{
 			$this->set_error('upload_no_file_types', 'debug');
 			return FALSE;
@@ -902,7 +892,7 @@ class CI_Upload {
 		}
 
 		// Images get some additional checks
-		if (in_array($ext, array('gif', 'jpg', 'jpeg', 'jpe', 'png', 'webp'), TRUE) && @getimagesize($this->file_temp) === FALSE)
+		if (@getimagesize($this->file_temp) === FALSE)
 		{
 			return FALSE;
 		}
@@ -931,7 +921,7 @@ class CI_Upload {
 	 */
 	public function is_allowed_filesize()
 	{
-		return ($this->max_size === 0 OR $this->max_size > $this->file_size);
+		return ($this->max_size === 0 || $this->max_size > $this->file_size);
 	}
 
 	// --------------------------------------------------------------------
@@ -1085,7 +1075,7 @@ class CI_Upload {
 		if (memory_get_usage() && ($memory_limit = ini_get('memory_limit')) > 0)
 		{
 			$memory_limit = str_split($memory_limit, strspn($memory_limit, '1234567890'));
-			if ( ! empty($memory_limit[1]))
+			if ( isset($memory_limit[1]) && ($memory_limit[1] !== '' && $memory_limit[1] !== '0'))
 			{
 				switch ($memory_limit[1][0])
 				{
@@ -1151,7 +1141,9 @@ class CI_Upload {
 	{
 		$this->_CI->lang->load('upload');
 
-		is_array($msg) OR $msg = array($msg);
+		if (!is_array($msg)) {
+            $msg = array($msg);
+        }
 		foreach ($msg as $val)
 		{
 			$msg = ($this->_CI->lang->line($val) === FALSE) ? $val : $this->_CI->lang->line($val);
@@ -1191,7 +1183,7 @@ class CI_Upload {
 	 */
 	protected function _prep_filename($filename)
 	{
-		if ($this->mod_mime_fix === FALSE OR $this->allowed_types === '*' OR ($ext_pos = strrpos($filename, '.')) === FALSE)
+		if ($this->mod_mime_fix === FALSE || $this->allowed_types === '*' || $ext_pos = strrpos($filename, '.') === FALSE)
 		{
 			return $filename;
 		}

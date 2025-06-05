@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * MySQL Utility Class
@@ -124,7 +124,7 @@ class CI_DB_mysql_utility extends CI_DB_utility {
 			$result = $query->result_array();
 			foreach ($result[0] as $val)
 			{
-				if ($i++ % 2)
+				if ($i++ % 2 !== 0)
 				{
 					$output .= $val.';'.$newline.$newline;
 				}

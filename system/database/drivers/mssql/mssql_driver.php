@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * MS SQL Database Adapter Class
@@ -454,7 +454,7 @@ class CI_DB_mssql_driver extends CI_DB {
 			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0 OR strpos(implode(',', $this->qb_select), '*') !== FALSE)
+			if (count($this->qb_select) === 0 || strpos(implode(',', $this->qb_select), '*') !== FALSE)
 			{
 				$select = '*'; // Inevitable
 			}

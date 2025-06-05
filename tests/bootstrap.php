@@ -1,5 +1,7 @@
 <?php
 
+use Dotenv\Dotenv;
+
 // Load Composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -16,7 +18,7 @@ define('ENVIRONMENT', 'testing');
 
 // Load environment variables for database connection
 try {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
     $dotenv->load();
 } catch (Exception $e) {
     // Set default values if .env not found
@@ -55,17 +57,17 @@ if (!function_exists('reset_test_database')) {
     function reset_test_database()
     {
         $CI =& get_instance();
-        
+
         // Drop table if exists
         $CI->db->query('DROP TABLE IF EXISTS posts');
-        
+
         // Execute SQL file to recreate database
         $sql_file = __DIR__ . '/../database/init/01_create_posts_table.sql';
         $sql = file_get_contents($sql_file);
-        
+
         // Split SQL statements by semicolon
         $statements = array_filter(array_map('trim', explode(';', $sql)));
-        
+
         foreach ($statements as $statement) {
             if (!empty($statement)) {
                 $CI->db->query($statement);

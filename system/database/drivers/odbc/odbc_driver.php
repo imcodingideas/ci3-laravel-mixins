@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * ODBC Database Adapter Class
@@ -153,7 +153,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-		if (empty($binds) OR empty($this->bind_marker) OR strpos($sql, $this->bind_marker) === FALSE)
+		if (empty($binds) || empty($this->bind_marker) || strpos($sql, $this->bind_marker) === FALSE)
 		{
 			return $sql;
 		}
@@ -220,7 +220,7 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 */
 	protected function _execute($sql)
 	{
-		if ( ! isset($this->odbc_result))
+		if ( $this->odbc_result === null)
 		{
 			return odbc_exec($this->conn_id, $sql);
 		}
@@ -229,11 +229,10 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 			return FALSE;
 		}
 
-		if (TRUE === ($success = odbc_execute($this->odbc_result, $this->binds)))
-		{
-			// For queries that return result sets, return the result_id resource on success
-			$this->is_write_type($sql) OR $success = $this->odbc_result;
-		}
+		// For queries that return result sets, return the result_id resource on success
+        if ((($success = odbc_execute($this->odbc_result, $this->binds))) && !$this->is_write_type($sql)) {
+            $success = $this->odbc_result;
+        }
 
 		$this->odbc_result = NULL;
 		$this->binds       = array();

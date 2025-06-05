@@ -36,7 +36,7 @@
  * @since	Version 2.1.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO Result Class
@@ -51,7 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_result extends CI_DB_result {
 
-	/**
+	public $db;
+    /**
 	 * Number of rows in the result set
 	 *
 	 * @return	int

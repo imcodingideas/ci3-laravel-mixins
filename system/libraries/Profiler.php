@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Profiler Class
@@ -315,8 +315,10 @@ class CI_Profiler {
 
 			foreach ($_GET as $key => $val)
 			{
-				is_int($key) OR $key = "'".htmlspecialchars($key, ENT_QUOTES, config_item('charset'))."'";
-				$val = (is_array($val) OR is_object($val))
+				if (!is_int($key)) {
+                    $key = "'".htmlspecialchars($key, ENT_QUOTES, config_item('charset'))."'";
+                }
+				$val = (is_array($val) || is_object($val))
 					? '<pre>'.htmlspecialchars(print_r($val, TRUE), ENT_QUOTES, config_item('charset')).'</pre>'
 					: htmlspecialchars($val, ENT_QUOTES, config_item('charset'));
 
@@ -355,8 +357,10 @@ class CI_Profiler {
 
 			foreach ($_POST as $key => $val)
 			{
-				is_int($key) OR $key = "'".htmlspecialchars($key, ENT_QUOTES, config_item('charset'))."'";
-				$val = (is_array($val) OR is_object($val))
+				if (!is_int($key)) {
+                    $key = "'".htmlspecialchars($key, ENT_QUOTES, config_item('charset'))."'";
+                }
+				$val = (is_array($val) || is_object($val))
 					? '<pre>'.htmlspecialchars(print_r($val, TRUE), ENT_QUOTES, config_item('charset')).'</pre>'
 					: htmlspecialchars($val, ENT_QUOTES, config_item('charset'));
 
@@ -367,8 +371,10 @@ class CI_Profiler {
 
 			foreach ($_FILES as $key => $val)
 			{
-				is_int($key) OR $key = "'".htmlspecialchars($key, ENT_QUOTES, config_item('charset'))."'";
-				$val = (is_array($val) OR is_object($val))
+				if (!is_int($key)) {
+                    $key = "'".htmlspecialchars($key, ENT_QUOTES, config_item('charset'))."'";
+                }
+				$val = (is_array($val) || is_object($val))
 					? '<pre>'.htmlspecialchars(print_r($val, TRUE), ENT_QUOTES, config_item('charset')).'</pre>'
 					: htmlspecialchars($val, ENT_QUOTES, config_item('charset'));
 
@@ -488,7 +494,7 @@ class CI_Profiler {
 			$pre       = '';
 			$pre_close = '';
 
-			if (is_array($val) OR is_object($val))
+			if (is_array($val) || is_object($val))
 			{
 				$val = print_r($val, TRUE);
 
@@ -514,7 +520,7 @@ class CI_Profiler {
 	{
 		if ( ! isset($this->CI->session))
 		{
-			return;
+			return null;
 		}
 
 		$output = '<fieldset id="ci_profiler_csession" style="border:1px solid #000;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">'
@@ -526,7 +532,7 @@ class CI_Profiler {
 			$pre       = '';
 			$pre_close = '';
 
-			if (is_array($val) OR is_object($val))
+			if (is_array($val) || is_object($val))
 			{
 				$val = print_r($val, TRUE);
 

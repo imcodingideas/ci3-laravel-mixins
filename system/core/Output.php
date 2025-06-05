@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Output Class
@@ -146,7 +146,9 @@ class CI_Output {
 			&& extension_loaded('zlib')
 		);
 
-		isset(self::$func_overload) OR self::$func_overload = ( ! is_php('8.0') && extension_loaded('mbstring') && @ini_get('mbstring.func_overload'));
+		if (!isset(self::$func_overload)) {
+            self::$func_overload = ( ! is_php('8.0') && extension_loaded('mbstring') && @ini_get('mbstring.func_overload'));
+        }
 
 		// Get mime types for later
 		$this->mimes =& get_mimes();
@@ -311,7 +313,7 @@ class CI_Output {
 			headers_list()
 		);
 
-		if (empty($headers) OR empty($header))
+		if ($headers === [] || empty($header))
 		{
 			return NULL;
 		}
@@ -475,13 +477,10 @@ class CI_Output {
 		// --------------------------------------------------------------------
 
 		// Are there any server headers to send?
-		if (count($this->headers) > 0)
-		{
-			foreach ($this->headers as $header)
+		foreach ($this->headers as $header)
 			{
 				@header($header[0], $header[1]);
 			}
-		}
 
 		// --------------------------------------------------------------------
 
@@ -518,7 +517,7 @@ class CI_Output {
 		if ($this->enable_profiler === TRUE)
 		{
 			$CI->load->library('profiler');
-			if ( ! empty($this->_profiler_sections))
+			if ( $this->_profiler_sections !== [])
 			{
 				$CI->profiler->set_sections($this->_profiler_sections);
 			}
@@ -561,7 +560,7 @@ class CI_Output {
 		$path = $CI->config->item('cache_path');
 		$cache_path = ($path === '') ? APPPATH.'cache/' : $path;
 
-		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
+		if ( ! is_dir($cache_path) || ! is_really_writable($cache_path))
 		{
 			log_message('error', 'Unable to write cache file: '.$cache_path);
 			return;
@@ -679,7 +678,7 @@ class CI_Output {
 
 		$filepath = $cache_path.md5($uri);
 
-		if ( ! file_exists($filepath) OR ! $fp = @fopen($filepath, 'rb'))
+		if ( ! file_exists($filepath) || ! $fp = @fopen($filepath, 'rb'))
 		{
 			return FALSE;
 		}
@@ -832,13 +831,14 @@ class CI_Output {
 	 */
 	protected static function substr($str, $start, $length = NULL)
 	{
-		if (self::$func_overload)
-		{
-			// mb_substr($str, $start, null, '8bit') returns an empty
-			// string on PHP 5.3
-			isset($length) OR $length = ($start >= 0 ? self::strlen($str) - $start : -$start);
-			return mb_substr($str, $start, $length, '8bit');
-		}
+		if (self::$func_overload) {
+            // mb_substr($str, $start, null, '8bit') returns an empty
+            // string on PHP 5.3
+            if (!isset($length)) {
+                $length = ($start >= 0 ? self::strlen($str) - $start : -$start);
+            }
+            return mb_substr($str, $start, $length, '8bit');
+        }
 
 		return isset($length)
 			? substr($str, $start, $length)

@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO Oracle Forge Class
@@ -191,14 +191,8 @@ class CI_DB_pdo_oci_forge extends CI_DB_pdo_forge {
 		switch (strtoupper($attributes['TYPE']))
 		{
 			case 'TINYINT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'MEDIUMINT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'INT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'BIGINT':
 				$attributes['TYPE'] = 'NUMBER';
 				return;

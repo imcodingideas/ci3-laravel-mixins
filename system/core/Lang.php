@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Language Class
@@ -74,19 +74,18 @@ class CI_Lang {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Load a language file
-	 *
-	 * @param	mixed	$langfile	Language file name
-	 * @param	string	$idiom		Language name (english, etc.)
-	 * @param	bool	$return		Whether to return the loaded array of translations
-	 * @param 	bool	$add_suffix	Whether to add suffix to $langfile
-	 * @param 	string	$alt_path	Alternative path to look for the language file
-	 *
-	 * @return	void|string[]	Array containing translations, if $return is set to TRUE
-	 */
-	public function load($langfile, $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
+    /**
+     * Load a language file
+     *
+     * @param	mixed	$langfile	Language file name
+     * @param	string	$idiom		Language name (english, etc.)
+     * @param	bool	$return		Whether to return the loaded array of translations
+     * @param 	bool	$add_suffix	Whether to add suffix to $langfile
+     * @param 	string	$alt_path	Alternative path to look for the language file
+     *
+     * @return string[]|null Array containing translations, if $return is set to TRUE
+     */
+    public function load($langfile, $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
 	{
 		if (is_array($langfile))
 		{
@@ -95,7 +94,7 @@ class CI_Lang {
 				$this->load($value, $idiom, $return, $add_suffix, $alt_path);
 			}
 
-			return;
+			return null;
 		}
 
 		$langfile = str_replace('.php', '', $langfile);
@@ -107,7 +106,7 @@ class CI_Lang {
 
 		$langfile .= '.php';
 
-		if (empty($idiom) OR ! preg_match('/^[a-z_-]+$/i', $idiom))
+		if (empty($idiom) || ! preg_match('/^[a-z_-]+$/i', $idiom))
 		{
 			$config =& get_config();
 			$idiom = empty($config['language']) ? 'english' : $config['language'];
@@ -115,12 +114,12 @@ class CI_Lang {
 
 		if ($return === FALSE && isset($this->is_loaded[$langfile]) && $this->is_loaded[$langfile] === $idiom)
 		{
-			return;
+			return null;
 		}
 
 		// Load the base file, so any others found can override it
 		$basepath = BASEPATH.'language/'.$idiom.'/'.$langfile;
-		if (($found = file_exists($basepath)) === TRUE)
+		if ($found = file_exists($basepath))
 		{
 			include($basepath);
 		}
@@ -149,12 +148,12 @@ class CI_Lang {
 			}
 		}
 
-		if ($found !== TRUE)
+		if (!$found)
 		{
 			show_error('Unable to load the requested language file: language/'.$idiom.'/'.$langfile);
 		}
 
-		if ( ! isset($lang) OR ! is_array($lang))
+		if ( ! isset($lang) || ! is_array($lang))
 		{
 			log_message('error', 'Language file contains no data: language/'.$idiom.'/'.$langfile);
 
@@ -162,7 +161,7 @@ class CI_Lang {
 			{
 				return array();
 			}
-			return;
+			return null;
 		}
 
 		if ($return === TRUE)

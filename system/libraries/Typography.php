@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Typography Class
@@ -356,7 +356,7 @@ class CI_Typography {
 	 */
 	protected function _format_newlines($str)
 	{
-		if ($str === '' OR (strpos($str, "\n") === FALSE && ! in_array($this->last_block_element, $this->inner_block_required)))
+		if ($str === '' || strpos($str, "\n") === FALSE && ! in_array($this->last_block_element, $this->inner_block_required))
 		{
 			return $str;
 		}

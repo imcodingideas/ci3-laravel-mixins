@@ -36,7 +36,7 @@
  * @since	Version 1.3.1
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * HTML Table Generating Class
@@ -52,6 +52,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CI_Table {
 
 	/**
+     * @var mixed[]
+     */
+    public $temp;
+    /**
 	 * Data for table rows
 	 *
 	 * @var array
@@ -77,14 +81,14 @@ class CI_Table {
 	 *
 	 * @var string
 	 */
-	public $caption		= NULL;
+	public $caption;
 
 	/**
 	 * Table layout template
 	 *
 	 * @var array
 	 */
-	public $template	= NULL;
+	public $template;
 
 	/**
 	 * Newline setting
@@ -105,7 +109,7 @@ class CI_Table {
 	 *
 	 * @var function
 	 */
-	public $function	= NULL;
+	public $function;
 
 	/**
 	 * Set the template from the table config file if it exists
@@ -173,7 +177,7 @@ class CI_Table {
 	 */
 	public function make_columns($array = array(), $col_limit = 0)
 	{
-		if ( ! is_array($array) OR count($array) === 0 OR ! is_int($col_limit))
+		if ( ! is_array($array) || count($array) === 0 || ! is_int($col_limit))
 		{
 			return FALSE;
 		}
@@ -261,7 +265,9 @@ class CI_Table {
 
 		foreach ($args as $key => $val)
 		{
-			is_array($val) OR $args[$key] = array('data' => $val);
+			if (!is_array($val)) {
+                $args[$key] = array('data' => $val);
+            }
 		}
 
 		return $args;
@@ -306,7 +312,7 @@ class CI_Table {
 		}
 
 		// Is there anything to display? No? Smite them!
-		if (empty($this->heading) && empty($this->rows))
+		if (empty($this->heading) && $this->rows === [])
 		{
 			return 'Undefined table data';
 		}
@@ -315,7 +321,7 @@ class CI_Table {
 		$this->_compile_template();
 
 		// Validate a possibly existing custom cell manipulation function
-		if (isset($this->function) && ! is_callable($this->function))
+		if ($this->function !== null && ! is_callable($this->function))
 		{
 			$this->function = NULL;
 		}
@@ -354,7 +360,7 @@ class CI_Table {
 		}
 
 		// Build the table rows
-		if ( ! empty($this->rows))
+		if ( $this->rows !== [])
 		{
 			$out .= $this->template['tbody_open'].$this->newline;
 
@@ -367,7 +373,7 @@ class CI_Table {
 				}
 
 				// We use modulus to alternate the row colors
-				$name = fmod($i++, 2) ? '' : 'alt_';
+				$name = fmod($i++, 2) !== 0.0 ? '' : 'alt_';
 
 				$out .= $this->template['row_'.$name.'start'].$this->newline;
 
@@ -386,11 +392,11 @@ class CI_Table {
 					$cell = isset($cell['data']) ? $cell['data'] : '';
 					$out .= $temp;
 
-					if ($cell === '' OR $cell === NULL)
+					if ($cell === '' || $cell === NULL)
 					{
 						$out .= $this->empty_cells;
 					}
-					elseif (isset($this->function))
+					elseif ($this->function !== null)
 					{
 						$out .= call_user_func($this->function, $cell);
 					}

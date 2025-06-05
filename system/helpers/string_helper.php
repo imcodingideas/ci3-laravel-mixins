@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter String Helpers
@@ -235,6 +235,7 @@ if ( ! function_exists('random_string'))
 			case 'sha1':
 				return sha1(uniqid(mt_rand(), TRUE));
 		}
+        return null;
 	}
 }
 

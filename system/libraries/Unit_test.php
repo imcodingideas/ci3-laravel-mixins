@@ -36,7 +36,7 @@
  * @since	Version 1.3.1
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Unit Testing Class
@@ -79,14 +79,14 @@ class CI_Unit_test {
 	 *
 	 * @var	string
 	 */
-	protected $_template = NULL;
+	protected $_template;
 
 	/**
 	 * Template rows
 	 *
 	 * @var	string
 	 */
-	protected $_template_rows = NULL;
+	protected $_template_rows;
 
 	/**
 	 * List of visible test items
@@ -170,7 +170,7 @@ class CI_Unit_test {
 			'test_name'     => $test_name,
 			'test_datatype' => gettype($test),
 			'res_datatype'  => $extype,
-			'result'        => ($result === TRUE) ? 'passed' : 'failed',
+			'result'        => ($result) ? 'passed' : 'failed',
 			'file'          => $back['file'],
 			'line'          => $back['line'],
 			'notes'         => $notes
@@ -372,7 +372,7 @@ class CI_Unit_test {
 			return;
 		}
 
-		if ($this->_template === NULL OR ! preg_match('/\{rows\}(.*?)\{\/rows\}/si', $this->_template, $match))
+		if ($this->_template === NULL || ! preg_match('/\{rows\}(.*?)\{\/rows\}/si', $this->_template, $match))
 		{
 			$this->_default_template();
 			return;

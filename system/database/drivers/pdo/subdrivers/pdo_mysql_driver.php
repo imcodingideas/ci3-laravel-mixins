@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO MySQL Database Adapter Class
@@ -53,7 +53,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $port;
+    public $database;
+    public $char_set;
+    public $encrypt;
+    public $db_debug;
+    /**
+     * @var never[]
+     */
+    public $data_cache;
+    public $conn_id;
+    public $dbprefix;
+    public $qb_join;
+    public $qb_from;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -103,9 +117,15 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 		{
 			$this->dsn = 'mysql:host='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 
-			empty($this->port) OR $this->dsn .= ';port='.$this->port;
-			empty($this->database) OR $this->dsn .= ';dbname='.$this->database;
-			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
+			if (!empty($this->port)) {
+                $this->dsn .= ';port='.$this->port;
+            }
+			if (!empty($this->database)) {
+                $this->dsn .= ';dbname='.$this->database;
+            }
+			if (!empty($this->char_set)) {
+                $this->dsn .= ';charset='.$this->char_set;
+            }
 		}
 		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 6) === FALSE)
 		{
@@ -123,7 +143,7 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 	 */
 	public function db_connect($persistent = FALSE)
 	{
-		if (isset($this->stricton))
+		if ($this->stricton !== null)
 		{
 			if ($this->stricton)
 			{
@@ -141,9 +161,7 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
                                         "STRICT_TRANS_TABLES", "")';
 			}
 
-			if ( ! empty($sql))
-			{
-				if (empty($this->options[PDO::MYSQL_ATTR_INIT_COMMAND]))
+			if (empty($this->options[PDO::MYSQL_ATTR_INIT_COMMAND]))
 				{
 					$this->options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET SESSION sql_mode = '.$sql;
 				}
@@ -151,7 +169,6 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 				{
 					$this->options[PDO::MYSQL_ATTR_INIT_COMMAND] .= ', @@session.sql_mode = '.$sql;
 				}
-			}
 		}
 
 		if ($this->compress === TRUE)
@@ -162,11 +179,21 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 		if (is_array($this->encrypt))
 		{
 			$ssl = array();
-			empty($this->encrypt['ssl_key'])    OR $ssl[PDO::MYSQL_ATTR_SSL_KEY]    = $this->encrypt['ssl_key'];
-			empty($this->encrypt['ssl_cert'])   OR $ssl[PDO::MYSQL_ATTR_SSL_CERT]   = $this->encrypt['ssl_cert'];
-			empty($this->encrypt['ssl_ca'])     OR $ssl[PDO::MYSQL_ATTR_SSL_CA]     = $this->encrypt['ssl_ca'];
-			empty($this->encrypt['ssl_capath']) OR $ssl[PDO::MYSQL_ATTR_SSL_CAPATH] = $this->encrypt['ssl_capath'];
-			empty($this->encrypt['ssl_cipher']) OR $ssl[PDO::MYSQL_ATTR_SSL_CIPHER] = $this->encrypt['ssl_cipher'];
+			if (!empty($this->encrypt['ssl_key'])) {
+                $ssl[PDO::MYSQL_ATTR_SSL_KEY]    = $this->encrypt['ssl_key'];
+            }
+			if (!empty($this->encrypt['ssl_cert'])) {
+                $ssl[PDO::MYSQL_ATTR_SSL_CERT]   = $this->encrypt['ssl_cert'];
+            }
+			if (!empty($this->encrypt['ssl_ca'])) {
+                $ssl[PDO::MYSQL_ATTR_SSL_CA]     = $this->encrypt['ssl_ca'];
+            }
+			if (!empty($this->encrypt['ssl_capath'])) {
+                $ssl[PDO::MYSQL_ATTR_SSL_CAPATH] = $this->encrypt['ssl_capath'];
+            }
+			if (!empty($this->encrypt['ssl_cipher'])) {
+                $ssl[PDO::MYSQL_ATTR_SSL_CIPHER] = $this->encrypt['ssl_cipher'];
+            }
 
 			if (defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT') && isset($this->encrypt['ssl_verify']))
 			{
@@ -175,13 +202,15 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 
 			// DO NOT use array_merge() here!
 			// It re-indexes numeric keys and the PDO_MYSQL_ATTR_SSL_* constants are integers.
-			empty($ssl) OR $this->options += $ssl;
+			if ($ssl !== []) {
+                $this->options += $ssl;
+            }
 		}
 
 		// Prior to version 5.7.3, MySQL silently downgrades to an unencrypted connection if SSL setup fails
 		if (
 			($pdo = parent::db_connect($persistent)) !== FALSE
-			&& ! empty($ssl)
+			&& $ssl !== []
 			&& version_compare($pdo->getAttribute(PDO::ATTR_CLIENT_VERSION), '5.7.3', '<=')
 			&& empty($pdo->query("SHOW STATUS LIKE 'ssl_cipher'")->fetchObject()->Value)
 		)

@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Initialize the database
@@ -83,7 +83,7 @@ function &DB($params = '', $query_builder_override = NULL)
 			}
 		}
 
-		if ( ! isset($db) OR count($db) === 0)
+		if ( ! isset($db) || count($db) === 0)
 		{
 			show_error('No database connection settings were found in the database config file.');
 		}
@@ -167,7 +167,7 @@ function &DB($params = '', $query_builder_override = NULL)
 
 	require_once(BASEPATH.'database/DB_driver.php');
 
-	if ( ! isset($query_builder) OR $query_builder === TRUE)
+	if ( ! isset($query_builder) || $query_builder === TRUE)
 	{
 		require_once(BASEPATH.'database/DB_query_builder.php');
 		if ( ! class_exists('CI_DB', FALSE))
@@ -194,7 +194,9 @@ function &DB($params = '', $query_builder_override = NULL)
 	// Load the DB driver
 	$driver_file = BASEPATH.'database/drivers/'.$params['dbdriver'].'/'.$params['dbdriver'].'_driver.php';
 
-	file_exists($driver_file) OR show_error('Invalid DB driver');
+	if (!file_exists($driver_file)) {
+        show_error('Invalid DB driver');
+    }
 	require_once($driver_file);
 
 	// Instantiate the DB adapter

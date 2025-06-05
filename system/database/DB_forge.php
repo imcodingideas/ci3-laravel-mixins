@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Database Forge Class
@@ -525,7 +525,7 @@ abstract class CI_DB_forge {
 	 */
 	public function rename_table($table_name, $new_table_name)
 	{
-		if ($table_name === '' OR $new_table_name === '')
+		if ($table_name === '' || $new_table_name === '')
 		{
 			show_error('A table name is required for that operation.');
 			return FALSE;
@@ -566,7 +566,9 @@ abstract class CI_DB_forge {
 	public function add_column($table, $field, $_after = NULL)
 	{
 		// Work-around for literal column definitions
-		is_array($field) OR $field = array($field);
+		if (!is_array($field)) {
+            $field = array($field);
+        }
 
 		foreach (array_keys($field) as $k)
 		{
@@ -629,7 +631,9 @@ abstract class CI_DB_forge {
 	public function modify_column($table, $field)
 	{
 		// Work-around for literal column definitions
-		is_array($field) OR $field = array($field);
+		if (!is_array($field)) {
+            $field = array($field);
+        }
 
 		foreach (array_keys($field) as $k)
 		{
@@ -720,7 +724,9 @@ abstract class CI_DB_forge {
 				continue;
 			}
 
-			isset($attributes['TYPE']) && $this->_attr_type($attributes);
+			if (isset($attributes['TYPE'])) {
+                $this->_attr_type($attributes);
+            }
 
 			$field = array(
 				'name'			=> $key,
@@ -735,7 +741,9 @@ abstract class CI_DB_forge {
 				'_literal'		=> FALSE
 			);
 
-			isset($attributes['TYPE']) && $this->_attr_unsigned($attributes, $field);
+			if (isset($attributes['TYPE'])) {
+                $this->_attr_unsigned($attributes, $field);
+            }
 
 			if ($create_table === FALSE)
 			{
@@ -850,7 +858,7 @@ abstract class CI_DB_forge {
 	 */
 	protected function _attr_unsigned(&$attributes, &$field)
 	{
-		if (empty($attributes['UNSIGNED']) OR $attributes['UNSIGNED'] !== TRUE)
+		if (empty($attributes['UNSIGNED']) || $attributes['UNSIGNED'] !== TRUE)
 		{
 			return;
 		}
@@ -1007,7 +1015,9 @@ abstract class CI_DB_forge {
 				continue;
 			}
 
-			is_array($this->keys[$i]) OR $this->keys[$i] = array($this->keys[$i]);
+			if (!is_array($this->keys[$i])) {
+                $this->keys[$i] = array($this->keys[$i]);
+            }
 
 			$sqls[] = 'CREATE INDEX '.$this->db->escape_identifiers($table.'_'.implode('_', $this->keys[$i]))
 				.' ON '.$this->db->escape_identifiers($table)

@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Calendar Class
@@ -133,7 +133,9 @@ class CI_Calendar {
 		$this->CI =& get_instance();
 		$this->CI->lang->load('calendar');
 
-		empty($config) OR $this->initialize($config);
+		if (!empty($config)) {
+            $this->initialize($config);
+        }
 
 		log_message('info', 'Calendar Class Initialized');
 	}
@@ -287,24 +289,24 @@ class CI_Calendar {
 			{
 				if ($day > 0 && $day <= $total_days)
 				{
-					$out .= ($is_current_month === TRUE && $day == $cur_day) ? $this->replacements['cal_cell_start_today'] : $this->replacements['cal_cell_start'];
+					$out .= ($is_current_month && $day == $cur_day) ? $this->replacements['cal_cell_start_today'] : $this->replacements['cal_cell_start'];
 
 					if (isset($data[$day]))
 					{
 						// Cells with content
-						$temp = ($is_current_month === TRUE && $day == $cur_day) ?
+						$temp = ($is_current_month && $day == $cur_day) ?
 								$this->replacements['cal_cell_content_today'] : $this->replacements['cal_cell_content'];
 						$out .= str_replace(array('{content}', '{day}'), array($data[$day], $day), $temp);
 					}
 					else
 					{
 						// Cells with no content
-						$temp = ($is_current_month === TRUE && $day == $cur_day) ?
+						$temp = ($is_current_month && $day == $cur_day) ?
 								$this->replacements['cal_cell_no_content_today'] : $this->replacements['cal_cell_no_content'];
 						$out .= str_replace('{day}', $day, $temp);
 					}
 
-					$out .= ($is_current_month === TRUE && $day == $cur_day) ? $this->replacements['cal_cell_end_today'] : $this->replacements['cal_cell_end'];
+					$out .= ($is_current_month && $day == $cur_day) ? $this->replacements['cal_cell_end_today'] : $this->replacements['cal_cell_end'];
 				}
 				elseif ($this->show_other_days === TRUE)
 				{

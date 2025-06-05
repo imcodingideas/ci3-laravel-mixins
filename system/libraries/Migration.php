@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Migration Class
@@ -71,7 +71,7 @@ class CI_Migration {
 	 *
 	 * @var string
 	 */
-	protected $_migration_path = NULL;
+	protected $_migration_path;
 
 	/**
 	 * Current migration version
@@ -136,7 +136,9 @@ class CI_Migration {
 		}
 
 		// If not set, set it
-		$this->_migration_path !== '' OR $this->_migration_path = APPPATH.'migrations/';
+		if ($this->_migration_path === '') {
+            $this->_migration_path = APPPATH.'migrations/';
+        }
 
 		// Add trailing slash if not set
 		$this->_migration_path = rtrim($this->_migration_path, '/').'/';
@@ -199,14 +201,7 @@ class CI_Migration {
 		// Note: We use strings, so that timestamp versions work on 32-bit systems
 		$current_version = $this->_get_version();
 
-		if ($this->_migration_type === 'sequential')
-		{
-			$target_version = sprintf('%03d', $target_version);
-		}
-		else
-		{
-			$target_version = (string) $target_version;
-		}
+		$target_version = $this->_migration_type === 'sequential' ? sprintf('%03d', $target_version) : (string) $target_version;
 
 		$migrations = $this->find_migrations();
 
@@ -245,9 +240,8 @@ class CI_Migration {
 			//
 			// Because we've previously sorted the $migrations array depending on the direction,
 			// we can safely break the loop once we reach $target_version ...
-			if ($method === 'up')
-			{
-				if ($number <= $current_version)
+			if ($method === 'up') {
+                if ($number <= $current_version)
 				{
 					continue;
 				}
@@ -255,18 +249,12 @@ class CI_Migration {
 				{
 					break;
 				}
-			}
-			else
-			{
-				if ($number > $current_version)
-				{
-					continue;
-				}
-				elseif ($number <= $target_version)
+            } elseif ($number > $current_version) {
+                continue;
+            } elseif ($number <= $target_version)
 				{
 					break;
 				}
-			}
 
 			// Check for sequence gaps
 			if ($this->_migration_type === 'sequential')
@@ -289,7 +277,7 @@ class CI_Migration {
 				$this->_error_string = sprintf($this->lang->line('migration_class_doesnt_exist'), $class);
 				return FALSE;
 			}
-			elseif ( ! method_exists($class, $method) OR ! (new ReflectionMethod($class, $method))->isPublic())
+			elseif ( ! method_exists($class, $method) || ! (new ReflectionMethod($class, $method))->isPublic())
 			{
 				$this->_error_string = sprintf($this->lang->line('migration_missing_'.$method.'_method'), $class);
 				return FALSE;
@@ -311,7 +299,7 @@ class CI_Migration {
 
 		// This is necessary when moving down, since the the last migration applied
 		// will be the down() method for the next migration up from the target
-		if ($current_version <> $target_version)
+		if ($current_version != $target_version)
 		{
 			$current_version = $target_version;
 			$this->_update_version($current_version);

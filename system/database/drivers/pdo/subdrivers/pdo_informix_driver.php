@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO Informix Database Adapter Class
@@ -53,7 +53,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $hostname;
+    public $host;
+    public $port;
+    public $service;
+    public $DSN;
+    public $database;
+    public $server;
+    public $protocol;
+    public $username;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    /**
+     * @var never[]
+     */
+    public $qb_orderby;
+    public $qb_offset;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -90,7 +109,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 			// Pre-defined DSN
 			if (empty($this->hostname) && empty($this->host) && empty($this->port) && empty($this->service))
 			{
-				if (isset($this->DSN))
+				if (property_exists($this, 'DSN') && $this->DSN !== null)
 				{
 					$this->dsn .= 'DSN='.$this->DSN;
 				}
@@ -102,7 +121,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 				return;
 			}
 
-			if (isset($this->host))
+			if (property_exists($this, 'host') && $this->host !== null)
 			{
 				$this->dsn .= 'host='.$this->host;
 			}
@@ -111,7 +130,7 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 				$this->dsn .= 'host='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 			}
 
-			if (isset($this->service))
+			if (property_exists($this, 'service') && $this->service !== null)
 			{
 				$this->dsn .= '; service='.$this->service;
 			}
@@ -120,10 +139,14 @@ class CI_DB_pdo_informix_driver extends CI_DB_pdo_driver {
 				$this->dsn .= '; service='.$this->port;
 			}
 
-			empty($this->database) OR $this->dsn .= '; database='.$this->database;
-			empty($this->server) OR $this->dsn .= '; server='.$this->server;
+			if (!empty($this->database)) {
+                $this->dsn .= '; database='.$this->database;
+            }
+			if (!empty($this->server)) {
+                $this->dsn .= '; server='.$this->server;
+            }
 
-			$this->dsn .= '; protocol='.(isset($this->protocol) ? $this->protocol : 'onsoctcp')
+			$this->dsn .= '; protocol='.(property_exists($this, 'protocol') && $this->protocol !== null ? $this->protocol : 'onsoctcp')
 				.'; EnableScrollableCursors=1';
 		}
 	}

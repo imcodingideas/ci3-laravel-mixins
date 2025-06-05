@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Database Driver Class
@@ -53,7 +53,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 abstract class CI_DB_driver {
 
-	/**
+	public $failover;
+    public $qb_limit;
+    public $qb_aliased_tables;
+    /**
 	 * Data Source Name / Connect string
 	 *
 	 * @var	string
@@ -143,7 +146,7 @@ abstract class CI_DB_driver {
 	 *
 	 * @var	int
 	 */
-	public $port			= NULL;
+	public $port;
 
 	/**
 	 * Persistent connection flag
@@ -633,7 +636,7 @@ abstract class CI_DB_driver {
 		// Is query caching enabled? If the query is a "read type"
 		// we will load the caching class and return the previously
 		// cached query if it exists
-		if ($this->cache_on === TRUE && $return_object === TRUE && $this->_cache_init())
+		if ($this->cache_on === TRUE && $return_object && $this->_cache_init())
 		{
 			$this->load_rdriver();
 			if (FALSE !== ($cache = $this->CACHE->read($sql)))
@@ -708,7 +711,7 @@ abstract class CI_DB_driver {
 		$this->query_count++;
 
 		// Will we have a result object instantiated? If not - we'll simply return TRUE
-		if ($return_object !== TRUE)
+		if (!$return_object)
 		{
 			// If caching is enabled we'll auto-cleanup any existing files related to this particular URI
 			if ($this->cache_on === TRUE && $this->cache_autodel === TRUE && $this->_cache_init())
@@ -781,12 +784,9 @@ abstract class CI_DB_driver {
 	 */
 	public function simple_query($sql)
 	{
-		if ( ! $this->conn_id)
+		if ( !$this->conn_id && ! $this->initialize())
 		{
-			if ( ! $this->initialize())
-			{
-				return FALSE;
-			}
+			return FALSE;
 		}
 
 		return $this->_execute($sql);
@@ -858,7 +858,7 @@ abstract class CI_DB_driver {
 		}
 
 		// The query() function will set this flag to FALSE in the event that a query failed
-		if ($this->_trans_status === FALSE OR $this->_trans_failure === TRUE)
+		if ($this->_trans_status === FALSE || $this->_trans_failure === TRUE)
 		{
 			$this->trans_rollback();
 
@@ -946,12 +946,12 @@ abstract class CI_DB_driver {
 	 */
 	public function trans_commit()
 	{
-		if ( ! $this->trans_enabled OR $this->_trans_depth === 0)
+		if ( ! $this->trans_enabled || $this->_trans_depth === 0)
 		{
 			return FALSE;
 		}
 		// When transactions are nested we only begin/commit/rollback the outermost ones
-		elseif ($this->_trans_depth > 1 OR $this->_trans_commit())
+		elseif ($this->_trans_depth > 1 || $this->_trans_commit())
 		{
 			$this->_trans_depth--;
 			return TRUE;
@@ -969,12 +969,12 @@ abstract class CI_DB_driver {
 	 */
 	public function trans_rollback()
 	{
-		if ( ! $this->trans_enabled OR $this->_trans_depth === 0)
+		if ( ! $this->trans_enabled || $this->_trans_depth === 0)
 		{
 			return FALSE;
 		}
 		// When transactions are nested we only begin/commit/rollback the outermost ones
-		elseif ($this->_trans_depth > 1 OR $this->_trans_rollback())
+		elseif ($this->_trans_depth > 1 || $this->_trans_rollback())
 		{
 			$this->_trans_depth--;
 			return TRUE;
@@ -994,7 +994,7 @@ abstract class CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-		if (empty($this->bind_marker) OR strpos($sql, $this->bind_marker) === FALSE)
+		if (empty($this->bind_marker) || strpos($sql, $this->bind_marker) === FALSE)
 		{
 			return $sql;
 		}
@@ -1113,10 +1113,9 @@ abstract class CI_DB_driver {
 	{
 		if (is_array($str))
 		{
-			$str = array_map(array(&$this, 'escape'), $str);
-			return $str;
+			return array_map(array(&$this, 'escape'), $str);
 		}
-		elseif (is_string($str) OR (is_object($str) && method_exists($str, '__toString')))
+		elseif (is_string($str) || is_object($str) && method_exists($str, '__toString'))
 		{
 			return "'".$this->escape_str($str)."'";
 		}
@@ -1395,7 +1394,7 @@ abstract class CI_DB_driver {
 	 */
 	public function escape_identifiers($item)
 	{
-		if ($this->_escape_char === '' OR empty($item) OR in_array($item, $this->_reserved_identifiers))
+		if ($this->_escape_char === '' || empty($item) || in_array($item, $this->_reserved_identifiers))
 		{
 			return $item;
 		}
@@ -1409,7 +1408,7 @@ abstract class CI_DB_driver {
 			return $item;
 		}
 		// Avoid breaking functions and literal values inside queries
-		elseif (ctype_digit($item) OR $item[0] === "'" OR ($this->_escape_char !== '"' && $item[0] === '"') OR strpos($item, '(') !== FALSE)
+		elseif (ctype_digit($item) || $item[0] === "'" || $this->_escape_char !== '"' && $item[0] === '"' || strpos($item, '(') !== FALSE)
 		{
 			return $item;
 		}
@@ -1936,7 +1935,9 @@ abstract class CI_DB_driver {
 
 				// dbprefix may've already been applied, with or without the identifier escaped
 				$ec = '(?<ec>'.preg_quote(is_array($this->_escape_char) ? $this->_escape_char[0] : $this->_escape_char).')?';
-				isset($ec[0]) && $ec .= '?'; // Just in case someone has disabled escaping by forcing an empty escape character
+				if (isset($ec[0])) {
+                    $ec .= '?';
+                } // Just in case someone has disabled escaping by forcing an empty escape character
 
 				// Verify table prefix and replace if necessary
 				if ($this->swap_pre !== '' && preg_match('#^'.$ec.preg_quote($this->swap_pre).'#', $parts[$i]))
@@ -1946,7 +1947,7 @@ abstract class CI_DB_driver {
 				// We only add the table prefix if it does not already exist
 				else
 				{
-					preg_match('#^'.$ec.preg_quote($this->dbprefix).'#', $parts[$i]) OR $parts[$i] = $this->dbprefix.$parts[$i];
+					preg_match('#^'.$ec.preg_quote($this->dbprefix).'#', $parts[$i]) || $parts[$i] = $this->dbprefix.$parts[$i];
 				}
 
 				// Put the parts back together

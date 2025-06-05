@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO PostgreSQL Database Adapter Class
@@ -53,7 +53,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $port;
+    public $database;
+    public $username;
+    public $password;
+    public $conn_id;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    /**
+     * @var never[]
+     */
+    public $qb_orderby;
+    public $qb_offset;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -94,13 +109,19 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 		{
 			$this->dsn = 'pgsql:host='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 
-			empty($this->port) OR $this->dsn .= ';port='.$this->port;
-			empty($this->database) OR $this->dsn .= ';dbname='.$this->database;
+			if (!empty($this->port)) {
+                $this->dsn .= ';port='.$this->port;
+            }
+			if (!empty($this->database)) {
+                $this->dsn .= ';dbname='.$this->database;
+            }
 
 			if ( ! empty($this->username))
 			{
 				$this->dsn .= ';user='.$this->username;
-				empty($this->password) OR $this->dsn .= ';password='.$this->password;
+				if (!empty($this->password)) {
+                    $this->dsn .= ';password='.$this->password;
+                }
 			}
 		}
 	}
@@ -325,7 +346,7 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	protected function _update_batch($table, $values, $index)
 	{
 		$ids = array();
-		foreach ($values as $key => $val)
+		foreach ($values as $val)
 		{
 			$ids[] = $val[$index]['value'];
 

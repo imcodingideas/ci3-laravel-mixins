@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Trackback Class
@@ -201,13 +201,13 @@ class CI_Trackback {
 
 			$this->data['charset'] = isset($_POST['charset']) ? strtoupper(trim($_POST['charset'])) : 'auto';
 
-			if ($val !== 'url' && MB_ENABLED === TRUE)
+			if ($val !== 'url' && MB_ENABLED)
 			{
-				if (MB_ENABLED === TRUE)
+				if (MB_ENABLED)
 				{
 					$_POST[$val] = mb_convert_encoding($_POST[$val], $this->charset, $this->data['charset']);
 				}
-				elseif (ICONV_ENABLED === TRUE)
+				elseif (ICONV_ENABLED)
 				{
 					$_POST[$val] = @iconv($this->data['charset'], $this->charset.'//IGNORE', $_POST[$val]);
 				}
@@ -296,7 +296,9 @@ class CI_Trackback {
 
 		// Build the path
 		$path = isset($target['path']) ? $target['path'] : $url;
-		empty($target['query']) OR $path .= '?'.$target['query'];
+		if (isset($target['query']) && ($target['query'] !== '' && $target['query'] !== '0')) {
+            $path .= '?'.$target['query'];
+        }
 
 		// Add the Trackback ID to the data string
 		if ($id = $this->get_id($url))
@@ -305,12 +307,12 @@ class CI_Trackback {
 		}
 
 		// Transfer the data
-		fputs($fp, 'POST '.$path." HTTP/1.0\r\n");
-		fputs($fp, 'Host: '.$target['host']."\r\n");
-		fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
-		fputs($fp, 'Content-length: '.strlen($data)."\r\n");
-		fputs($fp, "Connection: close\r\n\r\n");
-		fputs($fp, $data);
+		fwrite($fp, 'POST '.$path." HTTP/1.0\r\n");
+		fwrite($fp, 'Host: '.$target['host']."\r\n");
+		fwrite($fp, "Content-type: application/x-www-form-urlencoded\r\n");
+		fwrite($fp, 'Content-length: '.strlen($data)."\r\n");
+		fwrite($fp, "Connection: close\r\n\r\n");
+		fwrite($fp, $data);
 
 		// Was it successful?
 
@@ -415,7 +417,7 @@ class CI_Trackback {
 			}
 		}
 
-		return ctype_digit((string) $tb_id) ? $tb_id : FALSE;
+		return ctype_digit($tb_id) ? $tb_id : FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -474,6 +476,7 @@ class CI_Trackback {
 				return rtrim($out).$end_char;
 			}
 		}
+        return null;
 	}
 
 	// --------------------------------------------------------------------

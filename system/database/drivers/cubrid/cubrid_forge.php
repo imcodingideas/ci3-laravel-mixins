@@ -36,7 +36,7 @@
  * @since	Version 2.1.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CUBRID Forge Class
@@ -141,7 +141,7 @@ class CI_DB_cubrid_forge extends CI_DB_forge {
 		$extra_clause = isset($field['after'])
 			? ' AFTER '.$this->db->escape_identifiers($field['after']) : '';
 
-		if (empty($extra_clause) && isset($field['first']) && $field['first'] === TRUE)
+		if (($extra_clause === '' || $extra_clause === '0') && isset($field['first']) && $field['first'] === TRUE)
 		{
 			$extra_clause = ' FIRST';
 		}
@@ -217,7 +217,9 @@ class CI_DB_cubrid_forge extends CI_DB_forge {
 				continue;
 			}
 
-			is_array($this->keys[$i]) OR $this->keys[$i] = array($this->keys[$i]);
+			if (!is_array($this->keys[$i])) {
+                $this->keys[$i] = array($this->keys[$i]);
+            }
 
 			$sql .= ",\n\tKEY ".$this->db->escape_identifiers(implode('_', $this->keys[$i]))
 				.' ('.implode(', ', $this->db->escape_identifiers($this->keys[$i])).')';

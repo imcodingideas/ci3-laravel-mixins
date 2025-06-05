@@ -22,7 +22,7 @@ class PostModelTest extends TestCase
     public function testGetPostsReturnsArray()
     {
         $posts = $this->post_model->get_posts();
-        
+
         $this->assertIsArray($posts);
         $this->assertCount(3, $posts); // Should have 3 sample posts
     }
@@ -91,19 +91,19 @@ class PostModelTest extends TestCase
             'content' => 'Original content',
             'author' => 'Original Author'
         ];
-        
+
         $post_id = $this->post_model->create_post($post_data);
-        
+
         // Update the post
         $update_data = [
             'title' => 'Updated Title',
             'content' => 'Updated content'
         ];
-        
+
         $result = $this->post_model->update_post($post_id, $update_data);
-        
+
         $this->assertTrue($result);
-        
+
         // Verify update
         $updated_post = $this->post_model->get_post($post_id);
         $this->assertEquals($update_data['title'], $updated_post['title']);

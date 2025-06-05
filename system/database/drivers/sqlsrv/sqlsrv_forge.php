@@ -36,7 +36,7 @@
  * @since	Version 2.0.3
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * SQLSRV Forge Class

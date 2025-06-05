@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Download Helpers
@@ -64,13 +64,13 @@ if ( ! function_exists('force_download'))
 	 */
 	function force_download($filename = '', $data = '', $set_mime = FALSE)
 	{
-		if ($filename === '' OR $data === '')
+		if ($filename === '' || $data === '')
 		{
 			return;
 		}
 		elseif ($data === NULL)
 		{
-			if ( ! @is_file($filename) OR ($filesize = @filesize($filename)) === FALSE)
+			if ( ! @is_file($filename) || $filesize = @filesize($filename) === FALSE)
 			{
 				return;
 			}
@@ -92,7 +92,7 @@ if ( ! function_exists('force_download'))
 
 		if ($set_mime === TRUE)
 		{
-			if (count($x) === 1 OR $extension === '')
+			if (count($x) === 1 || $extension === '')
 			{
 				/* If we're going to detect the MIME type,
 				 * we'll need a file extension.

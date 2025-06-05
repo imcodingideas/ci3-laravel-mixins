@@ -8,7 +8,7 @@
  * - No output rendering
  * - Only core classes initialization
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /*
  * ------------------------------------------------------

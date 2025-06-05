@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Jquery Class
@@ -49,7 +49,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_Jquery extends CI_Javascript {
 
-	/**
+	public $CI;
+    /**
 	 * JavaScript directory location
 	 *
 	 * @var	string
@@ -167,7 +168,9 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _click($element = 'this', $js = '', $ret_false = TRUE)
 	{
-		is_array($js) OR $js = array($js);
+		if (!is_array($js)) {
+            $js = array($js);
+        }
 
 		if ($ret_false)
 		{
@@ -797,9 +800,6 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	public function corner($element = '', $corner_style = '')
 	{
-		// may want to make this configurable down the road
-		$corner_location = '/plugins/jquery.corner.js';
-
 		if ($corner_style !== '')
 		{
 			$corner_style = '"'.$corner_style.'"';
@@ -1002,7 +1002,9 @@ class CI_Jquery extends CI_Javascript {
 	 */
 	protected function _document_ready($js)
 	{
-		is_array($js) OR $js = array($js);
+		if (!is_array($js)) {
+            $js = array($js);
+        }
 
 		foreach ($js as $script)
 		{

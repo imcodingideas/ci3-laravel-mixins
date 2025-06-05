@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * SQLite3 Database Adapter Class
@@ -86,9 +86,9 @@ class CI_DB_sqlite3_driver extends CI_DB {
 
 		try
 		{
-			return ( ! $this->password)
-				? new SQLite3($this->database)
-				: new SQLite3($this->database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->password);
+			return ( $this->password)
+				? new SQLite3($this->database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->password)
+				: new SQLite3($this->database);
 		}
 		catch (Exception $e)
 		{

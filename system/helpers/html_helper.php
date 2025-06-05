@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter HTML Helpers
@@ -245,7 +245,7 @@ if ( ! function_exists('doctype'))
 				include(APPPATH.'config/'.ENVIRONMENT.'/doctypes.php');
 			}
 
-			if (empty($_doctypes) OR ! is_array($_doctypes))
+			if (empty($_doctypes) || ! is_array($_doctypes))
 			{
 				$doctypes = array();
 				return FALSE;

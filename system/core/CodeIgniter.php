@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * System Initialization File
@@ -403,7 +403,7 @@ if ( ! is_php('5.4'))
 	$class = ucfirst($RTR->class);
 	$method = $RTR->method;
 
-	if (empty($class) OR ! file_exists(APPPATH.'controllers/'.$RTR->directory.$class.'.php'))
+	if ($class === '' || $class === '0' || ! file_exists(APPPATH.'controllers/'.$RTR->directory.$class.'.php'))
 	{
 		$e404 = TRUE;
 	}
@@ -411,7 +411,7 @@ if ( ! is_php('5.4'))
 	{
 		require_once(APPPATH.'controllers/'.$RTR->directory.$class.'.php');
 
-		if ( ! class_exists($class, FALSE) OR $method[0] === '_' OR method_exists('CI_Controller', $method))
+		if ( ! class_exists($class, FALSE) || $method[0] === '_' || method_exists('CI_Controller', $method))
 		{
 			$e404 = TRUE;
 		}
@@ -438,7 +438,7 @@ if ( ! is_php('5.4'))
 		else
 		{
 			$reflection = new ReflectionMethod($class, $method);
-			if ( ! $reflection->isPublic() OR $reflection->isConstructor())
+			if ( ! $reflection->isPublic() || $reflection->isConstructor())
 			{
 				$e404 = TRUE;
 			}

@@ -36,7 +36,7 @@
  * @since	Version 1.4.1
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * oci8 Database Adapter Class
@@ -179,7 +179,7 @@ class CI_DB_oci8_driver extends CI_DB {
 			return;
 		}
 		elseif ($this->hostname !== '' && strpos($this->hostname, '/') === FALSE && strpos($this->hostname, ':') === FALSE
-			&& (( ! empty($this->port) && ctype_digit($this->port)) OR $this->database !== ''))
+			&& (! empty($this->port) && ctype_digit($this->port) || $this->database !== ''))
 		{
 			/* If the hostname field isn't empty, doesn't contain
 			 * ':' and/or '/' and if port and/or database aren't
@@ -201,7 +201,7 @@ class CI_DB_oci8_driver extends CI_DB {
 		/* At this point, we can only try and validate the hostname and
 		 * database fields separately as DSNs.
 		 */
-		if (preg_match($valid_dsns['ec'], $this->hostname) OR preg_match($valid_dsns['in'], $this->hostname))
+		if (preg_match($valid_dsns['ec'], $this->hostname) || preg_match($valid_dsns['in'], $this->hostname))
 		{
 			$this->dsn = $this->hostname;
 			return;
@@ -253,7 +253,7 @@ class CI_DB_oci8_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		if ( ! $this->conn_id OR ($version_string = oci_server_version($this->conn_id)) === FALSE)
+		if ( ! $this->conn_id || $version_string = oci_server_version($this->conn_id) === FALSE)
 		{
 			return FALSE;
 		}
@@ -320,7 +320,7 @@ class CI_DB_oci8_driver extends CI_DB {
 	 */
 	public function stored_procedure($package, $procedure, array $params)
 	{
-		if ($package === '' OR $procedure === '')
+		if ($package === '' || $procedure === '')
 		{
 			log_message('error', 'Invalid query: '.$package.'.'.$procedure);
 			return ($this->db_debug) ? $this->display_error('db_invalid_query') : FALSE;
@@ -359,7 +359,7 @@ class CI_DB_oci8_driver extends CI_DB {
 	 */
 	protected function _bind_params($params)
 	{
-		if ( ! is_array($params) OR ! is_resource($this->stmt_id))
+		if ( ! is_array($params) || ! is_resource($this->stmt_id))
 		{
 			return;
 		}
@@ -661,13 +661,13 @@ class CI_DB_oci8_driver extends CI_DB {
 	 */
 	protected function _limit($sql)
 	{
-		if (version_compare($this->version(), '12.1', '>='))
-		{
-			// OFFSET-FETCH can be used only with the ORDER BY clause
-			empty($this->qb_orderby) && $sql .= ' ORDER BY 1';
-
-			return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
-		}
+		if (version_compare($this->version(), '12.1', '>=')) {
+            // OFFSET-FETCH can be used only with the ORDER BY clause
+            if (empty($this->qb_orderby)) {
+                $sql .= ' ORDER BY 1';
+            }
+            return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
+        }
 
 		$this->limit_used = TRUE;
 		return 'SELECT * FROM (SELECT inner_query.*, rownum rnum FROM ('.$sql.') inner_query WHERE rownum < '.($this->qb_offset + $this->qb_limit + 1).')'

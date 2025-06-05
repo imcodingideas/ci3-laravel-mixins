@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Config Class
@@ -146,7 +146,7 @@ class CI_Config {
 
 				include($file_path);
 
-				if ( ! isset($config) OR ! is_array($config))
+				if ( ! isset($config) || ! is_array($config))
 				{
 					if ($fail_gracefully === TRUE)
 					{
@@ -174,7 +174,7 @@ class CI_Config {
 			}
 		}
 
-		if ($loaded === TRUE)
+		if ($loaded)
 		{
 			return TRUE;
 		}
@@ -184,6 +184,7 @@ class CI_Config {
 		}
 
 		show_error('The configuration file '.$file.'.php does not exist.');
+        return null;
 	}
 
 	// --------------------------------------------------------------------
@@ -336,12 +337,12 @@ class CI_Config {
 	 */
 	protected function _uri_string($uri)
 	{
-		if ($this->item('enable_query_strings') === FALSE)
-		{
-			is_array($uri) && $uri = implode('/', $uri);
-			return ltrim($uri, '/');
-		}
-		elseif (is_array($uri))
+		if ($this->item('enable_query_strings') === FALSE) {
+            if (is_array($uri)) {
+                $uri = implode('/', $uri);
+            }
+            return ltrim($uri, '/');
+        } elseif (is_array($uri))
 		{
 			return http_build_query($uri);
 		}

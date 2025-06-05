@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Postgre Database Adapter Class
@@ -85,7 +85,9 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	protected function _build_dsn()
 	{
-		$this->dsn === '' OR $this->dsn = '';
+		if ($this->dsn !== '') {
+            $this->dsn = '';
+        }
 
 		if (strpos($this->hostname, '/') !== FALSE)
 		{
@@ -93,7 +95,9 @@ class CI_DB_postgre_driver extends CI_DB {
 			$this->port = '';
 		}
 
-		$this->hostname === '' OR $this->dsn = 'host='.$this->hostname.' ';
+		if ($this->hostname !== '') {
+            $this->dsn = 'host='.$this->hostname.' ';
+        }
 
 		if ( ! empty($this->port) && ctype_digit($this->port))
 		{
@@ -108,10 +112,14 @@ class CI_DB_postgre_driver extends CI_DB {
 			 *
 			 * $db['password'] = NULL must be done in order to ignore it.
 			 */
-			$this->password === NULL OR $this->dsn .= "password='".$this->password."' ";
+			if ($this->password !== NULL) {
+                $this->dsn .= "password='".$this->password."' ";
+            }
 		}
 
-		$this->database === '' OR $this->dsn .= 'dbname='.$this->database.' ';
+		if ($this->database !== '') {
+            $this->dsn .= 'dbname='.$this->database.' ';
+        }
 
 		/* We don't have these options as elements in our standard configuration
 		 * array, but they might be set by parse_url() if the configuration was
@@ -140,7 +148,9 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	public function db_connect($persistent = FALSE)
 	{
-		empty($this->dsn) && $this->_build_dsn();
+		if (empty($this->dsn)) {
+            $this->_build_dsn();
+        }
 		$this->conn_id = ($persistent === TRUE)
 			? pg_pconnect($this->dsn)
 			: pg_connect($this->dsn);
@@ -155,7 +165,9 @@ class CI_DB_postgre_driver extends CI_DB {
 				return FALSE;
 			}
 
-			empty($this->schema) OR $this->simple_query('SET search_path TO '.$this->schema.',public');
+			if (!empty($this->schema)) {
+                $this->simple_query('SET search_path TO '.$this->schema.',public');
+            }
 		}
 
 		return $this->conn_id;
@@ -206,7 +218,7 @@ class CI_DB_postgre_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		if ( ! $this->conn_id OR ($pg_version = pg_version($this->conn_id)) === FALSE)
+		if ( ! $this->conn_id || $pg_version = pg_version($this->conn_id) === FALSE)
 		{
 			return FALSE;
 		}
@@ -313,7 +325,7 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	public function escape($str)
 	{
-		if (is_php('5.4.4') && (is_string($str) OR (is_object($str) && method_exists($str, '__toString'))))
+		if (is_php('5.4.4') && (is_string($str) || is_object($str) && method_exists($str, '__toString')))
 		{
 			return pg_escape_literal($this->conn_id, $str);
 		}
@@ -539,7 +551,7 @@ class CI_DB_postgre_driver extends CI_DB {
 	protected function _update_batch($table, $values, $index)
 	{
 		$ids = array();
-		foreach ($values as $key => $val)
+		foreach ($values as $val)
 		{
 			$ids[] = $val[$index]['value'];
 

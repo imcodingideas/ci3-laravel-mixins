@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * SQLite Forge Class
@@ -93,7 +93,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	 */
 	public function drop_database($db_name)
 	{
-		if ( ! file_exists($this->db->database) OR ! @unlink($this->db->database))
+		if ( ! file_exists($this->db->database) || ! @unlink($this->db->database))
 		{
 			return ($this->db->db_debug) ? $this->db->display_error('db_unable_to_drop') : FALSE;
 		}
@@ -122,7 +122,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
-		if ($alter_type === 'DROP' OR $alter_type === 'CHANGE')
+		if ($alter_type === 'DROP' || $alter_type === 'CHANGE')
 		{
 			// drop_column():
 			//	BEGIN TRANSACTION;

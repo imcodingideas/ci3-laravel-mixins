@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO SQLSRV Database Adapter Class
@@ -53,7 +53,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $port;
+    public $database;
+    public $QuotedId;
+    public $ConnectionPooling;
+    public $encrypt;
+    public $TraceOn;
+    public $TrustServerCertificate;
+    public $APP;
+    public $Failover_Partner;
+    public $LoginTimeout;
+    public $MultipleActiveResultSets;
+    public $TraceFile;
+    public $WSID;
+    public $char_set;
+    public $conn_id;
+    /**
+     * @var string[]|string
+     */
+    public $_escape_char;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    public $qb_orderby;
+    public $qb_offset;
+    public $qb_select;
+    public $db_debug;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -97,18 +125,22 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 		{
 			$this->dsn = 'sqlsrv:Server='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 
-			empty($this->port) OR $this->dsn .= ','.$this->port;
-			empty($this->database) OR $this->dsn .= ';Database='.$this->database;
+			if (!empty($this->port)) {
+                $this->dsn .= ','.$this->port;
+            }
+			if (!empty($this->database)) {
+                $this->dsn .= ';Database='.$this->database;
+            }
 
 			// Some custom options
 
-			if (isset($this->QuotedId))
+			if (property_exists($this, 'QuotedId') && $this->QuotedId !== null)
 			{
 				$this->dsn .= ';QuotedId='.$this->QuotedId;
 				$this->_quoted_identifier = (bool) $this->QuotedId;
 			}
 
-			if (isset($this->ConnectionPooling))
+			if (property_exists($this, 'ConnectionPooling') && $this->ConnectionPooling !== null)
 			{
 				$this->dsn .= ';ConnectionPooling='.$this->ConnectionPooling;
 			}
@@ -118,22 +150,34 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 				$this->dsn .= ';Encrypt=1';
 			}
 
-			if (isset($this->TraceOn))
+			if (property_exists($this, 'TraceOn') && $this->TraceOn !== null)
 			{
 				$this->dsn .= ';TraceOn='.$this->TraceOn;
 			}
 
-			if (isset($this->TrustServerCertificate))
+			if (property_exists($this, 'TrustServerCertificate') && $this->TrustServerCertificate !== null)
 			{
 				$this->dsn .= ';TrustServerCertificate='.$this->TrustServerCertificate;
 			}
 
-			empty($this->APP) OR $this->dsn .= ';APP='.$this->APP;
-			empty($this->Failover_Partner) OR $this->dsn .= ';Failover_Partner='.$this->Failover_Partner;
-			empty($this->LoginTimeout) OR $this->dsn .= ';LoginTimeout='.$this->LoginTimeout;
-			empty($this->MultipleActiveResultSets) OR $this->dsn .= ';MultipleActiveResultSets='.$this->MultipleActiveResultSets;
-			empty($this->TraceFile) OR $this->dsn .= ';TraceFile='.$this->TraceFile;
-			empty($this->WSID) OR $this->dsn .= ';WSID='.$this->WSID;
+			if (!empty($this->APP)) {
+                $this->dsn .= ';APP='.$this->APP;
+            }
+			if (!empty($this->Failover_Partner)) {
+                $this->dsn .= ';Failover_Partner='.$this->Failover_Partner;
+            }
+			if (!empty($this->LoginTimeout)) {
+                $this->dsn .= ';LoginTimeout='.$this->LoginTimeout;
+            }
+			if (!empty($this->MultipleActiveResultSets)) {
+                $this->dsn .= ';MultipleActiveResultSets='.$this->MultipleActiveResultSets;
+            }
+			if (!empty($this->TraceFile)) {
+                $this->dsn .= ';TraceFile='.$this->TraceFile;
+            }
+			if (!empty($this->WSID)) {
+                $this->dsn .= ';WSID='.$this->WSID;
+            }
 		}
 		elseif (preg_match('/QuotedId=(0|1)/', $this->dsn, $match))
 		{
@@ -158,7 +202,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 
 		$this->conn_id = parent::db_connect($persistent);
 
-		if ( ! is_object($this->conn_id) OR is_bool($this->_quoted_identifier))
+		if ( ! is_object($this->conn_id) || is_bool($this->_quoted_identifier))
 		{
 			return $this->conn_id;
 		}
@@ -298,13 +342,13 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	protected function _limit($sql)
 	{
 		// As of SQL Server 2012 (11.0.*) OFFSET is supported
-		if (version_compare($this->version(), '11', '>='))
-		{
-			// SQL Server OFFSET-FETCH can be used only with the ORDER BY clause
-			empty($this->qb_orderby) && $sql .= ' ORDER BY 1';
-
-			return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
-		}
+		if (version_compare($this->version(), '11', '>=')) {
+            // SQL Server OFFSET-FETCH can be used only with the ORDER BY clause
+            if (empty($this->qb_orderby)) {
+                $sql .= ' ORDER BY 1';
+            }
+            return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
+        }
 
 		$limit = $this->qb_offset + $this->qb_limit;
 
@@ -317,7 +361,7 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0 OR strpos(implode(',', $this->qb_select), '*') !== FALSE)
+			if (count($this->qb_select) === 0 || strpos(implode(',', $this->qb_select), '*') !== FALSE)
 			{
 				$select = '*'; // Inevitable
 			}

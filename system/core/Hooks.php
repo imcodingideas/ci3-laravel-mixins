@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Hooks Class
@@ -110,7 +110,7 @@ class CI_Hooks {
 		}
 
 		// If there are no hooks, we're done.
-		if ( ! isset($hook) OR ! is_array($hook))
+		if ( ! isset($hook) || ! is_array($hook))
 		{
 			return;
 		}
@@ -133,7 +133,7 @@ class CI_Hooks {
 	 */
 	public function call_hook($which = '')
 	{
-		if ( ! $this->enabled OR ! isset($this->hooks[$which]))
+		if ( ! $this->enabled || ! isset($this->hooks[$which]))
 		{
 			return FALSE;
 		}
@@ -187,7 +187,7 @@ class CI_Hooks {
 		// hook call within it a loop can happen
 		if ($this->_in_progress === TRUE)
 		{
-			return;
+			return null;
 		}
 
 		// -----------------------------------
@@ -234,31 +234,29 @@ class CI_Hooks {
 					return $this->_in_progress = FALSE;
 				}
 			}
-			else
-			{
-				class_exists($class, FALSE) OR require_once($filepath);
-
-				if ( ! class_exists($class, FALSE) OR ! method_exists($class, $function))
+			else {
+                if (!class_exists($class, FALSE)) {
+                    require_once($filepath);
+                }
+                if ( ! class_exists($class, FALSE) || ! method_exists($class, $function))
 				{
 					return $this->_in_progress = FALSE;
 				}
-
-				// Store the object and execute the method
-				$this->_objects[$class] = new $class();
-				$this->_objects[$class]->$function($params);
-			}
+                // Store the object and execute the method
+                $this->_objects[$class] = new $class();
+                $this->_objects[$class]->$function($params);
+            }
 		}
-		else
-		{
-			function_exists($function) OR require_once($filepath);
-
-			if ( ! function_exists($function))
+		else {
+            if (!function_exists($function)) {
+                require_once($filepath);
+            }
+            if ( ! function_exists($function))
 			{
 				return $this->_in_progress = FALSE;
 			}
-
-			$function($params);
-		}
+            $function($params);
+        }
 
 		$this->_in_progress = FALSE;
 		return TRUE;

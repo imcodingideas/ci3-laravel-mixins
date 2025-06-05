@@ -36,7 +36,7 @@
  * @since	Version 2.1.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CUBRID Result Class
@@ -121,8 +121,7 @@ class CI_DB_cubrid_result extends CI_DB_result {
 	 */
 	public function free_result()
 	{
-		if (is_resource($this->result_id) OR
-			(get_resource_type($this->result_id) === 'Unknown' && preg_match('/Resource id #/', strval($this->result_id))))
+		if (is_resource($this->result_id) || get_resource_type($this->result_id) === 'Unknown' && preg_match('/Resource id #/', strval($this->result_id)))
 		{
 			cubrid_close_request($this->result_id);
 			$this->result_id = FALSE;

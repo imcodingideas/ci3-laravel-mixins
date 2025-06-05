@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO Firebird Database Adapter Class
@@ -53,7 +53,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $database;
+    public $hostname;
+    public $char_set;
+    public $role;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    public $qb_offset;
+    public $db_debug;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -96,8 +107,12 @@ class CI_DB_pdo_firebird_driver extends CI_DB_pdo_driver {
 				$this->dsn .= 'dbname='.$this->hostname;
 			}
 
-			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
-			empty($this->role) OR $this->dsn .= ';role='.$this->role;
+			if (!empty($this->char_set)) {
+                $this->dsn .= ';charset='.$this->char_set;
+            }
+			if (!empty($this->role)) {
+                $this->dsn .= ';role='.$this->role;
+            }
 		}
 		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 9) === FALSE)
 		{

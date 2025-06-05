@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Javascript Class
@@ -50,7 +50,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_Javascript {
 
-	/**
+	public $CI;
+    public $js;
+    /**
 	 * JavaScript location
 	 *
 	 * @var	string
@@ -69,7 +71,7 @@ class CI_Javascript {
 	{
 		$defaults = array('js_library_driver' => 'jquery', 'autoload' => TRUE);
 
-		foreach ($defaults as $key => $val)
+		foreach (array_keys($defaults) as $key)
 		{
 			if (isset($params[$key]) && $params[$key] !== '')
 			{
@@ -651,7 +653,7 @@ class CI_Javascript {
 			$this->_javascript_location = $this->CI->config->item('javascript_location');
 		}
 
-		if ($relative === TRUE OR strpos($external_file, 'http://') === 0 OR strpos($external_file, 'https://') === 0)
+		if ($relative === TRUE || strpos($external_file, 'http://') === 0 || strpos($external_file, 'https://') === 0)
 		{
 			$str = $this->_open_script($external_file);
 		}
@@ -842,9 +844,9 @@ class CI_Javascript {
 		}
 		elseif (is_bool($result))
 		{
-			return ($result === TRUE) ? 'true' : 'false';
+			return ($result) ? 'true' : 'false';
 		}
-		elseif (is_string($result) OR $is_key)
+		elseif (is_string($result) || $is_key)
 		{
 			return '"'.str_replace(array('\\', "\t", "\n", "\r", '"', '/'), array('\\\\', '\\t', '\\n', "\\r", '\"', '\/'), $result).'"';
 		}
@@ -852,6 +854,7 @@ class CI_Javascript {
 		{
 			return $result;
 		}
+        return null;
 	}
 
 }

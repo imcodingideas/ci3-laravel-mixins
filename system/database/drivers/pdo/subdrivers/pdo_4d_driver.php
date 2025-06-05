@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO 4D Database Adapter Class
@@ -53,7 +53,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $port;
+    public $database;
+    public $char_set;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    /**
+     * @var never[]
+     */
+    public $qb_orderby;
+    public $qb_offset;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -85,9 +98,15 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 		{
 			$this->dsn = '4D:host='.(empty($this->hostname) ? '127.0.0.1' : $this->hostname);
 
-			empty($this->port) OR $this->dsn .= ';port='.$this->port;
-			empty($this->database) OR $this->dsn .= ';dbname='.$this->database;
-			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
+			if (!empty($this->port)) {
+                $this->dsn .= ';port='.$this->port;
+            }
+			if (!empty($this->database)) {
+                $this->dsn .= ';dbname='.$this->database;
+            }
+			if (!empty($this->char_set)) {
+                $this->dsn .= ';charset='.$this->char_set;
+            }
 		}
 		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 3) === FALSE)
 		{

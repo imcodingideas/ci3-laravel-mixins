@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Session Memcached Driver
@@ -140,7 +140,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 			}
 		}
 
-		if (empty($server_list))
+		if ($server_list === [])
 		{
 			log_message('error', 'Session: Memcached server pool is empty.');
 			return $this->_failure;
@@ -163,7 +163,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 */
 	public function read($session_id)
 	{
-		if (isset($this->_memcached) && $this->_get_lock($session_id))
+		if ($this->_memcached !== null && $this->_get_lock($session_id))
 		{
 			// Needed by write() to detect session_regenerate_id() calls
 			$this->_session_id = $session_id;
@@ -189,14 +189,14 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 */
 	public function write($session_id, $session_data)
 	{
-		if ( ! isset($this->_memcached, $this->_lock_key))
+		if ( $this->_memcached === null && $this->_lock_key === null)
 		{
 			return $this->_failure;
 		}
 		// Was the ID regenerated?
 		elseif ($session_id !== $this->_session_id)
 		{
-			if ( ! $this->_release_lock() OR ! $this->_get_lock($session_id))
+			if ( ! $this->_release_lock() || ! $this->_get_lock($session_id))
 			{
 				return $this->_failure;
 			}
@@ -219,8 +219,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 			return $this->_failure;
 		}
 		elseif (
-			$this->_memcached->touch($key, $this->_config['expiration'])
-			OR ($this->_memcached->getResultCode() === Memcached::RES_NOTFOUND && $this->_memcached->set($key, $session_data, $this->_config['expiration']))
+			$this->_memcached->touch($key, $this->_config['expiration']) || $this->_memcached->getResultCode() === Memcached::RES_NOTFOUND && $this->_memcached->set($key, $session_data, $this->_config['expiration'])
 		)
 		{
 			return $this->_success;
@@ -240,7 +239,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 */
 	public function close()
 	{
-		if (isset($this->_memcached))
+		if ($this->_memcached !== null)
 		{
 			$this->_release_lock();
 			if ( ! $this->_memcached->quit())
@@ -267,7 +266,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 */
 	public function destroy($session_id)
 	{
-		if (isset($this->_memcached, $this->_lock_key))
+		if ($this->_memcached !== null && $this->_lock_key !== null)
 		{
 			$this->_memcached->delete($this->_key_prefix.$session_id);
 			$this->_cookie_destroy();
@@ -345,9 +344,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 		{
 			if ( ! $this->_memcached->replace($this->_lock_key, time(), 300))
 			{
-				return ($this->_memcached->getResultCode() === Memcached::RES_NOTFOUND)
-					? $this->_memcached->add($this->_lock_key, time(), 300)
-					: FALSE;
+				return $this->_memcached->getResultCode() === Memcached::RES_NOTFOUND && $this->_memcached->add($this->_lock_key, time(), 300);
 			}
 
 			return TRUE;
@@ -397,7 +394,7 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 */
 	protected function _release_lock()
 	{
-		if (isset($this->_memcached, $this->_lock_key) && $this->_lock)
+		if ($this->_memcached !== null && $this->_lock_key !== null && $this->_lock)
 		{
 			if ( ! $this->_memcached->delete($this->_lock_key) && $this->_memcached->getResultCode() !== Memcached::RES_NOTFOUND)
 			{

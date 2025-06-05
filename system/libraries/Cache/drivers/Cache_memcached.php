@@ -36,7 +36,7 @@
  * @since	Version 2.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Memcached Caching Class
@@ -105,9 +105,15 @@ class CI_Cache_memcached extends CI_Driver {
 
 		foreach ($this->_config as $cache_server)
 		{
-			isset($cache_server['hostname']) OR $cache_server['hostname'] = $defaults['host'];
-			isset($cache_server['port']) OR $cache_server['port'] = $defaults['port'];
-			isset($cache_server['weight']) OR $cache_server['weight'] = $defaults['weight'];
+			if (!isset($cache_server['hostname'])) {
+                $cache_server['hostname'] = $defaults['host'];
+            }
+			if (!isset($cache_server['port'])) {
+                $cache_server['port'] = $defaults['port'];
+            }
+			if (!isset($cache_server['weight'])) {
+                $cache_server['weight'] = $defaults['weight'];
+            }
 
 			if ($this->_memcached instanceof Memcache)
 			{
@@ -288,7 +294,7 @@ class CI_Cache_memcached extends CI_Driver {
 	 */
 	public function is_supported()
 	{
-		return (extension_loaded('memcached') OR extension_loaded('memcache'));
+		return (extension_loaded('memcached') || extension_loaded('memcache'));
 	}
 
 	// ------------------------------------------------------------------------

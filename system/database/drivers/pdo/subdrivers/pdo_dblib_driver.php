@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO DBLIB Database Adapter Class
@@ -53,7 +53,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $port;
+    public $database;
+    public $char_set;
+    public $appname;
+    public $conn_id;
+    /**
+     * @var string[]|string
+     */
+    public $_escape_char;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $qb_limit;
+    public $qb_orderby;
+    public $qb_offset;
+    public $qb_select;
+    public $db_debug;
+    public $data_cache;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -102,9 +121,15 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 				$this->dsn .= (DIRECTORY_SEPARATOR === '\\' ? ',' : ':').$this->port;
 			}
 
-			empty($this->database) OR $this->dsn .= ';dbname='.$this->database;
-			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
-			empty($this->appname) OR $this->dsn .= ';appname='.$this->appname;
+			if (!empty($this->database)) {
+                $this->dsn .= ';dbname='.$this->database;
+            }
+			if (!empty($this->char_set)) {
+                $this->dsn .= ';charset='.$this->char_set;
+            }
+			if (!empty($this->appname)) {
+                $this->dsn .= ';appname='.$this->appname;
+            }
 		}
 		else
 		{
@@ -285,7 +310,7 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0 OR strpos(implode(',', $this->qb_select), '*') !== FALSE)
+			if (count($this->qb_select) === 0 || strpos(implode(',', $this->qb_select), '*') !== FALSE)
 			{
 				$select = '*'; // Inevitable
 			}

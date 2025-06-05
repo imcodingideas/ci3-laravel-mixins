@@ -36,7 +36,7 @@
  * @since	Version 1.3.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * MSSQL Result Class
@@ -182,7 +182,7 @@ class CI_DB_mssql_result extends CI_DB_result {
 	{
 		$row = mssql_fetch_object($this->result_id);
 
-		if ($class_name === 'stdClass' OR ! $row)
+		if ($class_name === 'stdClass' || ! $row)
 		{
 			return $row;
 		}

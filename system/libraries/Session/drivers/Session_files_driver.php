@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Session Files Driver
@@ -116,7 +116,9 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 
 		$this->_sid_regexp = $this->_config['_sid_regexp'];
 
-		isset(self::$func_overload) OR self::$func_overload = ( ! is_php('8.0') && extension_loaded('mbstring') && @ini_get('mbstring.func_overload'));
+		if (!isset(self::$func_overload)) {
+            self::$func_overload = ( ! is_php('8.0') && extension_loaded('mbstring') && @ini_get('mbstring.func_overload'));
+        }
 	}
 
 	// ------------------------------------------------------------------------
@@ -243,7 +245,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 	{
 		// If the two IDs don't match, we have a session_regenerate_id() call
 		// and we need to close the old handle and open a new one
-		if ($session_id !== $this->_session_id && ($this->close() === $this->_failure OR $this->read($session_id) === $this->_failure))
+		if ($session_id !== $this->_session_id && ($this->close() === $this->_failure || $this->read($session_id) === $this->_failure))
 		{
 			return $this->_failure;
 		}
@@ -362,7 +364,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 	 */
 	public function gc($maxlifetime)
 	{
-		if ( ! is_dir($this->_config['save_path']) OR ($directory = opendir($this->_config['save_path'])) === FALSE)
+		if ( ! is_dir($this->_config['save_path']) || $directory = opendir($this->_config['save_path']) === FALSE)
 		{
 			log_message('debug', "Session: Garbage collector couldn't list files under directory '".$this->_config['save_path']."'.");
 			return $this->_failure;
@@ -382,10 +384,7 @@ class CI_Session_files_driver extends CI_Session_driver implements CI_Session_dr
 		while (($file = readdir($directory)) !== FALSE)
 		{
 			// If the filename doesn't match this pattern, it's either not a session file or is not ours
-			if ( ! preg_match($pattern, $file)
-				OR ! is_file($this->_config['save_path'].DIRECTORY_SEPARATOR.$file)
-				OR ($mtime = filemtime($this->_config['save_path'].DIRECTORY_SEPARATOR.$file)) === FALSE
-				OR $mtime > $ts)
+			if ( ! preg_match($pattern, $file) || ! is_file($this->_config['save_path'].DIRECTORY_SEPARATOR.$file) || $mtime = filemtime($this->_config['save_path'].DIRECTORY_SEPARATOR.$file) === FALSE || $mtime > $ts)
 			{
 				continue;
 			}

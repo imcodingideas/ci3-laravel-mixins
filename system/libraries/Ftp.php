@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * FTP Class
@@ -112,7 +112,9 @@ class CI_FTP {
 	 */
 	public function __construct($config = array())
 	{
-		empty($config) OR $this->initialize($config);
+		if (!empty($config)) {
+            $this->initialize($config);
+        }
 		log_message('info', 'FTP Class Initialized');
 	}
 
@@ -264,7 +266,7 @@ class CI_FTP {
 	 */
 	public function mkdir($path, $permissions = NULL)
 	{
-		if ($path === '' OR ! $this->_is_conn())
+		if ($path === '' || ! $this->_is_conn())
 		{
 			return FALSE;
 		}
@@ -578,7 +580,7 @@ class CI_FTP {
 		if ($fp = @opendir($locpath))
 		{
 			// Attempt to open the remote file path and try to create it, if it doesn't exist
-			if ( ! $this->changedir($rempath, TRUE) && ( ! $this->mkdir($rempath) OR ! $this->changedir($rempath)))
+			if ( ! $this->changedir($rempath, TRUE) && ( ! $this->mkdir($rempath) || ! $this->changedir($rempath)))
 			{
 				return FALSE;
 			}
@@ -645,9 +647,7 @@ class CI_FTP {
 	 */
 	public function close()
 	{
-		return $this->_is_conn()
-			? @ftp_close($this->conn_id)
-			: FALSE;
+		return $this->_is_conn() && @ftp_close($this->conn_id);
 	}
 
 	// ------------------------------------------------------------------------

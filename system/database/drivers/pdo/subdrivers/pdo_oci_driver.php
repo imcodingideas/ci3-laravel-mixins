@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO Oracle Database Adapter Class
@@ -53,7 +53,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 
-	/**
+	public $dsn;
+    public $hostname;
+    public $port;
+    public $database;
+    public $char_set;
+    public $data_cache;
+    public $dbprefix;
+    public $_like_escape_str;
+    public $_like_escape_chr;
+    public $username;
+    public $qb_limit;
+    public $qb_orderby;
+    public $qb_offset;
+    /**
 	 * Sub-driver
 	 *
 	 * @var	string
@@ -117,10 +130,14 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 				$this->dsn .= '//'.(empty($this->hostname) ? '127.0.0.1' : $this->hostname)
 					.(empty($this->port) ? '' : ':'.$this->port).'/';
 
-				empty($this->database) OR $this->dsn .= $this->database;
+				if (!empty($this->database)) {
+                    $this->dsn .= $this->database;
+                }
 			}
 
-			empty($this->char_set) OR $this->dsn .= ';charset='.$this->char_set;
+			if (!empty($this->char_set)) {
+                $this->dsn .= ';charset='.$this->char_set;
+            }
 		}
 		elseif ( ! empty($this->char_set) && strpos($this->dsn, 'charset=', 4) === FALSE)
 		{
@@ -312,13 +329,13 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 	 */
 	protected function _limit($sql)
 	{
-		if (version_compare($this->version(), '12.1', '>='))
-		{
-			// OFFSET-FETCH can be used only with the ORDER BY clause
-			empty($this->qb_orderby) && $sql .= ' ORDER BY 1';
-
-			return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
-		}
+		if (version_compare($this->version(), '12.1', '>=')) {
+            // OFFSET-FETCH can be used only with the ORDER BY clause
+            if (empty($this->qb_orderby)) {
+                $sql .= ' ORDER BY 1';
+            }
+            return $sql.' OFFSET '.(int) $this->qb_offset.' ROWS FETCH NEXT '.$this->qb_limit.' ROWS ONLY';
+        }
 
 		return 'SELECT * FROM (SELECT inner_query.*, rownum rnum FROM ('.$sql.') inner_query WHERE rownum < '.($this->qb_offset + $this->qb_limit + 1).')'
 			.($this->qb_offset ? ' WHERE rnum >= '.($this->qb_offset + 1): '');

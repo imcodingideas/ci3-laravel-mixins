@@ -36,7 +36,7 @@
  * @since	Version 2.1.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CUBRID Database Adapter Class
@@ -95,18 +95,15 @@ class CI_DB_cubrid_driver extends CI_DB {
 	{
 		parent::__construct($params);
 
-		if (preg_match('/^CUBRID:[^:]+(:[0-9][1-9]{0,4})?:[^:]+:[^:]*:[^:]*:(\?.+)?$/', $this->dsn, $matches))
-		{
-			if (stripos($matches[2], 'autocommit=off') !== FALSE)
+		if (preg_match('/^CUBRID:[^:]+(:\d[1-9]{0,4})?:[^:]+:[^:]*:[^:]*:(\?.+)?$/', $this->dsn, $matches)) {
+            if (stripos($matches[2], 'autocommit=off') !== FALSE)
 			{
 				$this->auto_commit = FALSE;
 			}
-		}
-		else
-		{
-			// If no port is defined by the user, use the default value
-			empty($this->port) OR $this->port = 33000;
-		}
+        } elseif (!empty($this->port)) {
+            // If no port is defined by the user, use the default value
+            $this->port = 33000;
+        }
 	}
 
 	// --------------------------------------------------------------------
@@ -119,7 +116,7 @@ class CI_DB_cubrid_driver extends CI_DB {
 	 */
 	public function db_connect($persistent = FALSE)
 	{
-		if (preg_match('/^CUBRID:[^:]+(:[0-9][1-9]{0,4})?:[^:]+:([^:]*):([^:]*):(\?.+)?$/', $this->dsn, $matches))
+		if (preg_match('/^CUBRID:[^:]+(:\d[1-9]{0,4})?:[^:]+:([^:]*):([^:]*):(\?.+)?$/', $this->dsn, $matches))
 		{
 			$func = ($persistent !== TRUE) ? 'cubrid_connect_with_url' : 'cubrid_pconnect_with_url';
 			return ($matches[2] === '' && $matches[3] === '' && $this->username !== '' && $this->password !== '')
@@ -165,7 +162,7 @@ class CI_DB_cubrid_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		return ( ! $this->conn_id OR ($version = cubrid_get_server_info($this->conn_id)) === FALSE)
+		return ( ! $this->conn_id || $version = cubrid_get_server_info($this->conn_id) === FALSE)
 			? FALSE
 			: $this->data_cache['version'] = $version;
 	}
@@ -196,7 +193,7 @@ class CI_DB_cubrid_driver extends CI_DB {
 		{
 			return FALSE;
 		}
-		elseif ($autocommit === TRUE)
+		elseif ($autocommit)
 		{
 			return cubrid_set_autocommit($this->conn_id, CUBRID_AUTOCOMMIT_FALSE);
 		}

@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Shopping Cart Class
@@ -130,7 +130,7 @@ class CI_Cart {
 	public function insert($items = array())
 	{
 		// Was any cart data passed? No? Bah...
-		if ( ! is_array($items) OR count($items) === 0)
+		if ( ! is_array($items) || count($items) === 0)
 		{
 			log_message('error', 'The insert method must be passed an array containing data.');
 			return FALSE;
@@ -153,18 +153,15 @@ class CI_Cart {
 		{
 			foreach ($items as $val)
 			{
-				if (is_array($val) && isset($val['id']))
+				if (is_array($val) && isset($val['id']) && $this->_insert($val))
 				{
-					if ($this->_insert($val))
-					{
-						$save_cart = TRUE;
-					}
+					$save_cart = TRUE;
 				}
 			}
 		}
 
 		// Save the cart data if the insert was successful
-		if ($save_cart === TRUE)
+		if ($save_cart)
 		{
 			$this->_save_cart();
 			return isset($rowid) ? $rowid : TRUE;
@@ -184,7 +181,7 @@ class CI_Cart {
 	protected function _insert($items = array())
 	{
 		// Was any cart data passed? No? Bah...
-		if ( ! is_array($items) OR count($items) === 0)
+		if ( ! is_array($items) || count($items) === 0)
 		{
 			log_message('error', 'The insert method must be passed an array containing data.');
 			return FALSE;
@@ -288,7 +285,7 @@ class CI_Cart {
 	public function update($items = array())
 	{
 		// Was any cart data passed?
-		if ( ! is_array($items) OR count($items) === 0)
+		if ( ! is_array($items) || count($items) === 0)
 		{
 			return FALSE;
 		}
@@ -309,18 +306,15 @@ class CI_Cart {
 		{
 			foreach ($items as $val)
 			{
-				if (is_array($val) && isset($val['rowid']))
+				if (is_array($val) && isset($val['rowid']) && $this->_update($val) === TRUE)
 				{
-					if ($this->_update($val) === TRUE)
-					{
-						$save_cart = TRUE;
-					}
+					$save_cart = TRUE;
 				}
 			}
 		}
 
 		// Save the cart data if the insert was successful
-		if ($save_cart === TRUE)
+		if ($save_cart)
 		{
 			$this->_save_cart();
 			return TRUE;
@@ -394,7 +388,7 @@ class CI_Cart {
 		foreach ($this->_cart_contents as $key => $val)
 		{
 			// We make sure the array contains the proper indexes
-			if ( ! is_array($val) OR ! isset($val['price'], $val['qty']))
+			if ( ! is_array($val) || ! isset($val['price'], $val['qty']))
 			{
 				continue;
 			}
@@ -499,7 +493,7 @@ class CI_Cart {
 	 */
 	public function get_item($row_id)
 	{
-		return (in_array($row_id, array('total_items', 'cart_total'), TRUE) OR ! isset($this->_cart_contents[$row_id]))
+		return (in_array($row_id, array('total_items', 'cart_total'), TRUE) || ! isset($this->_cart_contents[$row_id]))
 			? FALSE
 			: $this->_cart_contents[$row_id];
 	}

@@ -36,7 +36,7 @@
  * @since	Version 1.4.1
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Oracle Forge Class
@@ -200,14 +200,8 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 		switch (strtoupper($attributes['TYPE']))
 		{
 			case 'TINYINT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'MEDIUMINT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'INT':
-				$attributes['TYPE'] = 'NUMBER';
-				return;
 			case 'BIGINT':
 				$attributes['TYPE'] = 'NUMBER';
 				return;

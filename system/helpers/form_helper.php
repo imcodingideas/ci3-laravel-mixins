@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Form Helpers
@@ -258,7 +258,9 @@ if ( ! function_exists('form_password'))
 	 */
 	function form_password($data = '', $value = '', $extra = '')
 	{
-		is_array($data) OR $data = array('name' => $data);
+		if (!is_array($data)) {
+            $data = array('name' => $data);
+        }
 		$data['type'] = 'password';
 		return form_input($data, $value, $extra);
 	}
@@ -281,7 +283,9 @@ if ( ! function_exists('form_upload'))
 	function form_upload($data = '', $value = '', $extra = '')
 	{
 		$defaults = array('type' => 'file', 'name' => '');
-		is_array($data) OR $data = array('name' => $data);
+		if (!is_array($data)) {
+            $data = array('name' => $data);
+        }
 		$data['type'] = 'file';
 
 		return '<input '._parse_form_attributes($data, $defaults)._attributes_to_string($extra)." />\n";
@@ -308,7 +312,7 @@ if ( ! function_exists('form_textarea'))
 			'rows' => '10'
 		);
 
-		if ( ! is_array($data) OR ! isset($data['value']))
+		if ( ! is_array($data) || ! isset($data['value']))
 		{
 			$val = $value;
 		}
@@ -385,8 +389,12 @@ if ( ! function_exists('form_dropdown'))
 			$defaults = array('name' => $data);
 		}
 
-		is_array($selected) OR $selected = array($selected);
-		is_array($options) OR $options = array($options);
+		if (!is_array($selected)) {
+            $selected = array($selected);
+        }
+		if (!is_array($options)) {
+            $options = array($options);
+        }
 
 		// If no selected state was submitted we will attempt to set it automatically
 		if (empty($selected))
@@ -416,7 +424,7 @@ if ( ! function_exists('form_dropdown'))
 
 			if (is_array($val))
 			{
-				if (empty($val))
+				if ($val === [])
 				{
 					continue;
 				}
@@ -427,7 +435,7 @@ if ( ! function_exists('form_dropdown'))
 				{
 					$sel = in_array($optgroup_key, $selected) ? ' selected="selected"' : '';
 					$form .= '<option value="'.html_escape($optgroup_key).'"'.$sel.'>'
-						.(string) $optgroup_val."</option>\n";
+						.$optgroup_val."</option>\n";
 				}
 
 				$form .= "</optgroup>\n";
@@ -436,7 +444,7 @@ if ( ! function_exists('form_dropdown'))
 			{
 				$form .= '<option value="'.html_escape($key).'"'
 					.(in_array($key, $selected) ? ' selected="selected"' : '').'>'
-					.(string) $val."</option>\n";
+					.$val."</option>\n";
 			}
 		}
 
@@ -459,7 +467,7 @@ if ( ! function_exists('form_checkbox'))
 	 */
 	function form_checkbox($data = '', $value = '', $checked = FALSE, $extra = '')
 	{
-		$defaults = array('type' => 'checkbox', 'name' => ( ! is_array($data) ? $data : ''), 'value' => $value);
+		$defaults = array('type' => 'checkbox', 'name' => ( is_array($data) ? '' : $data), 'value' => $value);
 
 		if (is_array($data) && array_key_exists('checked', $data))
 		{
@@ -503,7 +511,9 @@ if ( ! function_exists('form_radio'))
 	 */
 	function form_radio($data = '', $value = '', $checked = FALSE, $extra = '')
 	{
-		is_array($data) OR $data = array('name' => $data);
+		if (!is_array($data)) {
+            $data = array('name' => $data);
+        }
 		$data['type'] = 'radio';
 
 		return form_checkbox($data, $value, $checked, $extra);
@@ -714,11 +724,13 @@ if ( ! function_exists('set_value'))
 	{
 		$CI =& get_instance();
 
-		$value = (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
+		$value = (property_exists($CI, 'form_validation') && $CI->form_validation !== null && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 			? $CI->form_validation->set_value($field, $default)
 			: $CI->input->post($field, FALSE);
 
-		isset($value) OR $value = $default;
+		if (!isset($value)) {
+            $value = $default;
+        }
 		return ($html_escape) ? html_escape($value) : $value;
 	}
 }
@@ -742,7 +754,7 @@ if ( ! function_exists('set_select'))
 	{
 		$CI =& get_instance();
 
-		if (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
+		if (property_exists($CI, 'form_validation') && $CI->form_validation !== null && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 		{
 			return $CI->form_validation->set_select($field, $value, $default);
 		}
@@ -789,7 +801,7 @@ if ( ! function_exists('set_checkbox'))
 	{
 		$CI =& get_instance();
 
-		if (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
+		if (property_exists($CI, 'form_validation') && $CI->form_validation !== null && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 		{
 			return $CI->form_validation->set_checkbox($field, $value, $default);
 		}
@@ -841,7 +853,7 @@ if ( ! function_exists('set_radio'))
 	{
 		$CI =& get_instance();
 
-		if (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
+		if (property_exists($CI, 'form_validation') && $CI->form_validation !== null && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
 		{
 			return $CI->form_validation->set_radio($field, $value, $default);
 		}
@@ -1043,7 +1055,7 @@ if ( ! function_exists('_get_validation_object'))
 
 		if (FALSE !== ($object = $CI->load->is_loaded('Form_validation')))
 		{
-			if ( ! isset($CI->$object) OR ! is_object($CI->$object))
+			if ( ! isset($CI->$object) || ! is_object($CI->$object))
 			{
 				return $return;
 			}

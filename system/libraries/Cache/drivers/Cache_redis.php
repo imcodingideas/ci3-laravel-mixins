@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Redis Caching Class
@@ -199,14 +199,16 @@ class CI_Cache_redis extends CI_Driver
 	 */
 	public function save($id, $data, $ttl = 60, $raw = FALSE)
 	{
-		if (is_array($data) OR is_object($data))
+		if (is_array($data) || is_object($data))
 		{
 			if ( ! $this->_redis->sIsMember('_ci_redis_serialized', $id) && ! $this->_redis->sAdd('_ci_redis_serialized', $id))
 			{
 				return FALSE;
 			}
 
-			isset($this->_serialized[$id]) OR $this->_serialized[$id] = TRUE;
+			if (!isset($this->_serialized[$id])) {
+                $this->_serialized[$id] = TRUE;
+            }
 			$data = serialize($data);
 		}
 		else

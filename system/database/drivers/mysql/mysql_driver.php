@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * MySQL Database Adapter Class
@@ -128,7 +128,7 @@ class CI_DB_mysql_driver extends CI_DB {
 
 		if ($this->encrypt === TRUE)
 		{
-			$client_flags = $client_flags | MYSQL_CLIENT_SSL;
+			$client_flags |= MYSQL_CLIENT_SSL;
 		}
 
 		// Error suppression is necessary mostly due to PHP 5.5+ issuing E_DEPRECATED messages
@@ -148,7 +148,7 @@ class CI_DB_mysql_driver extends CI_DB {
 				: FALSE;
 		}
 
-		if (isset($this->stricton) && is_resource($this->conn_id))
+		if ($this->stricton !== null && is_resource($this->conn_id))
 		{
 			if ($this->stricton)
 			{
@@ -243,7 +243,7 @@ class CI_DB_mysql_driver extends CI_DB {
 			return $this->data_cache['version'];
 		}
 
-		if ( ! $this->conn_id OR ($version = mysql_get_server_info($this->conn_id)) === FALSE)
+		if ( ! $this->conn_id || $version = mysql_get_server_info($this->conn_id) === FALSE)
 		{
 			return FALSE;
 		}

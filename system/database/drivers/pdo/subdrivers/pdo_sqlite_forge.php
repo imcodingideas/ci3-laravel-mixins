@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * PDO SQLite Forge Class
@@ -155,7 +155,7 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
-		if ($alter_type === 'DROP' OR $alter_type === 'CHANGE')
+		if ($alter_type === 'DROP' || $alter_type === 'CHANGE')
 		{
 			// drop_column():
 			//	BEGIN TRANSACTION;

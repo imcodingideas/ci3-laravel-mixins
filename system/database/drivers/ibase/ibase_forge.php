@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Interbase/Firebird Forge Class
@@ -47,7 +47,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class CI_DB_ibase_forge extends CI_DB_forge {
 
-	/**
+	public $hostname;
+    public $conn_id;
+    /**
 	 * CREATE TABLE IF statement
 	 *
 	 * @var	string
@@ -99,7 +101,9 @@ class CI_DB_ibase_forge extends CI_DB_forge {
 		// Firebird databases are flat files, so a path is required
 
 		// Hostname is needed for remote access
-		empty($this->db->hostname) OR $db_name = $this->hostname.':'.$db_name;
+		if (!empty($this->db->hostname)) {
+            $db_name = $this->hostname.':'.$db_name;
+        }
 
 		return parent::create_database('"'.$db_name.'"');
 	}

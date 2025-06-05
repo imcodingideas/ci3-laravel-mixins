@@ -36,7 +36,7 @@
  * @since	Version 3.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Session Database Driver
@@ -83,7 +83,9 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 		parent::__construct($params);
 
 		$CI =& get_instance();
-		isset($CI->db) OR $CI->load->database();
+		if (!(property_exists($CI, 'db') && $CI->db !== null)) {
+            $CI->load->database();
+        }
 		$this->_db = $CI->db;
 
 		if ( ! $this->_db instanceof CI_DB_query_builder)
@@ -172,7 +174,7 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 			$this->_db->where('ip_address', $_SERVER['REMOTE_ADDR']);
 		}
 
-		if ( ! ($result = $this->_db->get()) OR ($result = $result->row()) === NULL)
+		if ( ! ($result = $this->_db->get()) || $result = $result->row() === NULL)
 		{
 			// PHP7 will reuse the same SessionHandler object after
 			// ID regeneration, so we need to explicitly set this to
@@ -211,9 +213,9 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 		$this->_db->reset_query();
 
 		// Was the ID regenerated?
-		if (isset($this->_session_id) && $session_id !== $this->_session_id)
+		if ($this->_session_id !== null && $session_id !== $this->_session_id)
 		{
-			if ( ! $this->_release_lock() OR ! $this->_get_lock($session_id))
+			if ( ! $this->_release_lock() || ! $this->_get_lock($session_id))
 			{
 				return $this->_failure;
 			}
@@ -384,9 +386,13 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 		$this->_db->reset_query();
 
 		$this->_db->select('1')->from($this->_config['save_path'])->where('id', $id);
-		empty($this->_config['match_ip']) OR $this->_db->where('ip_address', $_SERVER['REMOTE_ADDR']);
+		if (!empty($this->_config['match_ip'])) {
+            $this->_db->where('ip_address', $_SERVER['REMOTE_ADDR']);
+        }
 		$result = $this->_db->get();
-		empty($result) OR $result = $result->row();
+		if (!empty($result)) {
+            $result = $result->row();
+        }
 
 		return ! empty($result);
 	}

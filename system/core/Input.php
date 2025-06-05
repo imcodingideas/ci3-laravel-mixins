@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Input Class
@@ -146,10 +146,7 @@ class CI_Input {
 		$this->security =& load_class('Security', 'core');
 
 		// Do we need the UTF-8 class?
-		if (UTF8_ENABLED === TRUE)
-		{
-			$this->uni =& load_class('Utf8', 'core');
-		}
+		$this->uni =& load_class('Utf8', 'core');
 
 		// Sanitize global arrays
 		$this->_sanitize_globals();
@@ -177,10 +174,14 @@ class CI_Input {
 	 */
 	protected function _fetch_from_array(&$array, $index = NULL, $xss_clean = NULL)
 	{
-		is_bool($xss_clean) OR $xss_clean = $this->_enable_xss;
+		if (!is_bool($xss_clean)) {
+            $xss_clean = $this->_enable_xss;
+        }
 
 		// If $index is NULL, it means that the whole $array is requested
-		isset($index) OR $index = array_keys($array);
+		if (!isset($index)) {
+            $index = array_keys($array);
+        }
 
 		// allow fetching multiple keys at once
 		if (is_array($index))
@@ -336,7 +337,9 @@ class CI_Input {
 		{
 			// $this->raw_input_stream will trigger __get().
 			parse_str($this->raw_input_stream, $this->_input_stream);
-			is_array($this->_input_stream) OR $this->_input_stream = array();
+			if (!is_array($this->_input_stream)) {
+                $this->_input_stream = array();
+            }
 		}
 
 		return $this->_fetch_from_array($this->_input_stream, $index, $xss_clean);
@@ -407,11 +410,15 @@ class CI_Input {
 			$expire = ($expire > 0) ? time() + $expire : 0;
 		}
 
-		isset($samesite) OR $samesite = config_item('cookie_samesite');
+		if (!isset($samesite)) {
+            $samesite = config_item('cookie_samesite');
+        }
 		if (isset($samesite))
 		{
 			$samesite = ucfirst(strtolower($samesite));
-			in_array($samesite, array('Lax', 'Strict', 'None'), TRUE) OR $samesite = 'Lax';
+			if (!in_array($samesite, array('Lax', 'Strict', 'None'), TRUE)) {
+                $samesite = 'Lax';
+            }
 		}
 		else
 		{
@@ -515,7 +522,9 @@ class CI_Input {
 					}
 
 					// We have a subnet ... now the heavy lifting begins
-					isset($separator) OR $separator = $this->valid_ip($this->ip_address, 'ipv6') ? ':' : '.';
+					if (!isset($separator)) {
+                        $separator = $this->valid_ip($this->ip_address, 'ipv6') ? ':' : '.';
+                    }
 
 					// If the proxy entry doesn't match the IP protocol - skip it
 					if (strpos($proxy_ips[$i], $separator) === FALSE)
@@ -653,31 +662,18 @@ class CI_Input {
 				$_GET[$this->_clean_input_keys($key)] = $this->_clean_input_data($val);
 			}
 		}
-
-		// Clean $_POST Data
-		if (is_array($_POST))
-		{
-			foreach ($_POST as $key => $val)
+        // Clean $_POST Data
+        foreach ($_POST as $key => $val)
 			{
 				$_POST[$this->_clean_input_keys($key)] = $this->_clean_input_data($val);
 			}
-		}
-
-		// Clean $_COOKIE Data
-		if (is_array($_COOKIE))
-		{
-			// Also get rid of specially treated cookies that might be set by a server
-			// or silly application, that are of no use to a CI application anyway
-			// but that when present will trip our 'Disallowed Key Characters' alarm
-			// http://www.ietf.org/rfc/rfc2109.txt
-			// note that the key names below are single quoted strings, and are not PHP variables
-			unset(
+        // Clean $_COOKIE Data
+        unset(
 				$_COOKIE['$Version'],
 				$_COOKIE['$Path'],
 				$_COOKIE['$Domain']
 			);
-
-			foreach ($_COOKIE as $key => $val)
+        foreach ($_COOKIE as $key => $val)
 			{
 				if (($cookie_key = $this->_clean_input_keys($key)) !== FALSE)
 				{
@@ -688,7 +684,6 @@ class CI_Input {
 					unset($_COOKIE[$key]);
 				}
 			}
-		}
 
 		// Sanitize PHP_SELF
 		$_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
@@ -730,10 +725,7 @@ class CI_Input {
 		}
 
 		// Clean UTF-8 if supported
-		if (UTF8_ENABLED === TRUE)
-		{
-			$str = $this->uni->clean_string($str);
-		}
+		$str = $this->uni->clean_string($str);
 
 		// Remove control characters
 		$str = remove_invisible_characters($str, FALSE);
@@ -777,14 +769,8 @@ class CI_Input {
 				exit(7); // EXIT_USER_INPUT
 			}
 		}
-
-		// Clean UTF-8 if supported
-		if (UTF8_ENABLED === TRUE)
-		{
-			return $this->uni->clean_string($str);
-		}
-
-		return $str;
+        // Clean UTF-8 if supported
+        return $this->uni->clean_string($str);
 	}
 
 	// --------------------------------------------------------------------
@@ -798,7 +784,7 @@ class CI_Input {
 	public function request_headers($xss_clean = FALSE)
 	{
 		// If header is already defined, return it immediately
-		if ( ! empty($this->headers))
+		if ( $this->headers !== [])
 		{
 			return $this->_fetch_from_array($this->headers, NULL, $xss_clean);
 		}
@@ -808,11 +794,11 @@ class CI_Input {
 		{
 			$this->headers = apache_request_headers();
 		}
-		else
-		{
-			isset($_SERVER['CONTENT_TYPE']) && $this->headers['Content-Type'] = $_SERVER['CONTENT_TYPE'];
-
-			foreach ($_SERVER as $key => $val)
+		else {
+            if (isset($_SERVER['CONTENT_TYPE'])) {
+                $this->headers['Content-Type'] = $_SERVER['CONTENT_TYPE'];
+            }
+            foreach (array_keys($_SERVER) as $key)
 			{
 				if (sscanf($key, 'HTTP_%s', $header) === 1)
 				{
@@ -823,7 +809,7 @@ class CI_Input {
 					$this->headers[$header] = $_SERVER[$key];
 				}
 			}
-		}
+        }
 
 		return $this->_fetch_from_array($this->headers, NULL, $xss_clean);
 	}
@@ -843,14 +829,15 @@ class CI_Input {
 	{
 		static $headers;
 
-		if ( ! isset($headers))
-		{
-			empty($this->headers) && $this->request_headers();
-			foreach ($this->headers as $key => $value)
+		if (! isset($headers)) {
+            if ($this->headers === []) {
+                $this->request_headers();
+            }
+            foreach ($this->headers as $key => $value)
 			{
 				$headers[strtolower($key)] = $value;
 			}
-		}
+        }
 
 		$index = strtolower($index);
 
@@ -922,16 +909,17 @@ class CI_Input {
 	 * @return	mixed
 	 */
 	public function __get($name)
-	{
-		if ($name === 'raw_input_stream')
-		{
-			isset($this->_raw_input_stream) OR $this->_raw_input_stream = file_get_contents('php://input');
-			return $this->_raw_input_stream;
-		}
-		elseif ($name === 'ip_address')
+    {
+        if ($name === 'raw_input_stream') {
+            if ($this->_raw_input_stream === null) {
+                $this->_raw_input_stream = file_get_contents('php://input');
+            }
+            return $this->_raw_input_stream;
+        } elseif ($name === 'ip_address')
 		{
 			return $this->ip_address;
 		}
-	}
+        return null;
+    }
 
 }

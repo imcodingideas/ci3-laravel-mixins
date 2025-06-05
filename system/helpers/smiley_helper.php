@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Smiley Helpers
@@ -198,7 +198,7 @@ if ( ! function_exists('parse_smileys'))
 	 */
 	function parse_smileys($str = '', $image_url = '', $smileys = NULL)
 	{
-		if ($image_url === '' OR ( ! is_array($smileys) && FALSE === ($smileys = _get_smiley_array())))
+		if ($image_url === '' || ! is_array($smileys) && FALSE === $smileys = _get_smiley_array())
 		{
 			return $str;
 		}
@@ -242,7 +242,7 @@ if ( ! function_exists('_get_smiley_array'))
 				include(APPPATH.'config/'.ENVIRONMENT.'/smileys.php');
 			}
 
-			if (empty($smileys) OR ! is_array($smileys))
+			if (empty($smileys) || ! is_array($smileys))
 			{
 				$_smileys = array();
 				return FALSE;

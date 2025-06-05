@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Text Helpers
@@ -121,6 +121,7 @@ if ( ! function_exists('character_limiter'))
 				return (mb_strlen($out) === mb_strlen($str)) ? $out : $out.$end_char;
 			}
 		}
+        return null;
 	}
 }
 
@@ -412,7 +413,7 @@ if ( ! function_exists('convert_accented_characters'))
 				include(APPPATH.'config/'.ENVIRONMENT.'/foreign_chars.php');
 			}
 
-			if (empty($foreign_characters) OR ! is_array($foreign_characters))
+			if (empty($foreign_characters) || ! is_array($foreign_characters))
 			{
 				$array_from = array();
 				$array_to = array();
@@ -446,7 +447,9 @@ if ( ! function_exists('word_wrap'))
 	function word_wrap($str, $charlim = 76)
 	{
 		// Set the character limit
-		is_numeric($charlim) OR $charlim = 76;
+		if (!is_numeric($charlim)) {
+            $charlim = 76;
+        }
 
 		// Reduce multiple spaces
 		$str = preg_replace('| +|', ' ', $str);
@@ -513,13 +516,10 @@ if ( ! function_exists('word_wrap'))
 		}
 
 		// Put our markers back
-		if (count($unwrap) > 0)
-		{
-			foreach ($unwrap as $key => $val)
+		foreach ($unwrap as $key => $val)
 			{
 				$output = str_replace('{{unwrapped'.$key.'}}', $val, $output);
 			}
-		}
 
 		return $output;
 	}

@@ -36,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * CodeIgniter Driver Library Class
@@ -94,7 +94,7 @@ class CI_Driver_Library {
 		// Get CodeIgniter instance and subclass prefix
 		$prefix = config_item('subclass_prefix');
 
-		if ( ! isset($this->lib_name))
+		if ( $this->lib_name === null)
 		{
 			// Get library name without any prefix
 			$this->lib_name = str_replace(array('CI_', $prefix), '', get_class($this));
@@ -319,6 +319,7 @@ class CI_Driver {
 		{
 			return $this->_parent->$var;
 		}
+        return null;
 	}
 
 	// --------------------------------------------------------------------
