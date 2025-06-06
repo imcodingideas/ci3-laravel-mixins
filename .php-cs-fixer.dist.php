@@ -27,7 +27,7 @@ $config = new PhpCsFixer\Config();
 
 return $config
     ->setRules([
-        '@PHP83Migration' => true,
+        '@PHP84Migration' => true,
         'array_syntax' => ['syntax' => 'short'],
         'binary_operator_spaces' => [
             'default' => 'single_space',
