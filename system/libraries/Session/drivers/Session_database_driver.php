@@ -406,7 +406,8 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 	 * @param	string	$session_id	Session ID
 	 * @return	bool
 	 */
-	protected function _get_lock($session_id)
+	#[\Override]
+    protected function _get_lock($session_id)
 	{
 		if ($this->_platform === 'mysql')
 		{
@@ -443,7 +444,8 @@ class CI_Session_database_driver extends CI_Session_driver implements CI_Session
 	 *
 	 * @return	bool
 	 */
-	protected function _release_lock()
+	#[\Override]
+    protected function _release_lock()
 	{
 		if ( !$this->_lock)
 		{

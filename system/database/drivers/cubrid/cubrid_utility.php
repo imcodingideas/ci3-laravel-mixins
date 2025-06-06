@@ -53,7 +53,8 @@ class CI_DB_cubrid_utility extends CI_DB_utility {
 	 *
 	 * @return	array
 	 */
-	public function list_databases()
+	#[\Override]
+    public function list_databases()
 	{
 		return $this->db->data_cache['db_names'] ?? $this->db->data_cache['db_names'] = cubrid_list_dbs($this->db->conn_id);
 	}

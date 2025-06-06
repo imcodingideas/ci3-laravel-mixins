@@ -104,7 +104,8 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if (in_array($alter_type, ['DROP', 'ADD'], TRUE))
 		{
@@ -165,7 +166,8 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		// Reset field lengths for data types that don't support it
 		if (isset($attributes['CONSTRAINT']) && stripos((string) $attributes['TYPE'], 'int') !== FALSE)
@@ -196,7 +198,8 @@ class CI_DB_postgre_forge extends CI_DB_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
 		{

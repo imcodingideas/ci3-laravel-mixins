@@ -211,7 +211,8 @@ class CI_DB_pdo_sqlite_driver extends CI_DB_pdo_driver {
 	 * @param	string	$table
 	 * @return	string
 	 */
-	protected function _truncate($table)
+	#[\Override]
+    protected function _truncate($table)
 	{
 		return 'DELETE FROM ' . $table;
 	}

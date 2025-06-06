@@ -55,7 +55,8 @@ class CI_DB_ibase_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_fields()
+	#[\Override]
+    public function num_fields()
 	{
 		return ibase_num_fields($this->result_id);
 	}
@@ -69,7 +70,8 @@ class CI_DB_ibase_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function list_fields()
+	#[\Override]
+    public function list_fields()
 	{
 		$field_names = [];
 		for ($i = 0, $num_fields = $this->num_fields(); $i < $num_fields; $i++)
@@ -90,7 +92,8 @@ class CI_DB_ibase_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function field_data()
+	#[\Override]
+    public function field_data()
 	{
 		$retval = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
@@ -113,7 +116,8 @@ class CI_DB_ibase_result extends CI_DB_result {
 	 *
 	 * @return	void
 	 */
-	public function free_result()
+	#[\Override]
+    public function free_result()
 	{
 		ibase_free_result($this->result_id);
 	}
@@ -127,7 +131,8 @@ class CI_DB_ibase_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	#[\Override]
+    protected function _fetch_assoc()
 	{
 		return ibase_fetch_assoc($this->result_id, IBASE_FETCH_BLOBS);
 	}
@@ -142,7 +147,8 @@ class CI_DB_ibase_result extends CI_DB_result {
 	 * @param	string	$class_name
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	#[\Override]
+    protected function _fetch_object($class_name = 'stdClass')
 	{
 		$row = ibase_fetch_object($this->result_id, IBASE_FETCH_BLOBS);
 

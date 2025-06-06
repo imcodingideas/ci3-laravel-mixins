@@ -114,7 +114,8 @@ class CI_DB_pdo_mysql_forge extends CI_DB_pdo_forge {
 	 * @param	array	$attributes	Associative array of table attributes
 	 * @return	string
 	 */
-	protected function _create_table_attr($attributes)
+	#[\Override]
+    protected function _create_table_attr($attributes)
 	{
 		$sql = '';
 
@@ -149,7 +150,8 @@ class CI_DB_pdo_mysql_forge extends CI_DB_pdo_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if ($alter_type === 'DROP')
 		{
@@ -191,7 +193,8 @@ class CI_DB_pdo_mysql_forge extends CI_DB_pdo_forge {
 	 * @param	array	$field
 	 * @return	string
 	 */
-	protected function _process_column($field)
+	#[\Override]
+    protected function _process_column($field)
 	{
 		$extra_clause = isset($field['after'])
 			? ' AFTER ' . $this->db->escape_identifiers($field['after']) : '';
@@ -221,7 +224,8 @@ class CI_DB_pdo_mysql_forge extends CI_DB_pdo_forge {
 	 * @param	string	$table	(ignored)
 	 * @return	string
 	 */
-	protected function _process_indexes($table)
+	#[\Override]
+    protected function _process_indexes($table)
 	{
 		$sql = '';
 

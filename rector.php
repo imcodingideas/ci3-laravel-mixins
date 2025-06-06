@@ -38,9 +38,9 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     ]);
 
-    // PHP 7.4 to PHP 8.0 migration rules
+    // PHP 8.2 to PHP 8.3 migration rules
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_82,
+        LevelSetList::UP_TO_PHP_83,
     ]);
 
     // Optional: Add specific rules for code quality

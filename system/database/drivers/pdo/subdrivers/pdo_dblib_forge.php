@@ -84,7 +84,8 @@ class CI_DB_pdo_dblib_forge extends CI_DB_pdo_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if (in_array($alter_type, ['ADD', 'DROP'], TRUE))
 		{
@@ -111,7 +112,8 @@ class CI_DB_pdo_dblib_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		if (isset($attributes['CONSTRAINT']) && str_contains((string) $attributes['TYPE'], 'INT'))
 		{
@@ -140,7 +142,8 @@ class CI_DB_pdo_dblib_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos((string) $field['type'], 'int') !== FALSE)
 		{

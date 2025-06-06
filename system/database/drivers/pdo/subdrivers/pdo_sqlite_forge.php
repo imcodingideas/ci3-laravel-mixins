@@ -103,7 +103,8 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
-	public function create_database($db_name)
+	#[\Override]
+    public function create_database($db_name)
 	{
 		// In SQLite, a database is created when you connect to the database.
 		// We'll return TRUE so that an error isn't generated
@@ -118,7 +119,8 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
-	public function drop_database($db_name)
+	#[\Override]
+    public function drop_database($db_name)
 	{
 		// In SQLite, a database is dropped when we delete a file
 		if (file_exists($this->db->database))
@@ -154,7 +156,8 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if ($alter_type === 'DROP' || $alter_type === 'CHANGE')
 		{
@@ -182,7 +185,8 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 * @param	array	$field
 	 * @return	string
 	 */
-	protected function _process_column($field)
+	#[\Override]
+    protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
 			. ' ' . $field['type']
@@ -202,7 +206,8 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		switch (strtoupper((string) $attributes['TYPE']))
 		{
@@ -223,7 +228,8 @@ class CI_DB_pdo_sqlite_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos((string) $field['type'], 'int') !== FALSE)
 		{

@@ -83,7 +83,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 * @param	string	$db_name
 	 * @return	string
 	 */
-	public function create_database($db_name)
+	#[\Override]
+    public function create_database($db_name)
 	{
 		// Firebird databases are flat files, so a path is required
 
@@ -103,7 +104,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
-	public function drop_database($db_name)
+	#[\Override]
+    public function drop_database($db_name)
 	{
 		if ( !ibase_drop_db($this->conn_id))
 		{
@@ -131,7 +133,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if (in_array($alter_type, ['DROP', 'ADD'], TRUE))
 		{
@@ -185,7 +188,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 * @param	array	$field
 	 * @return	string
 	 */
-	protected function _process_column($field)
+	#[\Override]
+    protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
 			. ' ' . $field['type'] . $field['length']
@@ -204,7 +208,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		switch (strtoupper((string) $attributes['TYPE']))
 		{
@@ -235,7 +240,8 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		// Not supported
 	}

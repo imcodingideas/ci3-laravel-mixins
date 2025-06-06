@@ -133,7 +133,8 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	#[\Override]
+    public function db_connect($persistent = FALSE)
 	{
 		$this->conn_id = parent::db_connect($persistent);
 
@@ -153,7 +154,8 @@ class CI_DB_pdo_pgsql_driver extends CI_DB_pdo_driver {
 	 * @param	string	$name
 	 * @return	int
 	 */
-	public function insert_id($name = NULL)
+	#[\Override]
+    public function insert_id($name = NULL)
 	{
 		if ($name === NULL && version_compare($this->version(), '8.1', '>='))
 		{

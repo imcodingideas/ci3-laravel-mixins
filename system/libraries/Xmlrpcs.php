@@ -115,7 +115,8 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 	 * @param	mixed
 	 * @return	void
 	 */
-	public function initialize($config = [])
+	#[\Override]
+    public function initialize($config = [])
 	{
 		if (isset($config['functions']) && is_array($config['functions']))
 		{

@@ -178,7 +178,8 @@ class CI_DB_pdo_odbc_driver extends CI_DB_pdo_driver {
 	 * @param	string
 	 * @return	string
 	 */
-	protected function _escape_str($str)
+	#[\Override]
+    protected function _escape_str($str)
 	{
 		$this->display_error('db_unsupported_feature');
 	}

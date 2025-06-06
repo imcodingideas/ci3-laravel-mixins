@@ -192,7 +192,8 @@ class CI_DB_pdo_sqlsrv_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	#[\Override]
+    public function db_connect($persistent = FALSE)
 	{
 		if ( !empty($this->char_set) && preg_match('/utf[^8]*8/i', (string) $this->char_set))
 		{
