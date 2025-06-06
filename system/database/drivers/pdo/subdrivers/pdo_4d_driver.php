@@ -162,7 +162,8 @@ class CI_DB_pdo_4d_driver extends CI_DB_pdo_driver {
 	 * @param	string	$table
 	 * @return	string
 	 */
-	protected function _field_data($table)
+	#[\Override]
+    protected function _field_data($table)
 	{
 		return 'SELECT * FROM ' . $this->protect_identifiers($table, TRUE, NULL, FALSE) . ' LIMIT 1';
 	}

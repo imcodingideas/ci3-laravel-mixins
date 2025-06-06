@@ -55,7 +55,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_rows()
+	#[\Override]
+    public function num_rows()
 	{
 		if (is_int($this->num_rows))
 		{
@@ -86,7 +87,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_fields()
+	#[\Override]
+    public function num_fields()
 	{
 		return odbc_num_fields($this->result_id);
 	}
@@ -100,7 +102,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function list_fields()
+	#[\Override]
+    public function list_fields()
 	{
 		$field_names = [];
 		$num_fields = $this->num_fields();
@@ -125,7 +128,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function field_data()
+	#[\Override]
+    public function field_data()
 	{
 		$retval = [];
 		for ($i = 0, $odbc_index = 1, $c = $this->num_fields(); $i < $c; $i++, $odbc_index++)
@@ -148,7 +152,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 *
 	 * @return	void
 	 */
-	public function free_result()
+	#[\Override]
+    public function free_result()
 	{
 		if (is_resource($this->result_id))
 		{
@@ -166,7 +171,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	#[\Override]
+    protected function _fetch_assoc()
 	{
 		return odbc_fetch_array($this->result_id);
 	}
@@ -181,7 +187,8 @@ class CI_DB_odbc_result extends CI_DB_result {
 	 * @param	string	$class_name
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	#[\Override]
+    protected function _fetch_object($class_name = 'stdClass')
 	{
 		$row = odbc_fetch_object($this->result_id);
 

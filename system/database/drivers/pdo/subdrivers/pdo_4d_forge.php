@@ -112,7 +112,8 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if (in_array($alter_type, ['ADD', 'DROP'], TRUE))
 		{
@@ -131,7 +132,8 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 * @param	array	$field
 	 * @return	string
 	 */
-	protected function _process_column($field)
+	#[\Override]
+    protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
 			. ' ' . $field['type'] . $field['length']
@@ -150,7 +152,8 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		switch (strtoupper((string) $attributes['TYPE']))
 		{
@@ -181,7 +184,8 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_unique(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_unique(&$attributes, &$field)
 	{
 		if ( !empty($attributes['UNIQUE']) && $attributes['UNIQUE'] === TRUE)
 		{
@@ -201,7 +205,8 @@ class CI_DB_pdo_4d_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE)
 		{

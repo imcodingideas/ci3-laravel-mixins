@@ -55,7 +55,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_rows()
+	#[\Override]
+    public function num_rows()
 	{
 		return is_int($this->num_rows)
 			? $this->num_rows
@@ -69,7 +70,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_fields()
+	#[\Override]
+    public function num_fields()
 	{
 		return pg_num_fields($this->result_id);
 	}
@@ -83,7 +85,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function list_fields()
+	#[\Override]
+    public function list_fields()
 	{
 		$field_names = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
@@ -103,7 +106,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function field_data()
+	#[\Override]
+    public function field_data()
 	{
 		$retval = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
@@ -124,7 +128,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 *
 	 * @return	void
 	 */
-	public function free_result()
+	#[\Override]
+    public function free_result()
 	{
 		if ($this->result_id !== FALSE)
 		{
@@ -145,7 +150,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 * @param	int	$n
 	 * @return	bool
 	 */
-	public function data_seek($n = 0)
+	#[\Override]
+    public function data_seek($n = 0)
 	{
 		return pg_result_seek($this->result_id, $n);
 	}
@@ -159,7 +165,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	#[\Override]
+    protected function _fetch_assoc()
 	{
 		return pg_fetch_assoc($this->result_id);
 	}
@@ -174,7 +181,8 @@ class CI_DB_postgre_result extends CI_DB_result {
 	 * @param	string	$class_name
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	#[\Override]
+    protected function _fetch_object($class_name = 'stdClass')
 	{
 		return pg_fetch_object($this->result_id, NULL, $class_name);
 	}

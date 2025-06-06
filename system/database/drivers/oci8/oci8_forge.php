@@ -100,7 +100,8 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if ($alter_type === 'DROP')
 		{
@@ -159,7 +160,8 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		if ( !empty($attributes['AUTO_INCREMENT']) && $attributes['AUTO_INCREMENT'] === TRUE && stripos((string) $field['type'], 'number') !== FALSE && version_compare($this->db->version(), '12.1', '>='))
 		{
@@ -175,7 +177,8 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	 * @param	array	$field
 	 * @return	string
 	 */
-	protected function _process_column($field)
+	#[\Override]
+    protected function _process_column($field)
 	{
 		return $this->db->escape_identifiers($field['name'])
 			. ' ' . $field['type'] . $field['length']
@@ -196,7 +199,8 @@ class CI_DB_oci8_forge extends CI_DB_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		switch (strtoupper((string) $attributes['TYPE']))
 		{

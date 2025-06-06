@@ -55,7 +55,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_rows()
+	#[\Override]
+    public function num_rows()
 	{
 		return is_int($this->num_rows)
 			? $this->num_rows
@@ -69,7 +70,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_fields()
+	#[\Override]
+    public function num_fields()
 	{
 		return @sqlite_num_fields($this->result_id);
 	}
@@ -83,7 +85,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function list_fields()
+	#[\Override]
+    public function list_fields()
 	{
 		$field_names = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
@@ -103,7 +106,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function field_data()
+	#[\Override]
+    public function field_data()
 	{
 		$retval = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
@@ -129,7 +133,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 * @param	int	$n
 	 * @return	bool
 	 */
-	public function data_seek($n = 0)
+	#[\Override]
+    public function data_seek($n = 0)
 	{
 		return sqlite_seek($this->result_id, $n);
 	}
@@ -143,7 +148,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	#[\Override]
+    protected function _fetch_assoc()
 	{
 		return sqlite_fetch_array($this->result_id);
 	}
@@ -158,7 +164,8 @@ class CI_DB_sqlite_result extends CI_DB_result {
 	 * @param	string	$class_name
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	#[\Override]
+    protected function _fetch_object($class_name = 'stdClass')
 	{
 		return sqlite_fetch_object($this->result_id, $class_name);
 	}

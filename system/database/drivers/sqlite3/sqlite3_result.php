@@ -55,7 +55,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_fields()
+	#[\Override]
+    public function num_fields()
 	{
 		return $this->result_id->numColumns();
 	}
@@ -69,7 +70,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function list_fields()
+	#[\Override]
+    public function list_fields()
 	{
 		$field_names = [];
 		for ($i = 0, $c = $this->num_fields(); $i < $c; $i++)
@@ -89,7 +91,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function field_data()
+	#[\Override]
+    public function field_data()
 	{
 		static $data_types = [
 			SQLITE3_INTEGER	=> 'integer',
@@ -121,7 +124,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 *
 	 * @return	void
 	 */
-	public function free_result()
+	#[\Override]
+    public function free_result()
 	{
 		if (is_object($this->result_id))
 		{
@@ -139,7 +143,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	#[\Override]
+    protected function _fetch_assoc()
 	{
 		return $this->result_id->fetchArray(SQLITE3_ASSOC);
 	}
@@ -154,7 +159,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 * @param	string	$class_name
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	#[\Override]
+    protected function _fetch_object($class_name = 'stdClass')
 	{
 		// No native support for fetching rows as objects
 		if (($row = $this->result_id->fetchArray(SQLITE3_ASSOC)) === FALSE)
@@ -187,7 +193,8 @@ class CI_DB_sqlite3_result extends CI_DB_result {
 	 * @param	int	$n	(ignored)
 	 * @return	array
 	 */
-	public function data_seek($n = 0)
+	#[\Override]
+    public function data_seek($n = 0)
 	{
 		// Only resetting to the start of the result set is supported
 		return ($n > 0) ? FALSE : $this->result_id->reset();

@@ -140,7 +140,8 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	#[\Override]
+    public function db_connect($persistent = FALSE)
 	{
 		if ($this->stricton !== null)
 		{
@@ -254,7 +255,8 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 	 *
 	 * @return	bool
 	 */
-	protected function _trans_begin()
+	#[\Override]
+    protected function _trans_begin()
 	{
 		$this->conn_id->setAttribute(PDO::ATTR_AUTOCOMMIT, FALSE);
 		return $this->conn_id->beginTransaction();
@@ -267,7 +269,8 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 	 *
 	 * @return	bool
 	 */
-	protected function _trans_commit()
+	#[\Override]
+    protected function _trans_commit()
 	{
 		if ($this->conn_id->commit())
 		{
@@ -285,7 +288,8 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 	 *
 	 * @return	bool
 	 */
-	protected function _trans_rollback()
+	#[\Override]
+    protected function _trans_rollback()
 	{
 		if ($this->conn_id->rollBack())
 		{
@@ -382,7 +386,8 @@ class CI_DB_pdo_mysql_driver extends CI_DB_pdo_driver {
 	 * @param	string	$table
 	 * @return	string
 	 */
-	protected function _truncate($table)
+	#[\Override]
+    protected function _truncate($table)
 	{
 		return 'TRUNCATE ' . $table;
 	}

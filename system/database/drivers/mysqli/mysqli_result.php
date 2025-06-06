@@ -55,7 +55,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_rows()
+	#[\Override]
+    public function num_rows()
 	{
 		return is_int($this->num_rows)
 			? $this->num_rows
@@ -69,7 +70,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 *
 	 * @return	int
 	 */
-	public function num_fields()
+	#[\Override]
+    public function num_fields()
 	{
 		return $this->result_id->field_count;
 	}
@@ -83,7 +85,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function list_fields()
+	#[\Override]
+    public function list_fields()
 	{
 		$field_names = [];
 		$this->result_id->field_seek(0);
@@ -104,7 +107,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	public function field_data()
+	#[\Override]
+    public function field_data()
 	{
 		$retval = [];
 		$field_data = $this->result_id->fetch_fields();
@@ -176,7 +180,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 *
 	 * @return	void
 	 */
-	public function free_result()
+	#[\Override]
+    public function free_result()
 	{
 		if (is_object($this->result_id))
 		{
@@ -197,7 +202,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 * @param	int	$n
 	 * @return	bool
 	 */
-	public function data_seek($n = 0)
+	#[\Override]
+    public function data_seek($n = 0)
 	{
 		return $this->result_id->data_seek($n);
 	}
@@ -211,7 +217,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 *
 	 * @return	array
 	 */
-	protected function _fetch_assoc()
+	#[\Override]
+    protected function _fetch_assoc()
 	{
 		return $this->result_id->fetch_assoc();
 	}
@@ -226,7 +233,8 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	 * @param	string	$class_name
 	 * @return	object
 	 */
-	protected function _fetch_object($class_name = 'stdClass')
+	#[\Override]
+    protected function _fetch_object($class_name = 'stdClass')
 	{
 		return $this->result_id->fetch_object($class_name);
 	}

@@ -151,7 +151,8 @@ class CI_DB_pdo_oci_driver extends CI_DB_pdo_driver {
 	 *
 	 * @return	string
 	 */
-	public function version()
+	#[\Override]
+    public function version()
 	{
 		if (isset($this->data_cache['version']))
 		{

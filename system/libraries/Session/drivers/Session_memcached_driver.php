@@ -334,7 +334,8 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 * @param	string	$session_id	Session ID
 	 * @return	bool
 	 */
-	protected function _get_lock($session_id)
+	#[\Override]
+    protected function _get_lock($session_id)
 	{
 		// PHP 7 reuses the SessionHandler object on regeneration,
 		// so we need to check here if the lock key is for the
@@ -391,7 +392,8 @@ class CI_Session_memcached_driver extends CI_Session_driver implements CI_Sessio
 	 *
 	 * @return	bool
 	 */
-	protected function _release_lock()
+	#[\Override]
+    protected function _release_lock()
 	{
 		if ($this->_memcached !== null && $this->_lock_key !== null && $this->_lock)
 		{

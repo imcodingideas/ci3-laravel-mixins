@@ -149,7 +149,8 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 	 * @param	bool	$persistent
 	 * @return	object
 	 */
-	public function db_connect($persistent = FALSE)
+	#[\Override]
+    public function db_connect($persistent = FALSE)
 	{
 		if ($persistent === TRUE)
 		{
@@ -366,7 +367,8 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 	 *
 	 * @return      string
 	 */
-	public function version()
+	#[\Override]
+    public function version()
 	{
 		return $this->data_cache['version'] ?? $this->data_cache['version'] = $this->conn_id->query("SELECT SERVERPROPERTY('ProductVersion') AS ver")->fetchColumn(0);
 	}

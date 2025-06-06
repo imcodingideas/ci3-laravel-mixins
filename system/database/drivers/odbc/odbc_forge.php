@@ -78,7 +78,8 @@ class CI_DB_odbc_forge extends CI_DB_forge {
 	 * @param	array	&$field
 	 * @return	void
 	 */
-	protected function _attr_auto_increment(&$attributes, &$field)
+	#[\Override]
+    protected function _attr_auto_increment(&$attributes, &$field)
 	{
 		// Not supported (in most databases at least)
 	}

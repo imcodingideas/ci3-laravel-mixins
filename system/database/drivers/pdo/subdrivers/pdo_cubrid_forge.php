@@ -104,7 +104,8 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 * @param	mixed	$field		Column definition
 	 * @return	string|string[]
 	 */
-	protected function _alter_table($alter_type, $table, $field)
+	#[\Override]
+    protected function _alter_table($alter_type, $table, $field)
 	{
 		if (in_array($alter_type, ['DROP', 'ADD'], TRUE))
 		{
@@ -137,7 +138,8 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 * @param	array	$field
 	 * @return	string
 	 */
-	protected function _process_column($field)
+	#[\Override]
+    protected function _process_column($field)
 	{
 		$extra_clause = isset($field['after'])
 			? ' AFTER ' . $this->db->escape_identifiers($field['after']) : '';
@@ -168,7 +170,8 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 * @param	array	&$attributes
 	 * @return	void
 	 */
-	protected function _attr_type(&$attributes)
+	#[\Override]
+    protected function _attr_type(&$attributes)
 	{
 		switch (strtoupper((string) $attributes['TYPE']))
 		{
@@ -195,7 +198,8 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	 * @param	string	$table	(ignored)
 	 * @return	string
 	 */
-	protected function _process_indexes($table)
+	#[\Override]
+    protected function _process_indexes($table)
 	{
 		$sql = '';
 

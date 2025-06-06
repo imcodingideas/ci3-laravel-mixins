@@ -134,7 +134,8 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 * @param	bool	$persistent
 	 * @return	resource
 	 */
-	public function db_connect($persistent = FALSE)
+	#[\Override]
+    public function db_connect($persistent = FALSE)
 	{
 		return ($persistent === TRUE)
 			? odbc_pconnect($this->dsn, $this->username, $this->password)
@@ -150,7 +151,8 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 * @param	array	$binds	An array of values to bind
 	 * @return	string
 	 */
-	public function compile_binds($sql, $binds)
+	#[\Override]
+    public function compile_binds($sql, $binds)
 	{
 		if (empty($binds) || empty($this->bind_marker) || !str_contains($sql, $this->bind_marker))
 		{
@@ -301,7 +303,8 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 * @param	string	An SQL query string
 	 * @return	bool
 	 */
-	public function is_write_type($sql)
+	#[\Override]
+    public function is_write_type($sql)
 	{
 		if (preg_match('#^(INSERT|UPDATE).*RETURNING\s.+(\,\s?.+)*$#is', (string) $sql))
 		{
@@ -319,7 +322,8 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 * @param	string
 	 * @return	string
 	 */
-	protected function _escape_str($str)
+	#[\Override]
+    protected function _escape_str($str)
 	{
 		$this->display_error('db_unsupported_feature');
 	}
@@ -411,7 +415,8 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 *
 	 * @return	array
 	 */
-	public function error()
+	#[\Override]
+    public function error()
 	{
 		return ['code' => odbc_error($this->conn_id), 'message' => odbc_errormsg($this->conn_id)];
 	}
@@ -423,7 +428,8 @@ class CI_DB_odbc_driver extends CI_DB_driver {
 	 *
 	 * @return	void
 	 */
-	protected function _close()
+	#[\Override]
+    protected function _close()
 	{
 		odbc_close($this->conn_id);
 	}
