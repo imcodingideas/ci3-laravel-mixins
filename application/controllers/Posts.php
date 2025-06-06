@@ -3,18 +3,18 @@
 defined('BASEPATH') || exit('No direct script access allowed');
 
 #[\AllowDynamicProperties]
-class Posts extends CI_Controller {
+class Posts extends MY_Controller {
 
     public $form_validation;
     public $input;
-    public $Post_model;
     public $output;
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Post_model');
         $this->load->helper('url');
+        // Load Eloquent model
+        $this->eloquent_model('Post');
     }
 
     /**
@@ -22,7 +22,8 @@ class Posts extends CI_Controller {
      */
     public function index()
     {
-        $data['posts'] = $this->Post_model->get_posts();
+        $posts = Post::latest()->limit(10)->get();
+        $data['posts'] = $posts->toArray();
         $data['title'] = 'All Posts';
 
         $this->load->view('templates/header', $data);
@@ -39,7 +40,8 @@ class Posts extends CI_Controller {
             show_404();
         }
 
-        $data['post'] = $this->Post_model->get_post($id);
+        $post = Post::find($id);
+        $data['post'] = $post ? $post->toArray() : null;
 
         if (!$data['post']) {
             show_404();
@@ -76,11 +78,11 @@ class Posts extends CI_Controller {
                 'author' => $this->input->post('author'),
             ];
 
-            $post_id = $this->Post_model->create_post($post_data);
-
-            if ($post_id) {
-                redirect('posts/view/' . $post_id);
-            } else {
+            try {
+                $post = Post::create($post_data);
+                redirect('posts/view/' . $post->id);
+            } catch (Exception $e) {
+                log_message('error', 'Failed to create post: ' . $e->getMessage());
                 show_error('Unable to create post');
             }
         }
@@ -98,7 +100,8 @@ class Posts extends CI_Controller {
         $this->load->helper('form');
         $this->load->library('form_validation');
 
-        $data['post'] = $this->Post_model->get_post($id);
+        $post = Post::find($id);
+        $data['post'] = $post ? $post->toArray() : null;
 
         if (!$data['post']) {
             show_404();
@@ -120,9 +123,15 @@ class Posts extends CI_Controller {
                 'author' => $this->input->post('author'),
             ];
 
-            if ($this->Post_model->update_post($id, $post_data)) {
-                redirect('posts/view/' . $id);
-            } else {
+            try {
+                $post = Post::find($id);
+                if ($post && $post->update($post_data)) {
+                    redirect('posts/view/' . $id);
+                } else {
+                    show_error('Unable to update post');
+                }
+            } catch (Exception $e) {
+                log_message('error', 'Failed to update post: ' . $e->getMessage());
                 show_error('Unable to update post');
             }
         }
@@ -137,15 +146,20 @@ class Posts extends CI_Controller {
             show_404();
         }
 
-        $post = $this->Post_model->get_post($id);
+        try {
+            $post = Post::find($id);
 
-        if (!$post) {
-            show_404();
-        }
+            if (!$post) {
+                show_404();
+            }
 
-        if ($this->Post_model->delete_post($id)) {
-            redirect('posts');
-        } else {
+            if ($post->delete()) {
+                redirect('posts');
+            } else {
+                show_error('Unable to delete post');
+            }
+        } catch (Exception $e) {
+            log_message('error', 'Failed to delete post: ' . $e->getMessage());
             show_error('Unable to delete post');
         }
     }
@@ -155,10 +169,10 @@ class Posts extends CI_Controller {
      */
     public function api()
     {
-        $posts = $this->Post_model->get_posts();
+        $posts = Post::latest()->limit(10)->get();
 
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($posts));
+            ->set_output(json_encode($posts->toArray()));
     }
 } 
