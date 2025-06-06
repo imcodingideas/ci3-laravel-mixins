@@ -52,3 +52,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'posts';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// Posts routes moved to root
+$route['tag/(:any)'] = 'posts/tag/$1';
+$route['author/(:num)'] = 'posts/author/$1';
+$route['search'] = 'posts/search';
+$route['api'] = 'posts/api';
+$route['view/(:num)'] = 'posts/view/$1';
+$route['edit/(:num)'] = 'posts/edit/$1';
+$route['delete/(:num)'] = 'posts/delete/$1';
+$route['create'] = 'posts/create';
+$route['(:num)'] = 'posts/view/$1'; // Short URL for posts
+
+// Authors and Tags routes
+$route['authors'] = 'authors/index';
+$route['authors/view/(:num)'] = 'authors/view/$1';
+$route['authors/create'] = 'authors/create';
+$route['authors/edit/(:num)'] = 'authors/edit/$1';
+$route['authors/delete/(:num)'] = 'authors/delete/$1';
+
+$route['tags'] = 'tags/index';
+$route['tags/view/(:num)'] = 'tags/view/$1';
+$route['tags/create'] = 'tags/create';
+$route['tags/edit/(:num)'] = 'tags/edit/$1';
+$route['tags/delete/(:num)'] = 'tags/delete/$1';
