@@ -380,13 +380,13 @@ if ( !function_exists('meta'))
 if ( !function_exists('br'))
 {
 	/**
-	 * Generates HTML BR tags based on number supplied.
-	 *
-	 * @deprecated	3.0.0	Use str_repeat() instead
-	 * @param	int	$count	Number of times to repeat the tag
-	 * @return	string
-	 */
-	function br($count = 1)
+     * Generates HTML BR tags based on number supplied.
+     *
+     * @param	int	$count	Number of times to repeat the tag
+     * @return	string
+     */
+    #[\Deprecated(message: 'Use str_repeat() instead', since: '3.0.0')]
+    function br($count = 1)
 	{
 		return str_repeat('<br />', $count);
 	}
@@ -397,13 +397,13 @@ if ( !function_exists('br'))
 if ( !function_exists('nbs'))
 {
 	/**
-	 * Generates non-breaking space entities based on number supplied.
-	 *
-	 * @deprecated	3.0.0	Use str_repeat() instead
-	 * @param	int
-	 * @return	string
-	 */
-	function nbs($num = 1)
+     * Generates non-breaking space entities based on number supplied.
+     *
+     * @param	int
+     * @return	string
+     */
+    #[\Deprecated(message: 'Use str_repeat() instead', since: '3.0.0')]
+    function nbs($num = 1)
 	{
 		return str_repeat('&nbsp;', $num);
 	}

@@ -1494,18 +1494,17 @@ class CI_Form_validation {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Prep data for form.
-	 *
-	 * This function allows HTML to be safely shown in a form.
-	 * Special characters are converted.
-	 *
-	 * @deprecated	3.0.6	Not used anywhere within the framework and pretty much useless
-	 * @param	mixed	$data	Input data
-	 * @return	mixed
-	 */
-	public function prep_for_form($data)
+    /**
+     * Prep data for form.
+     *
+     * This function allows HTML to be safely shown in a form.
+     * Special characters are converted.
+     *
+     * @param	mixed	$data	Input data
+     * @return	mixed
+     */
+    #[\Deprecated(message: 'Not used anywhere within the framework and pretty much useless', since: '3.0.6')]
+    public function prep_for_form($data)
 	{
 		if ($this->_safe_form_data === FALSE || empty($data))
 		{

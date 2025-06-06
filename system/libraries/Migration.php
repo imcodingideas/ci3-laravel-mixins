@@ -276,7 +276,7 @@ class CI_Migration {
 				$this->_error_string = sprintf($this->lang->line('migration_class_doesnt_exist'), $class);
 				return FALSE;
 			}
-			elseif ( !method_exists($class, $method) || !(new ReflectionMethod($class, $method))->isPublic())
+			elseif ( !method_exists($class, $method) || !new ReflectionMethod($class, $method)->isPublic())
 			{
 				$this->_error_string = sprintf($this->lang->line('migration_missing_' . $method . '_method'), $class);
 				return FALSE;

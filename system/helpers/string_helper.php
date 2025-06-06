@@ -53,23 +53,23 @@ defined('BASEPATH') || exit('No direct script access allowed');
 if ( !function_exists('trim_slashes'))
 {
 	/**
-	 * Trim Slashes.
-	 *
-	 * Removes any leading/trailing slashes from a string:
-	 *
-	 * /this/that/theother/
-	 *
-	 * becomes:
-	 *
-	 * this/that/theother
-	 *
-	 * @todo	Remove in version 3.1+.
-	 * @deprecated	3.0.0	This is just an alias for PHP's native trim()
-	 *
-	 * @param	string
-	 * @return	string
-	 */
-	function trim_slashes($str)
+     * Trim Slashes.
+     *
+     * Removes any leading/trailing slashes from a string:
+     *
+     * /this/that/theother/
+     *
+     * becomes:
+     *
+     * this/that/theother
+     *
+     * @todo	Remove in version 3.1+.
+     *
+     * @param	string
+     * @return	string
+     */
+    #[\Deprecated(message: "This is just an alias for PHP's native trim()", since: '3.0.0')]
+    function trim_slashes($str)
 	{
 		return trim((string) $str, '/');
 	}
@@ -290,16 +290,16 @@ if ( !function_exists('alternator'))
 if ( !function_exists('repeater'))
 {
 	/**
-	 * Repeater function.
-	 *
-	 * @todo	Remove in version 3.1+.
-	 * @deprecated	3.0.0	This is just an alias for PHP's native str_repeat()
-	 *
-	 * @param	string	$data	String to repeat
-	 * @param	int	$num	Number of repeats
-	 * @return	string
-	 */
-	function repeater($data, $num = 1)
+     * Repeater function.
+     *
+     * @todo	Remove in version 3.1+.
+     *
+     * @param	string	$data	String to repeat
+     * @param	int	$num	Number of repeats
+     * @return	string
+     */
+    #[\Deprecated(message: "This is just an alias for PHP's native str_repeat()", since: '3.0.0')]
+    function repeater($data, $num = 1)
 	{
 		return ($num > 0) ? str_repeat($data, $num) : '';
 	}

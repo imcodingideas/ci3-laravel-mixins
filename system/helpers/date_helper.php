@@ -126,25 +126,25 @@ if ( !function_exists('mdate'))
 if ( !function_exists('standard_date'))
 {
 	/**
-	 * Standard Date.
-	 *
-	 * Returns a date formatted according to the submitted standard.
-	 *
-	 * As of PHP 5.2, the DateTime extension provides constants that
-	 * serve for the exact same purpose and are used with date().
-	 *
-	 * @todo	Remove in version 3.1+.
-	 * @deprecated	3.0.0	Use PHP's native date() instead.
-	 * @link	https://www.php.net/manual/en/class.datetime.php#datetime.constants.types
-	 *
-	 * @example	date(DATE_RFC822, now()); // default
-	 * @example	date(DATE_W3C, $time); // a different format and time
-	 *
-	 * @param	string	$fmt = 'DATE_RFC822'	the chosen format
-	 * @param	int	$time = NULL		Unix timestamp
-	 * @return	string
-	 */
-	function standard_date($fmt = 'DATE_RFC822', $time = NULL)
+     * Standard Date.
+     *
+     * Returns a date formatted according to the submitted standard.
+     *
+     * As of PHP 5.2, the DateTime extension provides constants that
+     * serve for the exact same purpose and are used with date().
+     *
+     * @todo	Remove in version 3.1+.
+     * @link	https://www.php.net/manual/en/class.datetime.php#datetime.constants.types
+     *
+     * @example	date(DATE_RFC822, now()); // default
+     * @example	date(DATE_W3C, $time); // a different format and time
+     *
+     * @param	string	$fmt = 'DATE_RFC822'	the chosen format
+     * @param	int	$time = NULL		Unix timestamp
+     * @return	string
+     */
+    #[\Deprecated(message: "Use PHP's native date() instead.", since: '3.0.0')]
+    function standard_date($fmt = 'DATE_RFC822', $time = NULL)
 	{
 		if (empty($time))
 		{
@@ -499,15 +499,15 @@ if ( !function_exists('human_to_unix'))
 if ( !function_exists('nice_date'))
 {
 	/**
-	 * Turns many "reasonably-date-like" strings into something
-	 * that is actually useful. This only works for dates after unix epoch.
-	 *
-	 * @deprecated	3.1.3	Use DateTime::createFromFormat($input_format, $input)->format($output_format);
-	 * @param	string	The terribly formatted date-like string
-	 * @param	string	Date format to return (same as php date function)
-	 * @return	string
-	 */
-	function nice_date($bad_date = '', $format = FALSE)
+     * Turns many "reasonably-date-like" strings into something
+     * that is actually useful. This only works for dates after unix epoch.
+     *
+     * @param	string	The terribly formatted date-like string
+     * @param	string	Date format to return (same as php date function)
+     * @return	string
+     */
+    #[\Deprecated(message: Use DateTime::createFromFormat($input_format, $input)->format($output_format);, since: '3.1.3')]
+    function nice_date($bad_date = '', $format = FALSE)
 	{
 		if (empty($bad_date))
 		{

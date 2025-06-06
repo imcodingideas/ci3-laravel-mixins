@@ -350,14 +350,13 @@ class CI_Config {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * System URL.
-	 *
-	 * @deprecated	3.0.0	Encourages insecure practices
-	 * @return	string
-	 */
-	public function system_url()
+    /**
+     * System URL.
+     *
+     * @return	string
+     */
+    #[\Deprecated(message: 'Encourages insecure practices', since: '3.0.0')]
+    public function system_url()
 	{
 		$x = explode('/', (string) preg_replace('|/*(.+?)/*$|', '\\1', BASEPATH));
 		return $this->slash_item('base_url') . end($x) . '/';

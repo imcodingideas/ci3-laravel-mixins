@@ -446,14 +446,13 @@ class CI_Router {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Fetch the current class.
-	 *
-	 * @deprecated	3.0.0	Read the 'class' property instead
-	 * @return	string
-	 */
-	public function fetch_class()
+    /**
+     * Fetch the current class.
+     *
+     * @return	string
+     */
+    #[\Deprecated(message: "Read the 'class' property instead", since: '3.0.0')]
+    public function fetch_class()
 	{
 		return $this->class;
 	}
@@ -472,14 +471,13 @@ class CI_Router {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Fetch the current method.
-	 *
-	 * @deprecated	3.0.0	Read the 'method' property instead
-	 * @return	string
-	 */
-	public function fetch_method()
+    /**
+     * Fetch the current method.
+     *
+     * @return	string
+     */
+    #[\Deprecated(message: "Read the 'method' property instead", since: '3.0.0')]
+    public function fetch_method()
 	{
 		return $this->method;
 	}
@@ -506,17 +504,16 @@ class CI_Router {
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Fetch directory.
-	 *
-	 * Feches the sub-directory (if any) that contains the requested
-	 * controller class.
-	 *
-	 * @deprecated	3.0.0	Read the 'directory' property instead
-	 * @return	string
-	 */
-	public function fetch_directory()
+    /**
+     * Fetch directory.
+     *
+     * Feches the sub-directory (if any) that contains the requested
+     * controller class.
+     *
+     * @return	string
+     */
+    #[\Deprecated(message: "Read the 'directory' property instead", since: '3.0.0')]
+    public function fetch_directory()
 	{
 		return $this->directory;
 	}
