@@ -86,15 +86,15 @@ if ( !function_exists('sanitize_filename'))
 if ( !function_exists('do_hash'))
 {
 	/**
-	 * Hash encode a string.
-	 *
-	 * @todo	Remove in version 3.1+.
-	 * @deprecated	3.0.0	Use PHP's native hash() instead.
-	 * @param	string	$str
-	 * @param	string	$type = 'sha1'
-	 * @return	string
-	 */
-	function do_hash($str, $type = 'sha1')
+     * Hash encode a string.
+     *
+     * @todo	Remove in version 3.1+.
+     * @param	string	$str
+     * @param	string	$type = 'sha1'
+     * @return	string
+     */
+    #[\Deprecated(message: "Use PHP's native hash() instead.", since: '3.0.0')]
+    function do_hash($str, $type = 'sha1')
 	{
 		if ( !in_array(strtolower($type), hash_algos()))
 		{

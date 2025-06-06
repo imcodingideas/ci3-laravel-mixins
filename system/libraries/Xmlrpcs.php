@@ -350,7 +350,7 @@ class CI_Xmlrpcs extends CI_Xmlrpc {
 				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
 			}
 		}
-		elseif ($objectCall && (!method_exists($method_parts[0], $method_parts[1]) || !(new ReflectionMethod($method_parts[0], $method_parts[1]))->isPublic()) || !$objectCall && !is_callable($this->methods[$methName]['function'])
+		elseif ($objectCall && (!method_exists($method_parts[0], $method_parts[1]) || !new ReflectionMethod($method_parts[0], $method_parts[1])->isPublic()) || !$objectCall && !is_callable($this->methods[$methName]['function'])
 		)
 		{
 			return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
