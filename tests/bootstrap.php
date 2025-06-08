@@ -58,19 +58,38 @@ if (!function_exists('reset_test_database')) {
     {
         $CI = &get_instance();
 
-        // Drop table if exists
+        // Disable foreign key checks to allow dropping tables
+        $CI->db->query('SET FOREIGN_KEY_CHECKS = 0');
+
+        // Drop all tables in correct order (children first)
+        $CI->db->query('DROP TABLE IF EXISTS post_tags');
+        $CI->db->query('DROP TABLE IF EXISTS tags');
         $CI->db->query('DROP TABLE IF EXISTS posts');
+        $CI->db->query('DROP TABLE IF EXISTS authors');
 
-        // Execute SQL file to recreate database
-        $sql_file = __DIR__ . '/../database/init/01_create_posts_table.sql';
-        $sql = file_get_contents($sql_file);
+        // Re-enable foreign key checks
+        $CI->db->query('SET FOREIGN_KEY_CHECKS = 1');
 
-        // Split SQL statements by semicolon
-        $statements = array_filter(array_map('trim', explode(';', $sql)));
+        // Execute all SQL files to recreate database in correct order
+        $sql_files = [
+            __DIR__ . '/../database/init/01_create_posts_table.sql',
+            __DIR__ . '/../database/init/02_create_authors_table.sql',
+            __DIR__ . '/../database/init/03_create_tags_table.sql',
+            __DIR__ . '/../database/init/04_update_posts_table.sql'
+        ];
 
-        foreach ($statements as $statement) {
-            if (!empty($statement)) {
-                $CI->db->query($statement);
+        foreach ($sql_files as $sql_file) {
+            if (file_exists($sql_file)) {
+                $sql = file_get_contents($sql_file);
+                
+                // Split SQL statements by semicolon
+                $statements = array_filter(array_map('trim', explode(';', $sql)));
+
+                foreach ($statements as $statement) {
+                    if (!empty($statement)) {
+                        $CI->db->query($statement);
+                    }
+                }
             }
         }
     }

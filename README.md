@@ -8,6 +8,15 @@ This project is a **test case for migrating CodeIgniter 3 to the latest PHP vers
 - **Database**: MySQL 5.7
 - **Tools**: Docker, Composer, phpMyAdmin
 
+## Features
+
+- **Laravel Eloquent Integration**: Full Laravel Eloquent ORM support in CodeIgniter 3
+  - Modern ORM with relationships, scopes, and accessors
+  - Direct model usage: `Post::latest()->get()`
+  - Auto-initialization via `MY_Controller` using CodeIgniter's DB config
+  - Custom `EloquentLoader` trait for model loading: `$this->eloquent_model('Post')`
+  - Maintains CodeIgniter's MVC structure
+
 ## PHP Migration Status
 
 - **Rector**: ✅ Full support for PHP 8.4 migration - Successfully completed

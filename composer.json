@@ -12,7 +12,9 @@
 	},
 	"require": {
 		"php": ">=8.4",
-		"vlucas/phpdotenv": "*"
+		"vlucas/phpdotenv": "*",
+		"illuminate/database": "^12.17",
+		"illuminate/events": "^12.17"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
